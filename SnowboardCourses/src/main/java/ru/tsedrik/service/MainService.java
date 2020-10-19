@@ -19,7 +19,7 @@ public class MainService {
         CourseService courseService = (CourseService) context.getBean("courseService");
 
         Person instructor = new Person();
-        instructor.setId(1);
+        instructor.setId(1L);
         instructor.setRole(Role.INSTRUCTOR);
         instructor.setFirstName("Елена");
         instructor.setLastName("Азарова");
@@ -27,13 +27,13 @@ public class MainService {
         System.out.println("Before save: " + instructor);
         personService.addPerson(instructor);
 
-        System.out.println("After save: " + personService.getPersonById(1));
+        System.out.println("After save: " + personService.getPersonById(1L));
 
         personService.deletePerson(instructor);
-        System.out.println("After delete: " + personService.getPersonById(1));
+        System.out.println("After delete: " + personService.getPersonById(1L));
 
         Person student1 = new Person();
-        student1.setId(1);
+        student1.setId(1L);
         student1.setRole(Role.STUDENT);
         student1.setFirstName("Иван");
         student1.setLastName("Сидоров");
@@ -41,7 +41,7 @@ public class MainService {
         personService.addPerson(student1);
 
         Person student2 = new Person();
-        student2.setId(1);
+        student2.setId(1L);
         student2.setRole(Role.STUDENT);
         student2.setFirstName("Алина");
         student2.setLastName("Лушакина");
@@ -53,21 +53,21 @@ public class MainService {
         students.add(student2);
 
         Group group = new Group();
-        group.setId(11);
+        group.setId(11L);
         group.setInstructor(instructor);
         group.setStudents(students);
         groupService.addGroup(group);
-        System.out.println(groupService.getGroupById(11));
+        System.out.println(groupService.getGroupById(11L));
 
         Course course = new Course();
-        course.setId(22);
+        course.setId(22L);
         course.setCourseType(CourseType.CARVING);
         course.setStartTime(LocalDate.of(2020, 12, 05));
         course.setEndTime(LocalDate.of(2020, 12, 11));
         course.setGroupCount(1);
         course.setGroups(Arrays.asList(group));
         courseService.addCourse(course);
-        System.out.println(courseService.getCourseById(22));
+        System.out.println(courseService.getCourseById(22L));
 
     }
 

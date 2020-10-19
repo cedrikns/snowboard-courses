@@ -5,7 +5,7 @@ import ru.tsedrik.model.CourseLocation;
 
 import java.util.HashMap;
 
-public class LocationDAOImpl extends AbstactDAO<CourseLocation, Integer> implements LocationDAO {
+public class LocationDAOImpl extends AbstactDAO<CourseLocation, Long> implements LocationDAO {
 
     public LocationDAOImpl() {
         super(new HashMap());

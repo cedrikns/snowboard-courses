@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CourseDAOImpl extends AbstactDAO<Course, Integer> implements CourseDAO {
+public class CourseDAOImpl extends AbstactDAO<Course, Long> implements CourseDAO {
 
     public CourseDAOImpl() {
         super(new HashMap<>());

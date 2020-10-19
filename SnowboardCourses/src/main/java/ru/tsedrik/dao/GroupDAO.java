@@ -5,7 +5,7 @@ import ru.tsedrik.model.Person;
 
 import java.util.Collection;
 
-public interface GroupDAO extends GenericDAO<Group, Integer> {
+public interface GroupDAO extends GenericDAO<Group, Long> {
 
     Collection<Group> getAllByPerson(Person person);
 

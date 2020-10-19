@@ -1,17 +1,17 @@
 package ru.tsedrik.model;
 
-public class CourseLocation implements Identifired<Integer> {
+public class CourseLocation implements Identifired<Long> {
 
-    private int id;
+    private Long id;
     private String name;
     private String country;
     private String city;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

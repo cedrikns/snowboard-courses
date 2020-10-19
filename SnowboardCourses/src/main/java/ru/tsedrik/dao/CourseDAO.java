@@ -7,7 +7,7 @@ import ru.tsedrik.model.Person;
 
 import java.util.Collection;
 
-public interface CourseDAO extends GenericDAO<Course, Integer> {
+public interface CourseDAO extends GenericDAO<Course, Long> {
 
     Course getByGroup(Group group);
     Collection<Course> getByInstructor(Person person);

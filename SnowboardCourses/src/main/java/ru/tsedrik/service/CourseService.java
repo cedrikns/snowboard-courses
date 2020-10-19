@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface CourseService {
     void addCourse(Course course);
     Course deleteCourse(Course course);
-    Course deleteCourseById(int id);
-    Course getCourseById(int id);
+    Course deleteCourseById(Long id);
+    Course getCourseById(Long id);
     Collection<Course> getCourseByType(CourseType type);
 }

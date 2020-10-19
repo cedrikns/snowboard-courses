@@ -3,8 +3,8 @@ package ru.tsedrik.model;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Course implements Identifired<Integer>{
-    private int id;
+public class Course implements Identifired<Long>{
+    private Long id;
     private CourseType courseType;
     private CourseLocation courseLocation;
     private LocalDate startTime;
@@ -13,11 +13,11 @@ public class Course implements Identifired<Integer>{
     private List<Group> groups;
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

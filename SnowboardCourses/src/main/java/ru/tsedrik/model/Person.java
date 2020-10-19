@@ -2,18 +2,18 @@ package ru.tsedrik.model;
 
 import java.util.Objects;
 
-public class Person  implements Identifired<Integer> {
-    private int id;
+public class Person  implements Identifired<Long> {
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private Role role;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

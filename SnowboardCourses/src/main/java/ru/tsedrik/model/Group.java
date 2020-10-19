@@ -2,18 +2,18 @@ package ru.tsedrik.model;
 
 import java.util.Set;
 
-public class Group implements Identifired<Integer> {
-    private int id;
+public class Group implements Identifired<Long> {
+    private Long id;
     private Person instructor;
     private int totalNumberOfPlaces;
     private int availableNumberOfPlaces;
     private Set<Person> students;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

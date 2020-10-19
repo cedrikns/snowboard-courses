@@ -16,12 +16,12 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public Person getPersonById(int id) {
+    public Person getPersonById(Long id) {
         return personDAO.getById(id);
     }
 
     @Override
-    public Person deletePersonById(int id) {
+    public Person deletePersonById(Long id) {
         return personDAO.deleteById(id);
     }
 

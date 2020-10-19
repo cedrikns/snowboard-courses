@@ -28,7 +28,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Course deleteCourseById(int id) {
+    public Course deleteCourseById(Long id) {
         return courseDAO.deleteById(id);
     }
 
@@ -38,7 +38,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Course getCourseById(int id) {
+    public Course getCourseById(Long id) {
         return courseDAO.getById(id);
     }
 }

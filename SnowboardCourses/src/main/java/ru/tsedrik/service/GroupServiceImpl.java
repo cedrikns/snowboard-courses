@@ -16,12 +16,12 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public Group getGroupById(int id) {
+    public Group getGroupById(Long id) {
         return groupDAO.getById(id);
     }
 
     @Override
-    public Group deleteGroupById(int id) {
+    public Group deleteGroupById(Long id) {
         return groupDAO.deleteById(id);
     }
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PersonDAOImpl extends AbstactDAO<Person, Integer> implements PersonDAO {
+public class PersonDAOImpl extends AbstactDAO<Person, Long> implements PersonDAO {
 
     public PersonDAOImpl() {
         super(new HashMap<>());

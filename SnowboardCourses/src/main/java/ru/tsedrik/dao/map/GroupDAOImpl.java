@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GroupDAOImpl extends AbstactDAO<Group, Integer> implements GroupDAO {
+public class GroupDAOImpl extends AbstactDAO<Group, Long> implements GroupDAO {
 
     public GroupDAOImpl() {
         super(new HashMap<>());
