@@ -2,11 +2,36 @@ package ru.tsedrik.model;
 
 import java.util.Set;
 
+/**
+ * Group представляет собой группу определенного курса.
+ * Каждая группа состоит из определенного количества участников
+ * и одного инструктора.
+ */
 public class Group implements Identifired<Long> {
+
+    /**
+     * Идентификатор группы
+     */
     private Long id;
+
+    /**
+     * Инструктор группы
+     */
     private Person instructor;
+
+    /**
+     * Общее количество мест в группе
+     */
     private int totalNumberOfPlaces;
+
+    /**
+     * Количество оставшихся свободных мест в группе
+     */
     private int availableNumberOfPlaces;
+
+    /**
+     * Список участников, которые будут обучатья в группе
+     */
     private Set<Person> students;
 
     public Long getId() {

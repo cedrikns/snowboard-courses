@@ -1,10 +1,31 @@
 package ru.tsedrik.model;
 
+/**
+ * CourseLocation представляет собой место проведения курса.
+ * Каждый объект данного класса будет характеризоваться:
+ * - названием
+ * - местом нахождения
+ */
 public class CourseLocation implements Identifired<Long> {
 
+    /**
+     * Идентификатор места проведения курса
+     */
     private Long id;
+
+    /**
+     * Название места проведения
+     */
     private String name;
+
+    /**
+     * Страна места проведения
+     */
     private String country;
+
+    /**
+     * Город места проведения
+     */
     private String city;
 
     public Long getId() {

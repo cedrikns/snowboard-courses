@@ -1,19 +1,24 @@
 package ru.tsedrik.service;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.tsedrik.config.SpringConfig;
 import ru.tsedrik.model.*;
 
-import java.awt.*;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
+/**
+ * MainService вспомогательный сервис для иллюстрации работы основной программы.
+ */
 public class MainService {
 
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         PersonService personService = (PersonService) context.getBean("personService");
         GroupService groupService = (GroupService) context.getBean("groupService");
         CourseService courseService = (CourseService) context.getBean("courseService");
@@ -68,7 +73,5 @@ public class MainService {
         course.setGroups(Arrays.asList(group));
         courseService.addCourse(course);
         System.out.println(courseService.getCourseById(22L));
-
     }
-
 }

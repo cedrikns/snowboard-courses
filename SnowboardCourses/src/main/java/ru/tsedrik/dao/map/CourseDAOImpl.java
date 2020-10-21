@@ -1,5 +1,6 @@
 package ru.tsedrik.dao.map;
 
+import org.springframework.stereotype.Repository;
 import ru.tsedrik.dao.CourseDAO;
 import ru.tsedrik.model.Course;
 import ru.tsedrik.model.CourseType;
@@ -12,6 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса CourseDAO
+ */
+@Repository
 public class CourseDAOImpl extends AbstactDAO<Course, Long> implements CourseDAO {
 
     public CourseDAOImpl() {
