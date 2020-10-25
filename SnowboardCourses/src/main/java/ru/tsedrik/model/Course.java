@@ -3,13 +3,49 @@ package ru.tsedrik.model;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Course представляет собой курс, на который будут записываться люди.
+ * Каждый объект данного класса будет характеризоваться:
+ * - названием курса
+ * - местом проведения
+ * - датой проведения
+ * - набором групп обучающихся
+ */
 public class Course implements Identifired<Long>{
+
+    /**
+     * Идентификатор курса
+     */
     private Long id;
+
+    /**
+     * Тип курса, от которого зависит программа
+     */
     private CourseType courseType;
+
+    /**
+     * Место проведения курса
+     */
     private CourseLocation courseLocation;
+
+    /**
+     * Дата начала курса
+     */
     private LocalDate startTime;
+
+    /**
+     * Дата окончания курса
+     */
     private LocalDate endTime;
+
+    /**
+     * Количество групп на курсе
+     */
     private int groupCount;
+
+    /**
+     * Список групп курса
+     */
     private List<Group> groups;
 
     @Override

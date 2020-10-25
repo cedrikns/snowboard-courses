@@ -2,11 +2,35 @@ package ru.tsedrik.model;
 
 import java.util.Objects;
 
+/**
+ * Person представляет собой участника курсов.
+ * Включает в себя как инструкторов, так и непосредственных участников.
+ */
 public class Person  implements Identifired<Long> {
+
+    /**
+     * Идентификатор участника
+     */
     private Long id;
+
+    /**
+     * Фамилия участника
+     */
     private String firstName;
+
+    /**
+     * Имя участника
+     */
     private String lastName;
+
+    /**
+     * Электронный адрес участника
+     */
     private String email;
+
+    /**
+     * Роль участника (Инструктор или Учащийся)
+     */
     private Role role;
 
     public Long getId() {

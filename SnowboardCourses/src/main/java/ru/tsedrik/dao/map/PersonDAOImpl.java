@@ -1,5 +1,6 @@
 package ru.tsedrik.dao.map;
 
+import org.springframework.stereotype.Repository;
 import ru.tsedrik.dao.PersonDAO;
 import ru.tsedrik.model.Person;
 import ru.tsedrik.model.Role;
@@ -8,6 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация интерфейса PersonDAO
+ */
+@Repository
 public class PersonDAOImpl extends AbstactDAO<Person, Long> implements PersonDAO {
 
     public PersonDAOImpl() {
