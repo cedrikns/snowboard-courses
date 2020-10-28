@@ -37,4 +37,12 @@ public interface GroupService {
      * @return  найденная группа
      */
     Group getGroupById(Long id);
+
+    /**
+     * Обновляет группу.
+     *
+     * @param group    группа, которая будет обновлена
+     */
+
+    Group updateGroup(Group group);
 }

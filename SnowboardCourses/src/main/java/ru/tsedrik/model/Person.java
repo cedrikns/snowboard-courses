@@ -33,6 +33,16 @@ public class Person  implements Identifired<Long> {
      */
     private Role role;
 
+    public Person(){}
+
+    public Person(Long id, String firstName, String lastName, String email, String role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = Role.valueOf(role.toUpperCase());
+    }
+
     public Long getId() {
         return id;
     }
@@ -71,6 +81,10 @@ public class Person  implements Identifired<Long> {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setRole(String role) {
+        this.role = Role.valueOf(role.toUpperCase());
     }
 
     @Override

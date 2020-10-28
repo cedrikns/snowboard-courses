@@ -1,5 +1,6 @@
 package ru.tsedrik.service;
 
+import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.model.Person;
 
 /**
@@ -10,9 +11,9 @@ public interface PersonService {
     /**
      * Добавляет нового участника курсов.
      *
-     * @param person    новый участник, который будет добавлен
+     * @param personDto    новый участник, который будет добавлен
      */
-    void addPerson(Person person);
+    PersonDto addPerson(PersonDto personDto);
 
     /**
      * Удаляет существующего участника курса.
@@ -28,7 +29,7 @@ public interface PersonService {
      * @param id    идентификатор удаляемого участника
      * @return  удаленный участник
      */
-    Person deletePersonById(Long id);
+    PersonDto deletePersonById(Long id);
 
     /**
      * Запрашивает участника курса по его идентификатору.
@@ -36,5 +37,12 @@ public interface PersonService {
      * @param id    идентификатор запрашиваемого участника
      * @return  найденный участник
      */
-    Person getPersonById(Long id);
+    PersonDto getPersonById(Long id);
+
+    /**
+     * Обновляет участника курсов.
+     *
+     * @param personDto    участник, который будет обновлен
+     */
+    PersonDto updatePerson(PersonDto personDto);
 }

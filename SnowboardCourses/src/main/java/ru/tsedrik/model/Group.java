@@ -1,6 +1,7 @@
 package ru.tsedrik.model;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Group представляет собой группу определенного курса.
@@ -32,7 +33,13 @@ public class Group implements Identifired<Long> {
     /**
      * Список участников, которые будут обучатья в группе
      */
-    private Set<Person> students;
+    private List<Person> students;
+
+    public Group(Long id, Integer totalNumberOfPlaces){
+        this.id = id;
+        this.totalNumberOfPlaces = this.availableNumberOfPlaces = totalNumberOfPlaces;
+        students = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -66,11 +73,11 @@ public class Group implements Identifired<Long> {
         this.availableNumberOfPlaces = availableNumberOfPlaces;
     }
 
-    public Set<Person> getStudents() {
+    public List<Person> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<Person> students) {
+    public void setStudents(List<Person> students) {
         this.students = students;
     }
 

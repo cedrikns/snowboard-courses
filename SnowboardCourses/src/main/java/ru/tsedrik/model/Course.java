@@ -1,6 +1,7 @@
 package ru.tsedrik.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,6 +48,16 @@ public class Course implements Identifired<Long>{
      * Список групп курса
      */
     private List<Group> groups;
+
+    public Course(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount) {
+        this.id = id;
+        this.courseType = CourseType.valueOf(courseType.toUpperCase());
+        this.courseLocation = courseLocation;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.groupCount = groupCount;
+        this.groups = new ArrayList<>();
+    }
 
     @Override
     public Long getId() {
@@ -105,6 +116,14 @@ public class Course implements Identifired<Long>{
         this.groups = groups;
     }
 
+    public Group getAvailableGroup(){
+        return groups.stream().filter(g -> g.getAvailableNumberOfPlaces() > 0).findFirst().get();
+    }
+
+    public boolean isAvailableGroupExist(){
+        return groups.stream().anyMatch(g -> g.getAvailableNumberOfPlaces() > 0);
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -113,6 +132,7 @@ public class Course implements Identifired<Long>{
                 ", courseLocation=" + courseLocation +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", groups=" + groups +
                 '}';
     }
 }
