@@ -32,7 +32,7 @@ public interface CourseService {
      * @param id    идентификатор удаляемого курса
      * @return  удаленный курс
      */
-    CourseDto deleteCourseById(Long id);
+    boolean deleteCourseById(Long id);
 
     /**
      * Запрашивает курс по его идентификатору.

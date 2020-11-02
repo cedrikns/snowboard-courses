@@ -14,7 +14,6 @@ public class CourseController {
 
     private CourseService courseService;
 
-    @Autowired
     public CourseController(CourseService courseService){
         this.courseService = courseService;
     }
@@ -32,13 +31,13 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public CourseDto deleteCourse(@PathVariable Long id){
-        CourseDto courseDto = courseService.deleteCourseById(id);
-        return courseDto;
+    public boolean deleteCourse(@PathVariable Long id){
+        boolean isDeleted = courseService.deleteCourseById(id);
+        return isDeleted;
     }
 
     @PostMapping(value = "/enroll")
-    public CourseDto createCourse(@RequestParam Long courseId, Long personId){
+    public CourseDto enrollCourse(@RequestParam Long courseId, Long personId){
         CourseDto courseDto = courseService.enroll(courseId, personId);
         return courseDto;
     }

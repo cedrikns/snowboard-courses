@@ -45,16 +45,15 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto deletePersonById(Long id) {
+    public boolean deletePersonById(Long id) {
         Person person = personDAO.deleteById(id);
-        PersonDto personDto = null;
+        boolean deletingResult;
         if (person != null) {
-            personDto = new PersonDto(
-                    person.getId(), person.getFirstName(), person.getLastName(),
-                    person.getEmail(), person.getRole().toString()
-            );
+            deletingResult = true;
+        } else {
+            deletingResult = false;
         }
-        return personDto;
+        return deletingResult;
     }
 
     @Override

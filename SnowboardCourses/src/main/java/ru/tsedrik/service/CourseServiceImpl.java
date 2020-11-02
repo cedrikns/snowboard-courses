@@ -80,18 +80,16 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public CourseDto deleteCourseById(Long id) {
+    public boolean deleteCourseById(Long id) {
         Course course = courseDAO.deleteById(id);
-        CourseDto courseDto = null;
+        boolean deletingResult;
         if (course != null) {
-            courseDto = new CourseDto(
-                    course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                    course.getStartTime(), course.getEndTime(),
-                    course.getGroupCount(), course.getGroups()
-            );
+            deletingResult = true;
+        } else {
+            deletingResult = false;
         }
 
-        return courseDto;
+        return deletingResult;
     }
 
     @Override

@@ -29,7 +29,7 @@ public interface PersonService {
      * @param id    идентификатор удаляемого участника
      * @return  удаленный участник
      */
-    PersonDto deletePersonById(Long id);
+    boolean deletePersonById(Long id);
 
     /**
      * Запрашивает участника курса по его идентификатору.

@@ -33,9 +33,9 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public PersonDto deletePerson(@PathVariable Long id){
-        PersonDto personDto = personService.deletePersonById(id);
-        return personDto;
+    public boolean deletePerson(@PathVariable Long id){
+        boolean isDeleted = personService.deletePersonById(id);
+        return isDeleted;
     }
 
     @PutMapping
