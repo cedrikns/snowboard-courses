@@ -1,8 +1,10 @@
 package ru.tsedrik.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ru.tsedrik.model.CourseLocation;
 import ru.tsedrik.model.Group;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CourseDto {
@@ -25,12 +27,14 @@ public class CourseDto {
     /**
      * Дата начала курса
      */
-    private String startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startTime;
 
     /**
      * Дата окончания курса
      */
-    private String endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endTime;
 
     /**
      * Количество групп на курсе
@@ -44,7 +48,7 @@ public class CourseDto {
 
     public CourseDto(){}
 
-    public CourseDto(Long id, String courseType, CourseLocation courseLocation, String startTime, String endTime, int groupCount, List<Group> groups) {
+    public CourseDto(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount, List<Group> groups) {
         this.id = id;
         this.courseType = courseType;
         this.courseLocation = courseLocation;
@@ -78,19 +82,19 @@ public class CourseDto {
         this.courseLocation = courseLocation;
     }
 
-    public String getStartTime() {
+    public LocalDate getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDate startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDate getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDate endTime) {
         this.endTime = endTime;
     }
 

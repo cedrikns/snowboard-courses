@@ -11,7 +11,6 @@ import ru.tsedrik.model.CourseType;
 import ru.tsedrik.model.Group;
 import ru.tsedrik.model.Person;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class CourseServiceImpl implements CourseService{
     public CourseDto addCourse(CourseDto courseDto) {
         Course course = new Course(
                 System.currentTimeMillis(), courseDto.getCourseType(), courseDto.getCourseLocation(),
-                LocalDate.parse(courseDto.getStartTime()), LocalDate.parse(courseDto.getEndTime()),
+                courseDto.getStartTime(), courseDto.getEndTime(),
                 courseDto.getGroupCount()
         );
 
@@ -87,7 +86,7 @@ public class CourseServiceImpl implements CourseService{
         if (course != null) {
             courseDto = new CourseDto(
                     course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                    course.getStartTime().toString(), course.getEndTime().toString(),
+                    course.getStartTime(), course.getEndTime(),
                     course.getGroupCount(), course.getGroups()
             );
         }
@@ -109,7 +108,7 @@ public class CourseServiceImpl implements CourseService{
         }
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                course.getStartTime().toString(), course.getEndTime().toString(),
+                course.getStartTime(), course.getEndTime(),
                 course.getGroupCount(), course.getGroups()
         );
 
@@ -142,7 +141,7 @@ public class CourseServiceImpl implements CourseService{
 
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                course.getStartTime().toString(), course.getEndTime().toString(),
+                course.getStartTime(), course.getEndTime(),
                 course.getGroupCount(), course.getGroups()
         );
 
