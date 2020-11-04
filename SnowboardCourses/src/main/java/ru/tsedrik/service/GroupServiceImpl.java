@@ -1,8 +1,13 @@
 package ru.tsedrik.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tsedrik.dao.GroupDAO;
 import ru.tsedrik.model.Group;
+
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * Реализация интерфейса GroupService
@@ -14,6 +19,8 @@ public class GroupServiceImpl implements GroupService{
      * Объект для управления персистентным состоянием объектов типа Group
      */
     private GroupDAO groupDAO;
+
+    private static final Logger logger = LogManager.getLogger(GroupServiceImpl.class.getName());
 
     public GroupServiceImpl(GroupDAO groupDAO){
         this.groupDAO = groupDAO;
@@ -42,5 +49,13 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Group updateGroup(Group group) {
         return groupDAO.update(group);
+    }
+
+    @Override
+    @Async
+    public void asyncMethod() {
+        LockSupport.parkNanos(5_000_000_000L);
+        logger.info("Async method was executed.");
+        throw new RuntimeException("Exception in asyncMethod()");
     }
 }

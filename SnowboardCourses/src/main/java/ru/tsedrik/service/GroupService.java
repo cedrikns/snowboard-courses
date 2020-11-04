@@ -45,4 +45,6 @@ public interface GroupService {
      */
 
     Group updateGroup(Group group);
+
+    void asyncMethod();
 }
