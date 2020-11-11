@@ -1,0 +1,73 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="group"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="group"
+                     remarks="Таблица созданных групп">
+            <column name="id" type="bigint"
+                    remarks="Идентификатор записи">
+                <constraints primaryKey="true"
+                             primaryKeyName="group_pk"
+                             nullable="false"/>
+            </column>
+            <!-- Ссылка на курс, к которому принадлежит данная группа -->
+            <column name="course_id" type="bigint"
+                    remarks="Идентификатор записи в таблице course">
+                <constraints foreignKeyName="course_fk"
+                             referencedTableName="course"
+                             referencedColumnNames="id"
+                             nullable="false"/>
+            </column>
+            <!-- Ссылка на инструктора, который будет заниматься с этой группой -->
+            <column name="person_id" type="bigint"
+                    remarks="Идентификатор записи в таблице person">
+                <constraints foreignKeyName="person_fk"
+                             referencedTableName="person"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="places_num_total" type="smallint"
+                    remarks="Общее количество мест в группе">
+                <constraints nullable="false"/>
+            </column>
+            <column name="places_num_available" type="smallint"
+                    remarks="Количество свободных мест в группе">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <comment>Задача по созданию групп</comment>
+    </changeSet>
+
+    <changeSet id="2" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="group" indexName="group_course_idx"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="group" indexName="group_course_idx">
+            <column name="course_id"/>
+        </createIndex>
+        <comment>Индекс для поиска по идентификатору курса</comment>
+    </changeSet>
+
+    <changeSet id="3" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="group" indexName="group_instructor_idx"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="group" indexName="group_instructor_idx">
+            <column name="person_id"/>
+        </createIndex>
+        <comment>Индекс для поиска по инструктору</comment>
+    </changeSet>
+
+</databaseChangeLog>
