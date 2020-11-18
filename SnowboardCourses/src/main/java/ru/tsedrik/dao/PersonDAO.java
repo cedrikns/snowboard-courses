@@ -17,4 +17,19 @@ public interface PersonDAO extends GenericDAO<Person, Long> {
      * @return  список найденных участников
      */
     Collection<Person> getAllByRole(Role role);
+
+    /**
+     * Возвращает участника по его электронному адресу
+     *
+     * @param email электронный адрес участника
+     * @return  найденный участник
+     */
+    Person getPersonByEmail(String email);
+
+    /**
+     * Возвращает всех участников группы
+     * @param groupId  идентификатор группы
+     * @return  список найденных участников
+     */
+    Collection<Person> getAllByGroupId(Long groupId);
 }

@@ -1,18 +1,18 @@
 {
 	"info": {
-		"_postman_id": "5146f059-cf1f-45b9-92c6-82b84103ac2c",
-		"name": "CourseController",
+		"_postman_id": "699f1bc6-15b3-4fd8-ad30-42b7b7051b44",
+		"name": "LocationController",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Create Course",
+			"name": "Create Location",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"courseType\" : \"CARVING\",\r\n    \"startTime\" : \"2020-11-15\",\r\n    \"endTime\" : \"2020-11-25\",\r\n    \"groupCount\" : \"2\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"Шерегеш\",\r\n    \"country\" : \"Россия\",\r\n    \"city\" : \"Шерегеш\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,20 +20,20 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course",
+					"raw": "localhost:8080/courseLocation",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"course"
+						"courseLocation"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Course",
+			"name": "Get Location",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -50,21 +50,21 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course/1603911916937",
+					"raw": "localhost:8080/courseLocation/1605562874218",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"course",
-						"1603911916937"
+						"courseLocation",
+						"1605562874218"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete Course",
+			"name": "Delete Location",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -78,27 +78,27 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/person/1603897817375",
+					"raw": "localhost:8080/courseLocation/1605562874218",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"person",
-						"1603897817375"
+						"courseLocation",
+						"1605562874218"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Enroll Course",
+			"name": "Update Location",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"courseType\" : \"FREERIDE\",\r\n    \"startTime\" : \"15.11.2020\",\r\n    \"endTime\" : \"25.11.2020\",\r\n    \"groupCount\" : \"2\"\r\n}",
+					"raw": "{\r\n    \"id\" : \"1605562874218\",\r\n    \"name\" : \"Шерегеш\",\r\n    \"country\" : \"Российская Федерация\",\r\n    \"city\" : \"Шерегеш\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -106,24 +106,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course/enroll?courseId&personId",
+					"raw": "localhost:8080/courseLocation",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"course",
-						"enroll"
-					],
-					"query": [
-						{
-							"key": "courseId",
-							"value": null
-						},
-						{
-							"key": "personId",
-							"value": null
-						}
+						"courseLocation"
 					]
 				}
 			},

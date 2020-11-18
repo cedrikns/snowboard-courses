@@ -16,6 +16,11 @@ public class Group implements Identifired<Long> {
     private Long id;
 
     /**
+     * Идентификатор курса, для которого создана данная группа
+     */
+    private Long courseId;
+
+    /**
      * Инструктор группы
      */
     private Person instructor;
@@ -35,8 +40,11 @@ public class Group implements Identifired<Long> {
      */
     private List<Person> students;
 
-    public Group(Long id, Integer totalNumberOfPlaces){
+    public Group() {}
+
+    public Group(Long id, Long courseId, Integer totalNumberOfPlaces){
         this.id = id;
+        this.courseId = courseId;
         this.totalNumberOfPlaces = this.availableNumberOfPlaces = totalNumberOfPlaces;
         students = new ArrayList<>();
     }
@@ -79,6 +87,14 @@ public class Group implements Identifired<Long> {
 
     public void setStudents(List<Person> students) {
         this.students = students;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     @Override
