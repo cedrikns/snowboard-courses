@@ -6,10 +6,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.controller.dto.PersonDto;
+import ru.tsedrik.model.Role;
 import ru.tsedrik.service.PersonService;
 import ru.tsedrik.validator.PersonDtoValidator;
 
 import java.net.URI;
+import java.util.List;
 
 
 /**
@@ -38,6 +40,18 @@ public class PersonController {
     public PersonDto getPerson(@PathVariable Long id){
         PersonDto personDto = personService.getPersonById(id);
         return personDto;
+    }
+
+    @GetMapping(params = "email")
+    public PersonDto getAllPersonByEmail(@RequestParam String email){
+        PersonDto personDto = personService.getPersonByEmail(email);
+        return personDto;
+    }
+
+    @GetMapping(params = "role")
+    public List<PersonDto> getAllPersonByRole(@RequestParam String role){
+        List<PersonDto> personsWithRole = personService.getAllPersonByRole(Role.valueOf(role.toUpperCase()));
+        return personsWithRole;
     }
 
     @DeleteMapping(value = "/{id}")

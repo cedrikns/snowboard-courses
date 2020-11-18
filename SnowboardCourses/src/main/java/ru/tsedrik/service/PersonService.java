@@ -2,6 +2,9 @@ package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.model.Person;
+import ru.tsedrik.model.Role;
+
+import java.util.List;
 
 /**
  * PersonService представляет интерфейс взаимодействия с классом Person
@@ -40,9 +43,25 @@ public interface PersonService {
     PersonDto getPersonById(Long id);
 
     /**
+     * Запрашивает участника курса по его электронному адресу.
+     *
+     * @param email    электронный адрес запрашиваемого участника
+     * @return  найденный участник
+     */
+    PersonDto getPersonByEmail(String email);
+
+    /**
      * Обновляет участника курсов.
      *
      * @param personDto    участник, который будет обновлен
      */
     PersonDto updatePerson(PersonDto personDto);
+
+    /**
+     * Получает всех участников с указанной ролью
+     *
+     * @param role  роль участника
+     * @return      список найденных участников с указанной ролью
+     */
+    List<PersonDto> getAllPersonByRole(Role role);
 }
