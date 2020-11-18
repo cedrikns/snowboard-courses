@@ -1,12 +1,6 @@
-package ru.tsedrik.model;
+package ru.tsedrik.controller.dto;
 
-/**
- * CourseLocation представляет собой место проведения курса.
- * Каждый объект данного класса будет характеризоваться:
- * - названием
- * - местом нахождения
- */
-public class CourseLocation implements Identifired<Long> {
+public class CourseLocationDto {
 
     /**
      * Идентификатор места проведения курса
@@ -28,9 +22,9 @@ public class CourseLocation implements Identifired<Long> {
      */
     private String city;
 
-    public CourseLocation() {}
+    public CourseLocationDto(){}
 
-    public CourseLocation(Long id, String name, String country, String city) {
+    public CourseLocationDto(Long id, String name, String country, String city) {
         this.id = id;
         this.name = name;
         this.country = country;
@@ -67,15 +61,5 @@ public class CourseLocation implements Identifired<Long> {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    @Override
-    public String toString() {
-        return "CourseLocation{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                '}';
     }
 }

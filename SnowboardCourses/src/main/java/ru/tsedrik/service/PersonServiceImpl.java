@@ -2,15 +2,22 @@ package ru.tsedrik.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.dao.PersonDAO;
 import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.model.Person;
+import ru.tsedrik.model.Role;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса PersonService
  */
 @Service
+@Transactional
 public class PersonServiceImpl implements PersonService{
 
     /**
@@ -43,7 +50,20 @@ public class PersonServiceImpl implements PersonService{
     public PersonDto getPersonById(Long id) {
         Person person = personDAO.getById(id);
         if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + id);
+            throw new PersonNotFoundException(personNotFoundExMsg + "id = " + id);
+        }
+        PersonDto personDto = new PersonDto(
+                person.getId(), person.getFirstName(), person.getLastName(),
+                person.getEmail(), person.getRole().toString()
+        );
+        return personDto;
+    }
+
+    @Override
+    public PersonDto getPersonByEmail(String email) {
+        Person person = personDAO.getPersonByEmail(email);
+        if (person == null){
+            throw new PersonNotFoundException(personNotFoundExMsg + "email = " + email);
         }
         PersonDto personDto = new PersonDto(
                 person.getId(), person.getFirstName(), person.getLastName(),
@@ -54,14 +74,7 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public boolean deletePersonById(Long id) {
-        Person person = personDAO.deleteById(id);
-        boolean deletingResult;
-        if (person != null) {
-            deletingResult = true;
-        } else {
-            deletingResult = false;
-        }
-        return deletingResult;
+        return personDAO.deleteById(id);
     }
 
     @Override
@@ -73,7 +86,7 @@ public class PersonServiceImpl implements PersonService{
     public PersonDto updatePerson(Long id, PersonDto personDto) {
         Person person = personDAO.getById(id);
         if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + personDto.getId());
+            throw new PersonNotFoundException(personNotFoundExMsg + "id = " + personDto.getId());
         }
         person.setFirstName(personDto.getFirstName());
         person.setLastName(personDto.getLastName());
@@ -84,5 +97,20 @@ public class PersonServiceImpl implements PersonService{
         personDto.setId(id);
 
         return personDto;
+    }
+
+    @Override
+    public List<PersonDto> getAllPersonByRole(Role role) {
+        Collection<Person> persons = personDAO.getAllByRole(role);
+
+        List<PersonDto> result = persons.stream().map(person -> {
+            PersonDto personDto = new PersonDto(
+                    person.getId(), person.getFirstName(), person.getLastName(),
+                    person.getEmail(), person.getRole().toString()
+            );
+            return personDto;
+        }).collect(Collectors.toList());
+
+        return result;
     }
 }
