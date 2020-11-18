@@ -11,11 +11,26 @@ import java.util.Collection;
 public interface GroupDAO extends GenericDAO<Group, Long> {
 
     /**
-     * Возвращает список записей о группах, содержащих указанного участника.
+     * Возвращает список записей о группах с конкретным инструктором.
      *
-     * @param person    участник
+     * @param person    инструктор
      * @return  список найденных групп
      */
-    Collection<Group> getAllByPerson(Person person);
+    Collection<Group> getAllByInstructor(Person person);
 
+    /**
+     * Возвращает список записей о группах, составляющих конкретный курс.
+     *
+     * @param id    идентификатор курса, группы которого нужно найти
+     * @return  список найденных групп
+     */
+    Collection<Group> getAllByCourseId(Long id);
+
+    /**
+     * Добавляет участника в группу.
+     *
+     * @param groupId    идентификатор группы, в которую будет добавлен участник
+     * @param personId   идентификатор участника, который будет добавлен в группу
+     */
+    boolean addPersonToGroup(Long groupId, Long personId);
 }
