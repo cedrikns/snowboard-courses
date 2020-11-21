@@ -1,5 +1,6 @@
 package ru.tsedrik.service;
 
+import ru.tsedrik.controller.dto.CourseDto;
 import ru.tsedrik.model.Course;
 import ru.tsedrik.model.CourseType;
 
@@ -13,9 +14,9 @@ public interface CourseService {
     /**
      * Добавляет новый курс.
      *
-     * @param course    новый курс, который будет добавлен
+     * @param courseDto    новый курс, который будет добавлен
      */
-    void addCourse(Course course);
+    CourseDto addCourse(CourseDto courseDto);
 
     /**
      * Удаляет существующий курс.
@@ -31,7 +32,7 @@ public interface CourseService {
      * @param id    идентификатор удаляемого курса
      * @return  удаленный курс
      */
-    Course deleteCourseById(Long id);
+    boolean deleteCourseById(Long id);
 
     /**
      * Запрашивает курс по его идентификатору.
@@ -39,7 +40,7 @@ public interface CourseService {
      * @param id    идентификатор запрашиваемого курса
      * @return  найденный курс
      */
-    Course getCourseById(Long id);
+    CourseDto getCourseById(Long id);
 
     /**
      * Запрашивает набор всех курсов указанного типа CourseType.
@@ -48,4 +49,12 @@ public interface CourseService {
      * @return  список всех найденных курсов указанного типа
      */
     Collection<Course> getCourseByType(CourseType type);
+
+    /**
+     * Записывает Участника на конкретный курс
+     * @param courseId  идентификатор курса, на который будет записан Участник
+     * @param personId  идентификатор Участника
+     * @return  Обновленный курс
+     */
+    CourseDto enroll(Long courseId, Long personId);
 }

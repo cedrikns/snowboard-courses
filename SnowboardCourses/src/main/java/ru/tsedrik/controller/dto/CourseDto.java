@@ -1,18 +1,13 @@
-package ru.tsedrik.model;
+package ru.tsedrik.controller.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import ru.tsedrik.model.CourseLocation;
+import ru.tsedrik.model.Group;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Course представляет собой курс, на который будут записываться люди.
- * Каждый объект данного класса будет характеризоваться:
- * - названием курса
- * - местом проведения
- * - датой проведения
- * - набором групп обучающихся
- */
-public class Course implements Identifired<Long>{
+public class CourseDto {
 
     /**
      * Идентификатор курса
@@ -22,7 +17,7 @@ public class Course implements Identifired<Long>{
     /**
      * Тип курса, от которого зависит программа
      */
-    private CourseType courseType;
+    private String courseType;
 
     /**
      * Место проведения курса
@@ -32,11 +27,13 @@ public class Course implements Identifired<Long>{
     /**
      * Дата начала курса
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startTime;
 
     /**
      * Дата окончания курса
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endTime;
 
     /**
@@ -49,17 +46,18 @@ public class Course implements Identifired<Long>{
      */
     private List<Group> groups;
 
-    public Course(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount) {
+    public CourseDto(){}
+
+    public CourseDto(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount, List<Group> groups) {
         this.id = id;
-        this.courseType = CourseType.valueOf(courseType.toUpperCase());
+        this.courseType = courseType;
         this.courseLocation = courseLocation;
         this.startTime = startTime;
         this.endTime = endTime;
         this.groupCount = groupCount;
-        this.groups = new ArrayList<>();
+        this.groups = groups;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
@@ -68,11 +66,11 @@ public class Course implements Identifired<Long>{
         this.id = id;
     }
 
-    public CourseType getCourseType() {
+    public String getCourseType() {
         return courseType;
     }
 
-    public void setCourseType(CourseType courseType) {
+    public void setCourseType(String courseType) {
         this.courseType = courseType;
     }
 
@@ -114,25 +112,5 @@ public class Course implements Identifired<Long>{
 
     public void setGroups(List<Group> groups) {
         this.groups = groups;
-    }
-
-    public Group getAvailableGroup(){
-        return groups.stream().filter(g -> g.getAvailableNumberOfPlaces() > 0).findFirst().get();
-    }
-
-    public boolean isAvailableGroupExist(){
-        return groups.stream().anyMatch(g -> g.getAvailableNumberOfPlaces() > 0);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", courseType=" + courseType +
-                ", courseLocation=" + courseLocation +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", groups=" + groups +
-                '}';
     }
 }
