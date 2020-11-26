@@ -28,18 +28,38 @@ public class CourseServiceImpl implements CourseService{
      * Объект для управления персистентным состоянием объектов типа Course
      */
     private CourseDAO courseDAO;
+
+    /**
+     * Объект для управления персистентным состоянием объектов типа Person
+     */
     private PersonDAO personDAO;
+
+    /**
+     * Объект для управления обращения к сервису сущности Group
+     */
     private GroupService groupService;
 
+    /**
+     * Максимальное количество групп на курсе
+     */
     @Value("${course.maxGroupCount}")
     private String maxGroupCount;
 
+    /**
+     * Максимальное количество участников в одной группе
+     */
     @Value("${group.maxPersonPerGroup}")
     private String maxPersonPerGroup;
 
+    /**
+     * Шаблон сообщения об ошибке для исключения CourseNotFoundException
+     */
     @Value("${exception.courseNotFound}")
     private String courseNotFoundExMsg;
 
+    /**
+     * Шаблон сообщения об ошибке для исключения PersonNotFoundException
+     */
     @Value("${exception.personNotFound}")
     private String personNotFoundExMsg;
 

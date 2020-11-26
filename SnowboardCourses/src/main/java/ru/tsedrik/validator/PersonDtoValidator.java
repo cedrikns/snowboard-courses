@@ -6,6 +6,9 @@ import org.springframework.validation.Validator;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.exception.PersonFormValidationException;
 
+/**
+ * Валидатор для полей формы по созданию сущности Person
+ */
 @Component
 public class PersonDtoValidator implements Validator {
 

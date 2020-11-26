@@ -18,6 +18,9 @@ public class PersonServiceImpl implements PersonService{
      */
     private PersonDAO personDAO;
 
+    /**
+     * Шаблон сообщения об ошибке для исключения PersonNotFoundException
+     */
     @Value("${exception.personNotFound}")
     private String personNotFoundExMsg;
 

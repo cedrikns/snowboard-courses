@@ -1,6 +1,5 @@
 package ru.tsedrik.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,7 +22,6 @@ public class PersonController {
     private PersonService personService;
     private PersonDtoValidator personDtoValidator;
 
-    @Autowired
     public PersonController(PersonService personService, PersonDtoValidator personDtoValidator){
         this.personService = personService;
         this.personDtoValidator = personDtoValidator;

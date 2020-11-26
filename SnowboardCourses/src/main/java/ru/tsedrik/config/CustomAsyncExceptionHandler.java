@@ -6,13 +6,15 @@ import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 
 import java.lang.reflect.Method;
 
+/**
+ * Класс для перехвата исключений при асинхронном взаимодействии
+ */
 public class CustomAsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
 
     private static final Logger log = LogManager.getLogger(CustomAsyncExceptionHandler.class.getName());
 
     @Override
     public void handleUncaughtException(Throwable throwable, Method method, Object... objects) {
-        log.error("Exception message - " + throwable.getMessage());
-        log.error("Method name - " + method.getName());
+        log.error("Method name - " + method.getName() + ". Exception message - " + throwable.getMessage());
     }
 }

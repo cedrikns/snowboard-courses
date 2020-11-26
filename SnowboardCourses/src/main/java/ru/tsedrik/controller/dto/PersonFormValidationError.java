@@ -4,11 +4,32 @@ import org.springframework.validation.ObjectError;
 
 import java.util.List;
 
+/**
+ * Класс для возврата пользователю информации об ошибках, которые возникли во время валидации формы для создания сущности Person
+ */
 public class PersonFormValidationError {
+
+    /**
+     * Идентификатор объекта
+     */
     private Long id;
+
+    /**
+     * Код исключения, в результате которого был создан данный объект
+     */
     private String errorCode;
+
+    /**
+     * Списко ошибок, которые возникли в результате валидации заполнения полей формы
+     */
     private List<ObjectError> errors;
+
+    /**
+     * Идентификатор системы, в которой произошло исключение
+     */
     private String systemId;
+
+
 
     public PersonFormValidationError(Long id, List<ObjectError> errors, String errorCode, String systemId) {
         this.id = id;

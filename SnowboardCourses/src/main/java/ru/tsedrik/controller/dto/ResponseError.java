@@ -1,9 +1,28 @@
 package ru.tsedrik.controller.dto;
 
+/**
+ * Класс для возврата пользователю информации о возникшем исключении во время обработки его запроса.
+ */
 public class ResponseError {
+
+    /**
+     * Идентификатор объекта
+     */
     private Long id;
+
+    /**
+     * Сообщение исключения
+     */
     private String message;
+
+    /**
+     * Код исключения, в результате которого был создан данный объект
+     */
     private String errorCode;
+
+    /**
+     * Идентификатор системы, в которой произошло исключение
+     */
     private String systemId;
 
     public ResponseError(Long id, String message, String errorCode, String systemId) {

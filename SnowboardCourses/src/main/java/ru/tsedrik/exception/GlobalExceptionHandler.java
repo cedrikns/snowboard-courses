@@ -1,5 +1,6 @@
 package ru.tsedrik.exception;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +9,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tsedrik.controller.dto.PersonFormValidationError;
 import ru.tsedrik.controller.dto.ResponseError;
 
+/**
+ * Класс для перехвата исключений
+ */
 @RestControllerAdvice(basePackages = "ru.tsedrik.controller")
 public class GlobalExceptionHandler {
+
+    /**
+     * Идентификатор системы, в которой произошло исключение
+     */
+    @Value("${system.id}")
+    private String systemId;
 
     /**
      * Метод для перехвата и обработки исключения PersonFormValidationException
@@ -21,7 +31,7 @@ public class GlobalExceptionHandler {
                 System.currentTimeMillis(),
                 e.getErrors().getAllErrors(),
                 "personFormValidationException",
-                "my-system");
+                systemId);
 
         return new ResponseEntity<>(validationError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
@@ -35,7 +45,7 @@ public class GlobalExceptionHandler {
         ResponseError responseError = new ResponseError(System.currentTimeMillis(),
                 e.getMessage(),
                 "entityNotFoundException",
-                "my-system");
+                systemId);
 
         return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
@@ -48,7 +58,7 @@ public class GlobalExceptionHandler {
         ResponseError responseError = new ResponseError(System.currentTimeMillis(),
                 e.getMessage(),
                 "illegalArgumentException",
-                "my-system");
+                systemId);
 
         return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
@@ -62,7 +72,7 @@ public class GlobalExceptionHandler {
         ResponseError responseError = new ResponseError(System.currentTimeMillis(),
                 e.getMessage(),
                 "undefinedException",
-                "my-system");
+                systemId);
 
         return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
