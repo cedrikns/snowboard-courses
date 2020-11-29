@@ -2,12 +2,9 @@ package ru.tsedrik.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tsedrik.dao.GroupDAO;
 import ru.tsedrik.model.Group;
-
-import java.util.concurrent.locks.LockSupport;
 
 /**
  * Реализация интерфейса GroupService
@@ -51,11 +48,4 @@ public class GroupServiceImpl implements GroupService{
         return groupDAO.update(group);
     }
 
-    @Override
-    @Async
-    public void asyncMethod() {
-        LockSupport.parkNanos(5_000_000_000L);
-        logger.info("Async method was executed.");
-        throw new RuntimeException("Exception in asyncMethod()");
-    }
 }

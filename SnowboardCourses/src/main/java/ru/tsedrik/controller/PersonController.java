@@ -34,21 +34,21 @@ public class PersonController {
         return ResponseEntity.created(uri).body(resultPersonDto);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public PersonDto getPerson(@PathVariable Long id){
         PersonDto personDto = personService.getPersonById(id);
         return personDto;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public boolean deletePerson(@PathVariable Long id){
         boolean isDeleted = personService.deletePersonById(id);
         return isDeleted;
     }
 
-    @PutMapping
-    public PersonDto updatePerson(@RequestBody PersonDto personDto){
-        personService.updatePerson(personDto);
+    @PutMapping(value = "/{id}")
+    public PersonDto updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto){
+        personService.updatePerson(id, personDto);
         return personDto;
     }
 

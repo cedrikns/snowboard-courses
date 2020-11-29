@@ -39,7 +39,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\" : \"Павел\",\r\n    \"lastName\" : \"Главный\",\r\n    \"email\" : \"glavnii@gmail.ru\",\r\n    \"role\" : \"STUDENT\"\r\n}",
+					"raw": "{\r\n    \"firstName\" : \"Иван\",\r\n    \"lastName\" : \"Иванов\",\r\n    \"email\" : \"ivanov2@gmail.com\",\r\n    \"role\" : \"STUDENT\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -66,7 +66,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\" : \"\",\r\n    \"firstName\" : \"Иван\",\r\n    \"lastName\" : \"Иванов\",\r\n    \"email\" : \"ivanov@gmail.ru\",\r\n    \"role\" : \"instructor\"\r\n}",
+					"raw": "{\r\n    \"firstName\" : \"Петр\",\r\n    \"lastName\" : \"Иванов\",\r\n    \"email\" : \"ivanov@gmail.ru\",\r\n    \"role\" : \"instructor\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,13 +74,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/person",
+					"raw": "localhost:8080/person/1603899879725",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"person"
+						"person",
+						"1603899879725"
 					]
 				}
 			},
@@ -93,7 +94,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\" : \"1603899879725\",\r\n    \"firstName\" : \"Николай\",\r\n    \"lastName\" : \"Главный\",\r\n    \"email\" : \"glavnii@gmail.ru\",\r\n    \"role\" : \"STUDENT\"\r\n}",
+					"raw": "{\r\n    \"id\" : \"1605722867719\",\r\n    \"firstName\" : \"Антонина\",\r\n    \"lastName\" : \"Пионовна\",\r\n    \"email\" : \"pionov@gmail.com\",\r\n    \"role\" : \"STUDENT\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,13 +102,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/person",
+					"raw": "localhost:8080/person/1606666770435",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"person"
+						"person",
+						"1606666770435"
 					]
 				}
 			},
@@ -194,6 +196,78 @@
 					"port": "8080",
 					"path": [
 						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Person By Role",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/person?role=student",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "role",
+							"value": "student"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Person By Email",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/person?email=leonov@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "leonov@gmail.com"
+						}
 					]
 				}
 			},

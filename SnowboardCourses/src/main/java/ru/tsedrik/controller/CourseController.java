@@ -26,7 +26,7 @@ public class CourseController {
     }
 
     @GetMapping(value = "/{id}")
-    public CourseDto getPerson(@PathVariable Long id){
+    public CourseDto getCourse(@PathVariable Long id){
         CourseDto courseDto = courseService.getCourseById(id);
         return courseDto;
     }

@@ -87,8 +87,6 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public CourseDto addCourse(CourseDto courseDto) {
 
-//        groupService.asyncMethod();
-
         logger.info("Work after asyncMethod was called.");
 
         Course course = new Course(
