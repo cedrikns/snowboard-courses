@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 /**
- * Configuration class for DataSourse
+ * Конфигурационный файл для настройки и создания DataSource
  */
-
 @Configuration
 @EnableTransactionManagement
 public class DataSourceConfig {

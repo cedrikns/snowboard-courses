@@ -12,7 +12,6 @@ import java.sql.SQLException;
 /**
  * Mapper from ResultSet to Person
  */
-
 public class PersonRowMapper implements RowMapper<Person> {
 
     private static final Logger log = LogManager.getLogger(PersonRowMapper.class.getName());

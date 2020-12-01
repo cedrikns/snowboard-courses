@@ -3,6 +3,9 @@ package ru.tsedrik.service;
 import ru.tsedrik.controller.dto.CourseLocationDto;
 import ru.tsedrik.model.CourseLocation;
 
+/**
+ * LocationService представляет интерфейс взаимодействия с классом CourseLocation
+ */
 public interface LocationService {
 
     /**
@@ -39,7 +42,8 @@ public interface LocationService {
     /**
      * Обновляет место проведения курса.
      *
+     * @param id    идентификатор места проведения, которое будет обновлено
      * @param locationDto    место проведения курса, которое будет обновлено
      */
-    CourseLocationDto updateLocation(CourseLocationDto locationDto);
+    CourseLocationDto updateLocation(Long id, CourseLocationDto locationDto);
 }

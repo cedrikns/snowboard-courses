@@ -7,6 +7,9 @@ import org.springframework.context.annotation.DependsOn;
 
 import javax.sql.DataSource;
 
+/**
+ * Конфигурационный файл для настройки и создания Liquibase
+ */
 @Configuration
 @DependsOn("dataSource")
 public class LiquibaseConfig {

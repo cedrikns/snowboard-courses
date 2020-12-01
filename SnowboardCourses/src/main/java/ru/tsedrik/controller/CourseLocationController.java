@@ -14,7 +14,6 @@ import ru.tsedrik.service.LocationService;
 public class CourseLocationController {
     private LocationService locationService;
 
-    @Autowired
     public CourseLocationController(LocationService locationService) {
         this.locationService = locationService;
     }
@@ -38,9 +37,9 @@ public class CourseLocationController {
         return isDeleted;
     }
 
-    @PutMapping
-    public CourseLocationDto updateCourseLocation(@RequestBody CourseLocationDto locationDto){
-        locationService.updateLocation(locationDto);
+    @PutMapping(value = "/{id}")
+    public CourseLocationDto updateCourseLocation(@PathVariable Long id, @RequestBody CourseLocationDto locationDto){
+        locationService.updateLocation(id, locationDto);
         return locationDto;
     }
 }
