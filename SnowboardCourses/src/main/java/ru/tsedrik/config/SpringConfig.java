@@ -1,6 +1,8 @@
 package ru.tsedrik.config;
 
 import org.springframework.context.annotation.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
  * Общий конфигурационный файл spring
@@ -10,4 +12,10 @@ import org.springframework.context.annotation.*;
 @ComponentScan("ru.tsedrik")
 public class SpringConfig {
 
+    @Bean
+    public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
+        RequestMappingHandlerAdapter bean = new RequestMappingHandlerAdapter();
+        bean.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        return bean;
+    }
 }
