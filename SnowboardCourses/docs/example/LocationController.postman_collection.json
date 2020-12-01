@@ -98,7 +98,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\" : \"1605562874218\",\r\n    \"name\" : \"Шерегеш\",\r\n    \"country\" : \"Российская Федерация\",\r\n    \"city\" : \"Шерегеш\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"Шерегеш\",\r\n    \"country\" : \"Российская Федерация\",\r\n    \"city\" : \"Шерегеш\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -106,13 +106,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/courseLocation",
+					"raw": "localhost:8080/courseLocation/1606846688879",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"courseLocation"
+						"courseLocation",
+						"1606846688879"
 					]
 				}
 			},

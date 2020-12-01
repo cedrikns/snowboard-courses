@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import javax.sql.DataSource;
 
 /**
- * Configuration class for Spring JDBC classes
+ * Конфигурационный файл для Spring JDBC классов
  */
 
 @Configuration
