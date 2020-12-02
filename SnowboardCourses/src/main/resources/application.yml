@@ -1,0 +1,51 @@
+server:
+  port: ${APP_PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    context-path: /snowboard-courses
+    application-display-name: SnowboardCourses
+  tomcat:
+    max-connections: 1000
+    accept-count: 100
+    connection-timeout: 30000
+
+spring:
+  application:
+    name: snowboard-courses
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.xml
+
+logging:
+  level:
+    ROOT: INFO
+    ru.iteco: DEBUG
+    org.springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+  metrics:
+    export:
+      atlas:
+        enabled: true
+
+system:
+  id: snowboard-courses
+
+course:
+  maxGroupCount: 2
+group:
+  maxPersonPerGroup: 2

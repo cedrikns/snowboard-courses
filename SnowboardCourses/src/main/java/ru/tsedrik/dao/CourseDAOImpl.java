@@ -1,7 +1,7 @@
 package ru.tsedrik.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -22,7 +22,7 @@ import java.util.*;
 @Repository
 public class CourseDAOImpl implements CourseDAO {
 
-    private static final Logger log = LogManager.getLogger(CourseDAOImpl.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(CourseDAOImpl.class.getName());
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
