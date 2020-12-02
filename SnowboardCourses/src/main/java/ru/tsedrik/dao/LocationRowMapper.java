@@ -6,6 +6,9 @@ import ru.tsedrik.model.CourseLocation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Mapper from ResultSet to CourseLocation
+ */
 public class LocationRowMapper implements RowMapper<CourseLocation> {
 
     @Override

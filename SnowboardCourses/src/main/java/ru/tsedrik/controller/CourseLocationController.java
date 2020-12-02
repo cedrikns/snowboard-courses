@@ -1,10 +1,12 @@
 package ru.tsedrik.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.controller.dto.CourseLocationDto;
 import ru.tsedrik.service.LocationService;
+
+import java.net.URI;
 
 /**
  * Controller for CourseLocation
@@ -14,16 +16,15 @@ import ru.tsedrik.service.LocationService;
 public class CourseLocationController {
     private LocationService locationService;
 
-    @Autowired
     public CourseLocationController(LocationService locationService) {
         this.locationService = locationService;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CourseLocationDto createCourseLocation(@RequestBody CourseLocationDto courseLocationDto){
-        locationService.addLocation(courseLocationDto);
-        return courseLocationDto;
+    public ResponseEntity<CourseLocationDto> createCourseLocation(@RequestBody CourseLocationDto courseLocationDto, UriComponentsBuilder uriComponentsBuilder){
+        CourseLocationDto resultCourseLocationDto = locationService.addLocation(courseLocationDto);
+        URI uri = uriComponentsBuilder.path("/courseLocation/" + resultCourseLocationDto.getId()).buildAndExpand(resultCourseLocationDto).toUri();
+        return ResponseEntity.created(uri).body(resultCourseLocationDto);
     }
 
     @GetMapping(value = "/{id}")
@@ -38,9 +39,9 @@ public class CourseLocationController {
         return isDeleted;
     }
 
-    @PutMapping
-    public CourseLocationDto updateCourseLocation(@RequestBody CourseLocationDto locationDto){
-        locationService.updateLocation(locationDto);
+    @PutMapping(value = "/{id}")
+    public CourseLocationDto updateCourseLocation(@PathVariable Long id, @RequestBody CourseLocationDto locationDto){
+        locationService.updateLocation(id, locationDto);
         return locationDto;
     }
 }

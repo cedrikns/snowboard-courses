@@ -86,7 +86,7 @@ public class PersonServiceImpl implements PersonService{
     public PersonDto updatePerson(Long id, PersonDto personDto) {
         Person person = personDAO.getById(id);
         if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + "id = " + personDto.getId());
+            throw new PersonNotFoundException(personNotFoundExMsg + "id = " + id);
         }
         person.setFirstName(personDto.getFirstName());
         person.setLastName(personDto.getLastName());

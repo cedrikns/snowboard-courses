@@ -53,6 +53,7 @@ public interface PersonService {
     /**
      * Обновляет участника курсов.
      *
+     * @param id    идентификатор участника, который будет обновлен
      * @param personDto    участник, который будет обновлен
      */
     PersonDto updatePerson(Long id, PersonDto personDto);

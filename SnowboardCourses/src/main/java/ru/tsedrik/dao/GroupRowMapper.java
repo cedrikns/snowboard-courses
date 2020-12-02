@@ -7,6 +7,9 @@ import ru.tsedrik.model.Person;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Mapper from ResultSet to Group
+ */
 public class GroupRowMapper implements RowMapper<Group> {
 
     @Override
