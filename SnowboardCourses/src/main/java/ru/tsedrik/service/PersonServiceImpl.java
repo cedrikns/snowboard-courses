@@ -1,8 +1,10 @@
 package ru.tsedrik.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.dao.PersonDAO;
+import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.model.Person;
 
 /**
@@ -15,6 +17,12 @@ public class PersonServiceImpl implements PersonService{
      * Объект для управления персистентным состоянием объектов типа Person
      */
     private PersonDAO personDAO;
+
+    /**
+     * Шаблон сообщения об ошибке для исключения PersonNotFoundException
+     */
+    @Value("${exception.personNotFound}")
+    private String personNotFoundExMsg;
 
     public PersonServiceImpl(PersonDAO personDAO){
         this.personDAO = personDAO;
@@ -35,7 +43,7 @@ public class PersonServiceImpl implements PersonService{
     public PersonDto getPersonById(Long id) {
         Person person = personDAO.getById(id);
         if (person == null){
-            throw new IllegalArgumentException("There is no person with id = " + id);
+            throw new PersonNotFoundException(personNotFoundExMsg + id);
         }
         PersonDto personDto = new PersonDto(
                 person.getId(), person.getFirstName(), person.getLastName(),
@@ -62,10 +70,10 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto updatePerson(PersonDto personDto) {
-        Person person = personDAO.getById(personDto.getId());
+    public PersonDto updatePerson(Long id, PersonDto personDto) {
+        Person person = personDAO.getById(id);
         if (person == null){
-            throw new IllegalArgumentException("There is no person with id = " + personDto.getId());
+            throw new PersonNotFoundException(personNotFoundExMsg + personDto.getId());
         }
         person.setFirstName(personDto.getFirstName());
         person.setLastName(personDto.getLastName());
@@ -73,6 +81,8 @@ public class PersonServiceImpl implements PersonService{
         person.setRole(personDto.getRole());
 
         personDAO.update(person);
+        personDto.setId(id);
+
         return personDto;
     }
 }

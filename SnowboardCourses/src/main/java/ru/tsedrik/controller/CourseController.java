@@ -1,6 +1,6 @@
 package ru.tsedrik.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.tsedrik.controller.dto.CourseDto;
 import ru.tsedrik.service.CourseService;
@@ -19,18 +19,19 @@ public class CourseController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public CourseDto createCourse(@RequestBody CourseDto courseDto){
         courseService.addCourse(courseDto);
         return courseDto;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public CourseDto getPerson(@PathVariable Long id){
+    @GetMapping(value = "/{id}")
+    public CourseDto getCourse(@PathVariable Long id){
         CourseDto courseDto = courseService.getCourseById(id);
         return courseDto;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public boolean deleteCourse(@PathVariable Long id){
         boolean isDeleted = courseService.deleteCourseById(id);
         return isDeleted;

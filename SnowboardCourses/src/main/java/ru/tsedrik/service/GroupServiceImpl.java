@@ -1,5 +1,7 @@
 package ru.tsedrik.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import ru.tsedrik.dao.GroupDAO;
 import ru.tsedrik.model.Group;
@@ -14,6 +16,8 @@ public class GroupServiceImpl implements GroupService{
      * Объект для управления персистентным состоянием объектов типа Group
      */
     private GroupDAO groupDAO;
+
+    private static final Logger logger = LogManager.getLogger(GroupServiceImpl.class.getName());
 
     public GroupServiceImpl(GroupDAO groupDAO){
         this.groupDAO = groupDAO;
@@ -43,4 +47,5 @@ public class GroupServiceImpl implements GroupService{
     public Group updateGroup(Group group) {
         return groupDAO.update(group);
     }
+
 }

@@ -1,11 +1,15 @@
 package ru.tsedrik.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tsedrik.controller.dto.CourseDto;
 import ru.tsedrik.dao.CourseDAO;
 import ru.tsedrik.dao.PersonDAO;
+import ru.tsedrik.exception.CourseNotFoundException;
+import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.model.Course;
 import ru.tsedrik.model.CourseType;
 import ru.tsedrik.model.Group;
@@ -24,14 +28,42 @@ public class CourseServiceImpl implements CourseService{
      * Объект для управления персистентным состоянием объектов типа Course
      */
     private CourseDAO courseDAO;
+
+    /**
+     * Объект для управления персистентным состоянием объектов типа Person
+     */
     private PersonDAO personDAO;
+
+    /**
+     * Объект для управления обращения к сервису сущности Group
+     */
     private GroupService groupService;
 
+    /**
+     * Максимальное количество групп на курсе
+     */
     @Value("${course.maxGroupCount}")
     private String maxGroupCount;
 
+    /**
+     * Максимальное количество участников в одной группе
+     */
     @Value("${group.maxPersonPerGroup}")
     private String maxPersonPerGroup;
+
+    /**
+     * Шаблон сообщения об ошибке для исключения CourseNotFoundException
+     */
+    @Value("${exception.courseNotFound}")
+    private String courseNotFoundExMsg;
+
+    /**
+     * Шаблон сообщения об ошибке для исключения PersonNotFoundException
+     */
+    @Value("${exception.personNotFound}")
+    private String personNotFoundExMsg;
+
+    private static final Logger logger = LogManager.getLogger(CourseServiceImpl.class.getName());
 
     public CourseDAO getCourseDAO() {
         return courseDAO;
@@ -54,6 +86,9 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public CourseDto addCourse(CourseDto courseDto) {
+
+        logger.info("Work after asyncMethod was called.");
+
         Course course = new Course(
                 System.currentTimeMillis(), courseDto.getCourseType(), courseDto.getCourseLocation(),
                 courseDto.getStartTime(), courseDto.getEndTime(),
@@ -102,7 +137,7 @@ public class CourseServiceImpl implements CourseService{
         Course course = courseDAO.getById(id);
 
         if (course == null){
-            throw new IllegalArgumentException("There is no course with id = " + id);
+            throw new CourseNotFoundException(courseNotFoundExMsg + id);
         }
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
@@ -117,7 +152,7 @@ public class CourseServiceImpl implements CourseService{
         Course course = courseDAO.getById(courseId);
 
         if (course == null){
-            throw new IllegalArgumentException("There is no course with id = " + courseId);
+            throw new CourseNotFoundException(courseNotFoundExMsg + courseId);
         }
 
         if (!course.isAvailableGroupExist()){
@@ -126,7 +161,7 @@ public class CourseServiceImpl implements CourseService{
 
         Person person = personDAO.getById(personId);
         if (person == null){
-            throw new IllegalArgumentException("There is no person with id = " + personId);
+            throw new PersonNotFoundException(personNotFoundExMsg + personId);
         }
 
         Group group = course.getAvailableGroup();
@@ -145,4 +180,5 @@ public class CourseServiceImpl implements CourseService{
 
         return courseDto;
     }
+
 }
