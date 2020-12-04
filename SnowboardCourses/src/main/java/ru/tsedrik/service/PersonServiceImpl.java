@@ -70,8 +70,8 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto updatePerson(Long id, PersonDto personDto) {
-        Person person = personDAO.getById(id);
+    public PersonDto updatePerson(PersonDto personDto) {
+        Person person = personDAO.getById(personDto.getId());
         if (person == null){
             throw new PersonNotFoundException(personNotFoundExMsg + personDto.getId());
         }
@@ -81,7 +81,6 @@ public class PersonServiceImpl implements PersonService{
         person.setRole(personDto.getRole());
 
         personDAO.update(person);
-        personDto.setId(id);
 
         return personDto;
     }

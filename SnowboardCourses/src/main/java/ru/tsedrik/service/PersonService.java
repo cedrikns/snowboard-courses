@@ -44,5 +44,5 @@ public interface PersonService {
      *
      * @param personDto    участник, который будет обновлен
      */
-    PersonDto updatePerson(Long id, PersonDto personDto);
+    PersonDto updatePerson(PersonDto personDto);
 }
