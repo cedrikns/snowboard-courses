@@ -67,6 +67,7 @@ public class LocationServiceImpl implements LocationService{
         location.setCity(locationDto.getCity());
 
         locationDAO.update(location);
+
         return locationDto;
     }
 }

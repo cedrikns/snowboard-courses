@@ -6,6 +6,9 @@ import ru.tsedrik.model.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Mapper from ResultSet to Course
+ */
 public class CourseRowMapper implements RowMapper<Course> {
 
     @Override

@@ -3,6 +3,9 @@ package ru.tsedrik.service;
 import ru.tsedrik.controller.dto.CourseLocationDto;
 import ru.tsedrik.model.CourseLocation;
 
+/**
+ * LocationService представляет интерфейс взаимодействия с классом CourseLocation
+ */
 public interface LocationService {
 
     /**
