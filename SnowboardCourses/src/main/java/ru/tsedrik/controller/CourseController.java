@@ -1,9 +1,13 @@
 package ru.tsedrik.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.controller.dto.CourseDto;
 import ru.tsedrik.service.CourseService;
+
+import java.net.URI;
 
 /**
  * Controller for Course
@@ -19,10 +23,10 @@ public class CourseController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CourseDto createCourse(@RequestBody CourseDto courseDto){
-        courseService.addCourse(courseDto);
-        return courseDto;
+    public ResponseEntity<CourseDto> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder){
+        CourseDto resultCourseDto = courseService.addCourse(courseDto);
+        URI uri = uriComponentsBuilder.path("/course/" + resultCourseDto.getId()).buildAndExpand(resultCourseDto).toUri();
+        return ResponseEntity.created(uri).body(resultCourseDto);
     }
 
     @GetMapping(value = "/{id}")
