@@ -42,8 +42,7 @@ public interface LocationService {
     /**
      * Обновляет место проведения курса.
      *
-     * @param id    идентификатор места проведения, которое будет обновлено
      * @param locationDto    место проведения курса, которое будет обновлено
      */
-    CourseLocationDto updateLocation(Long id, CourseLocationDto locationDto);
+    CourseLocationDto updateLocation(CourseLocationDto locationDto);
 }

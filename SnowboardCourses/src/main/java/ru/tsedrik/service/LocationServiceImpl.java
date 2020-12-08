@@ -57,17 +57,16 @@ public class LocationServiceImpl implements LocationService{
     }
 
     @Override
-    public CourseLocationDto updateLocation(Long id, CourseLocationDto locationDto) {
-        CourseLocation location = locationDAO.getById(id);
+    public CourseLocationDto updateLocation(CourseLocationDto locationDto) {
+        CourseLocation location = locationDAO.getById(locationDto.getId());
         if (location == null){
-            throw new CourseLocationNotFoundException("There wasn't found course location with id = " + id);
+            throw new CourseLocationNotFoundException("There wasn't found course location with id = " + locationDto.getId());
         }
         location.setName(locationDto.getName());
         location.setCountry(locationDto.getCountry());
         location.setCity(locationDto.getCity());
 
         locationDAO.update(location);
-        locationDto.setId(id);
 
         return locationDto;
     }

@@ -62,7 +62,10 @@ public class PersonController {
 
     @PutMapping(value = "/{id}")
     public PersonDto updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto){
-        personService.updatePerson(id, personDto);
+        if (!id.equals(personDto.getId())){
+            throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + personDto.getId());
+        }
+        personService.updatePerson(personDto);
         return personDto;
     }
 

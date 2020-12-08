@@ -41,7 +41,10 @@ public class CourseLocationController {
 
     @PutMapping(value = "/{id}")
     public CourseLocationDto updateCourseLocation(@PathVariable Long id, @RequestBody CourseLocationDto locationDto){
-        locationService.updateLocation(id, locationDto);
+        if (!id.equals(locationDto.getId())){
+            throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + locationDto.getId());
+        }
+        locationService.updateLocation(locationDto);
         return locationDto;
     }
 }
