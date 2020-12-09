@@ -1,8 +1,8 @@
 package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.CourseDto;
-import ru.tsedrik.model.Course;
-import ru.tsedrik.model.CourseType;
+import ru.tsedrik.domain.Course;
+import ru.tsedrik.domain.CourseType;
 
 import java.util.Collection;
 
@@ -22,15 +22,15 @@ public interface CourseService {
      * Удаляет существующий курс.
      *
      * @param course    существующий курс, который будет удален
-     * @return  удаленный курс
+     * @return  успешно ли прошло удаление
      */
-    Course deleteCourse(Course course);
+    boolean deleteCourse(Course course);
 
     /**
      * Удаляет существующий курс по его идентификатору.
      *
      * @param id    идентификатор удаляемого курса
-     * @return  удаленный курс
+     * @return  успешно ли прошло удаление
      */
     boolean deleteCourseById(Long id);
 

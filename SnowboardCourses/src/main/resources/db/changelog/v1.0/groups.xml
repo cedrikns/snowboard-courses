@@ -7,16 +7,16 @@
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="group"/>
+                <tableExists tableName="groups"/>
             </not>
         </preConditions>
 
-        <createTable tableName="group"
+        <createTable tableName="groups"
                      remarks="Таблица созданных групп">
             <column name="id" type="bigint"
                     remarks="Идентификатор записи">
                 <constraints primaryKey="true"
-                             primaryKeyName="group_pk"
+                             primaryKeyName="groups_pk"
                              nullable="false"/>
             </column>
             <!-- Ссылка на курс, к которому принадлежит данная группа -->
@@ -24,8 +24,7 @@
                     remarks="Идентификатор записи в таблице course">
                 <constraints foreignKeyName="course_fk"
                              referencedTableName="course"
-                             referencedColumnNames="id"
-                             nullable="false"/>
+                             referencedColumnNames="id"/>
             </column>
             <!-- Ссылка на инструктора, который будет заниматься с этой группой -->
             <column name="person_id" type="bigint"
@@ -49,10 +48,10 @@
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="group" indexName="group_course_idx"/>
+                <indexExists tableName="groups" indexName="groups_course_idx"/>
             </not>
         </preConditions>
-        <createIndex tableName="group" indexName="group_course_idx">
+        <createIndex tableName="groups" indexName="groups_course_idx">
             <column name="course_id"/>
         </createIndex>
         <comment>Индекс для поиска по идентификатору курса</comment>
@@ -61,10 +60,10 @@
     <changeSet id="3" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="group" indexName="group_instructor_idx"/>
+                <indexExists tableName="groups" indexName="groups_instructor_idx"/>
             </not>
         </preConditions>
-        <createIndex tableName="group" indexName="group_instructor_idx">
+        <createIndex tableName="groups" indexName="groups_instructor_idx">
             <column name="person_id"/>
         </createIndex>
         <comment>Индекс для поиска по инструктору</comment>

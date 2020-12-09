@@ -1,4 +1,9 @@
-package ru.tsedrik.model;
+package ru.tsedrik.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * CourseLocation представляет собой место проведения курса.
@@ -6,16 +11,20 @@ package ru.tsedrik.model;
  * - названием
  * - местом нахождения
  */
+@Entity
+@Table(name = "location")
 public class CourseLocation implements Identifired<Long> {
 
     /**
      * Идентификатор места проведения курса
      */
+    @Id
     private Long id;
 
     /**
      * Название места проведения
      */
+    @Column(nullable = false)
     private String name;
 
     /**

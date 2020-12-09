@@ -1,8 +1,9 @@
-package ru.tsedrik.model;
+package ru.tsedrik.domain;
 
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Course представляет собой курс, на который будут записываться люди.
@@ -12,42 +13,54 @@ import java.util.List;
  * - датой проведения
  * - набором групп обучающихся
  */
+@Entity
+@Table(name = "course")
 public class Course implements Identifired<Long>{
 
     /**
      * Идентификатор курса
      */
+    @Id
     private Long id;
 
     /**
      * Тип курса, от которого зависит программа
      */
+    @Column(name = "course_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private CourseType courseType;
 
     /**
      * Место проведения курса
      */
+    @ManyToOne
+    @JoinColumn(name = "location_id")
     private CourseLocation courseLocation;
 
     /**
      * Дата начала курса
      */
+    @Column(name = "begin_date", nullable = false)
     private LocalDate beginDate;
 
     /**
      * Дата окончания курса
      */
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     /**
      * Количество групп на курсе
      */
+    @Column(name = "max_groups_num", nullable = false)
     private int groupCount;
 
     /**
      * Список групп курса
      */
-    private List<Group> groups;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
+    private Set<Group> groups;
 
     public Course(){}
 
@@ -58,7 +71,7 @@ public class Course implements Identifired<Long>{
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.groupCount = groupCount;
-        this.groups = new ArrayList<>();
+        this.groups = new HashSet<>();
     }
 
     @Override
@@ -110,11 +123,11 @@ public class Course implements Identifired<Long>{
         this.groupCount = groupCount;
     }
 
-    public List<Group> getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 

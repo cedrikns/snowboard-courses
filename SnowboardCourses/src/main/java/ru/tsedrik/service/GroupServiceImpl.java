@@ -4,12 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tsedrik.dao.GroupDAO;
-import ru.tsedrik.dao.PersonDAO;
-import ru.tsedrik.model.Group;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
+import ru.tsedrik.domain.Group;
+import ru.tsedrik.repository.GroupRepository;
 
 /**
  * Реализация интерфейса GroupService
@@ -21,53 +17,40 @@ public class GroupServiceImpl implements GroupService{
     /**
      * Объект для управления персистентным состоянием объектов типа Group
      */
-    private GroupDAO groupDAO;
-    private PersonDAO personDAO;
+    private GroupRepository groupRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(GroupServiceImpl.class.getName());
 
-    public GroupServiceImpl(GroupDAO groupDAO, PersonDAO personDAO){
-        this.groupDAO = groupDAO;
-        this.personDAO = personDAO;
+    public GroupServiceImpl(GroupRepository groupRepository){
+        this.groupRepository = groupRepository;
     }
 
     @Override
     public void addGroup(Group group) {
-        groupDAO.create(group);
+        groupRepository.save(group);
     }
 
     @Override
     public Group getGroupById(Long id) {
-        Group group = groupDAO.getById(id);
-        group.setStudents(personDAO.getAllByGroupId(group.getId()).stream().collect(Collectors.toList()));
+        Group group = groupRepository.findById(id).get();
         return group;
     }
 
     @Override
     public boolean deleteGroupById(Long id) {
-        return groupDAO.deleteById(id);
+        groupRepository.deleteById(id);
+        return true;
     }
 
     @Override
-    public Group deleteGroup(Group group) {
-        return groupDAO.delete(group);
+    public boolean deleteGroup(Group group) {
+        groupRepository.delete(group);
+        return true;
     }
 
     @Override
     public Group updateGroup(Group group) {
-        return groupDAO.update(group);
-    }
-
-    @Override
-    public Collection<Group> getAllByCourseId(Long id) {
-        Collection<Group> groups = groupDAO.getAllByCourseId(id);
-        groups.forEach(g -> g.setStudents(personDAO.getAllByGroupId(g.getId()).stream().collect(Collectors.toList())));
-        return groups;
-    }
-
-    @Override
-    public boolean addPersonToGroup(Long groupId, Long personId) {
-        return groupDAO.addPersonToGroup(groupId, personId);
+         return groupRepository.save(group);
     }
 
 }

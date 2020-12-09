@@ -29,7 +29,7 @@
             <column name="group_id" type="bigint"
                     remarks="Идентификатор записи в таблице group">
                 <constraints foreignKeyName="group_id_fk"
-                             referencedTableName="group"
+                             referencedTableName="groups"
                              referencedColumnNames="id"
                              nullable="false"/>
             </column>

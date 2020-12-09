@@ -1,36 +1,46 @@
-package ru.tsedrik.model;
+package ru.tsedrik.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Person представляет собой участника курсов.
  * Включает в себя как инструкторов, так и непосредственных участников.
  */
+@Entity
+@Table(name = "person")
 public class Person  implements Identifired<Long> {
 
     /**
      * Идентификатор участника
      */
+    @Id
+    @Column
     private Long id;
 
     /**
      * Фамилия участника
      */
+    @Column(name = "first_name")
     private String firstName;
 
     /**
      * Имя участника
      */
+    @Column(name = "last_name")
     private String lastName;
 
     /**
      * Электронный адрес участника
      */
+    @Column(nullable = false, unique = true)
     private String email;
 
     /**
      * Роль участника (Инструктор или Учащийся)
      */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public Person(){}

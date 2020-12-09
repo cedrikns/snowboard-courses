@@ -7,18 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.controller.dto.CourseDto;
-import ru.tsedrik.dao.CourseDAO;
-import ru.tsedrik.dao.PersonDAO;
 import ru.tsedrik.exception.CourseNotFoundException;
 import ru.tsedrik.exception.PersonNotFoundException;
-import ru.tsedrik.model.Course;
-import ru.tsedrik.model.CourseType;
-import ru.tsedrik.model.Group;
-import ru.tsedrik.model.Person;
+import ru.tsedrik.domain.Course;
+import ru.tsedrik.domain.CourseType;
+import ru.tsedrik.domain.Group;
+import ru.tsedrik.domain.Person;
+import ru.tsedrik.repository.CourseRepository;
+import ru.tsedrik.repository.PersonRepository;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Реализация интерфейса CourseService
@@ -30,17 +29,12 @@ public class CourseServiceImpl implements CourseService{
     /**
      * Объект для управления персистентным состоянием объектов типа Course
      */
-    private CourseDAO courseDAO;
+    private CourseRepository courseRepository;
 
     /**
      * Объект для управления персистентным состоянием объектов типа Person
      */
-    private PersonDAO personDAO;
-
-    /**
-     * Объект для управления обращения к сервису сущности Group
-     */
-    private GroupService groupService;
+    private PersonRepository personRepository;
 
     /**
      * Максимальное количество групп на курсе
@@ -68,23 +62,14 @@ public class CourseServiceImpl implements CourseService{
 
     private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class.getName());
 
-    public CourseDAO getCourseDAO() {
-        return courseDAO;
+    @Autowired
+    public void setCourseRepository(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @Autowired
-    public void setCourseDAO(CourseDAO courseDAO) {
-        this.courseDAO = courseDAO;
-    }
-
-    @Autowired
-    public void setPersonDAO(PersonDAO personDAO) {
-        this.personDAO = personDAO;
-    }
-
-    @Autowired
-    public void setGroupService(GroupService groupService) {
-        this.groupService = groupService;
+    public void setPersonRepository(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @Override
@@ -96,13 +81,12 @@ public class CourseServiceImpl implements CourseService{
                 courseDto.getGroupCount()
         );
 
-        courseDAO.create(course);
-
         for (int i = 0; i < course.getGroupCount(); i++){
-            Group group = new Group(System.currentTimeMillis(), course.getId(), Integer.parseInt(maxPersonPerGroup));
-            groupService.addGroup(group);
+            Group group = new Group(System.currentTimeMillis() + i + 1, course.getId(), Integer.parseInt(maxPersonPerGroup));
             course.getGroups().add(group);
         }
+
+        course = courseRepository.save(course);
 
         courseDto.setId(course.getId());
         courseDto.setGroups(course.getGroups());
@@ -111,67 +95,55 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Course deleteCourse(Course course) {
-        course.getGroups().forEach(g -> groupService.deleteGroup(g));
-        return courseDAO.delete(course);
+    public boolean deleteCourse(Course course) {
+        courseRepository.delete(course);
+        return true;
     }
 
     @Override
     public boolean deleteCourseById(Long id) {
-        groupService.getAllByCourseId(id).forEach(g -> groupService.deleteGroup(g));
-        return courseDAO.deleteById(id);
+        courseRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public Collection<Course> getCourseByType(CourseType type) {
-        return courseDAO.getByCourseType(type);
+        return courseRepository.getCourseByCourseType(type);
     }
 
     @Override
     public CourseDto getCourseById(Long id) {
-        Course course = courseDAO.getById(id);
-
-        if (course == null){
-            throw new CourseNotFoundException(courseNotFoundExMsg + id);
-        }
-
-        course.setGroups(groupService.getAllByCourseId(course.getId()).stream().collect(Collectors.toList()));
-
-        CourseDto courseDto = new CourseDto(
-                course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                course.getBeginDate(), course.getEndDate(),
-                course.getGroupCount(), course.getGroups()
-        );
+        CourseDto courseDto = courseRepository.findById(id)
+                .map(course -> new CourseDto(
+                        course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
+                        course.getBeginDate(), course.getEndDate(),
+                        course.getGroupCount(), course.getGroups()))
+                .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + id));
 
         return courseDto;
     }
 
     public CourseDto enroll(Long courseId, Long personId){
-        Course course = courseDAO.getById(courseId);
-
-        if (course == null){
-            throw new CourseNotFoundException(courseNotFoundExMsg + courseId);
-        }
-
-        course.setGroups(groupService.getAllByCourseId(course.getId()).stream().collect(Collectors.toList()));
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + courseId));
 
         if (!course.isAvailableGroupExist()){
             throw new IllegalArgumentException("There is no available places on this course");
         }
 
-        Person person = personDAO.getById(personId);
-        if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + "with id = " + personId);
-        }
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "with id = " + personId));
 
         Group group = course.getAvailableGroup();
-        List<Person> students = group.getStudents();
-        students.add(person);
-        group.setStudents(students);
-        group.setAvailableNumberOfPlaces(group.getAvailableNumberOfPlaces() - 1);
+        Set<Person> students = group.getStudents();
+        if (students.add(person)) {
+            group.setStudents(students);
+            group.setAvailableNumberOfPlaces(group.getTotalNumberOfPlaces() - students.size());
+        } else {
+            throw new IllegalArgumentException("Участник " + person.getId() + " не был добавлен на курс.");
+        }
 
-        groupService.addPersonToGroup(group.getId(), personId);
-        groupService.updateGroup(group);
+        courseRepository.save(course);
 
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),

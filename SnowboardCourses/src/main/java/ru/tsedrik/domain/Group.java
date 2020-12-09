@@ -1,44 +1,56 @@
-package ru.tsedrik.model;
+package ru.tsedrik.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Group представляет собой группу определенного курса.
  * Каждая группа состоит из определенного количества участников
  * и одного инструктора.
  */
+@Entity
+@Table(name = "groups")
 public class Group implements Identifired<Long> {
 
     /**
      * Идентификатор группы
      */
+    @Id
     private Long id;
 
     /**
      * Идентификатор курса, для которого создана данная группа
      */
+    @Column(name = "course_id", nullable = false)
     private Long courseId;
 
     /**
      * Инструктор группы
      */
+
+    @ManyToOne
+    @JoinColumn(name = "person_id")
     private Person instructor;
 
     /**
      * Общее количество мест в группе
      */
+    @Column(name = "places_num_total", nullable = false)
     private int totalNumberOfPlaces;
 
     /**
      * Количество оставшихся свободных мест в группе
      */
+    @Column(name = "places_num_available", nullable = false)
     private int availableNumberOfPlaces;
 
     /**
      * Список участников, которые будут обучатья в группе
      */
-    private List<Person> students;
+    @ManyToMany(cascade={CascadeType.PERSIST, })
+    @JoinTable(name="group_person", joinColumns=@JoinColumn(name="group_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
+    private Set<Person> students;
 
     public Group() {}
 
@@ -46,7 +58,7 @@ public class Group implements Identifired<Long> {
         this.id = id;
         this.courseId = courseId;
         this.totalNumberOfPlaces = this.availableNumberOfPlaces = totalNumberOfPlaces;
-        students = new ArrayList<>();
+        students = new HashSet<>();
     }
 
     public Long getId() {
@@ -81,11 +93,11 @@ public class Group implements Identifired<Long> {
         this.availableNumberOfPlaces = availableNumberOfPlaces;
     }
 
-    public List<Person> getStudents() {
+    public Set<Person> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Person> students) {
+    public void setStudents(Set<Person> students) {
         this.students = students;
     }
 
