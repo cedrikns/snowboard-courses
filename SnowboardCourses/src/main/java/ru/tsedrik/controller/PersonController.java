@@ -6,7 +6,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.controller.dto.PersonDto;
-import ru.tsedrik.model.Role;
+import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.service.PersonService;
 import ru.tsedrik.validator.PersonDtoValidator;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * Controller for Person
  */
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/v1/person")
 public class PersonController {
 
     private PersonService personService;
@@ -42,16 +42,10 @@ public class PersonController {
         return personDto;
     }
 
-    @GetMapping(params = "email")
-    public PersonDto getAllPersonByEmail(@RequestParam String email){
-        PersonDto personDto = personService.getPersonByEmail(email);
-        return personDto;
-    }
-
-    @GetMapping(params = "role")
-    public List<PersonDto> getAllPersonByRole(@RequestParam String role){
-        List<PersonDto> personsWithRole = personService.getAllPersonByRole(Role.valueOf(role.toUpperCase()));
-        return personsWithRole;
+    @GetMapping
+    public List<PersonDto> getAllPerson(@RequestBody PersonSearchDto personSearchDto){
+        List<PersonDto> persons = personService.getAllPerson(personSearchDto);
+        return persons;
     }
 
     @DeleteMapping(value = "/{id}")

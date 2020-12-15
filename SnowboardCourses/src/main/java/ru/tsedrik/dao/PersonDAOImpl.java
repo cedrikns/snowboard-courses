@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import ru.tsedrik.model.Person;
 import ru.tsedrik.model.Role;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +30,10 @@ public class PersonDAOImpl implements PersonDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
-    public PersonDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
+    public PersonDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.simpleJdbcInsert = simpleJdbcInsert;
-        this.simpleJdbcInsert.withTableName("person");
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("person");
     }
 
     @Override
@@ -124,6 +124,15 @@ public class PersonDAOImpl implements PersonDAO {
             log.info("There wan't found person with email = " + email);
             return null;
         }
+    }
+
+    @Override
+    public List<Person> getAllByEmailAndRole(String email, Role role) {
+        List<Person> persons = jdbcTemplate.query("select * from person where email = ? and role = ?",
+                    new Object[]{email, role.name()}, new PersonRowMapper());
+
+        log.info("Was founded " + persons.size() + " persons with role " + role + " and email " + email + ".");
+        return persons;
     }
 
     @Override
