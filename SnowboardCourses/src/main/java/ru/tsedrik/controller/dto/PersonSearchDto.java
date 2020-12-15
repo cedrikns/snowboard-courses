@@ -1,9 +1,19 @@
 package ru.tsedrik.controller.dto;
 
 /**
- * Класс для передачи параметров поиска
+ * Класс для передачи параметров поиска сущности Person
  */
 public class PersonSearchDto {
+
+    /**
+     * Фамилия участника
+     */
+    private String firstName;
+
+    /**
+     * Имя участника
+     */
+    private String lastName;
 
     /**
      * Электронный адрес участника
@@ -18,9 +28,27 @@ public class PersonSearchDto {
     public PersonSearchDto() {
     }
 
-    public PersonSearchDto(String email, String role) {
+    public PersonSearchDto(String firstName, String lastName, String email, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {

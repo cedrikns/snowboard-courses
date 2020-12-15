@@ -15,7 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "course")
-public class Course implements Identifired<Long>{
+public class Course extends CreateAtIdentified implements Identifired<Long>{
 
     /**
      * Идентификатор курса
@@ -35,7 +35,7 @@ public class Course implements Identifired<Long>{
      */
     @ManyToOne
     @JoinColumn(name = "location_id")
-    private CourseLocation courseLocation;
+    private Location location;
 
     /**
      * Дата начала курса
@@ -64,10 +64,10 @@ public class Course implements Identifired<Long>{
 
     public Course(){}
 
-    public Course(Long id, String courseType, CourseLocation courseLocation, LocalDate beginDate, LocalDate endDate, int groupCount) {
+    public Course(Long id, String courseType, Location location, LocalDate beginDate, LocalDate endDate, int groupCount) {
         this.id = id;
         this.courseType = CourseType.valueOf(courseType.toUpperCase());
-        this.courseLocation = courseLocation;
+        this.location = location;
         this.beginDate = beginDate;
         this.endDate = endDate;
         this.groupCount = groupCount;
@@ -91,12 +91,12 @@ public class Course implements Identifired<Long>{
         this.courseType = courseType;
     }
 
-    public CourseLocation getCourseLocation() {
-        return courseLocation;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setCourseLocation(CourseLocation courseLocation) {
-        this.courseLocation = courseLocation;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public LocalDate getBeginDate() {
@@ -144,7 +144,7 @@ public class Course implements Identifired<Long>{
         return "Course{" +
                 "id=" + id +
                 ", courseType=" + courseType +
-                ", courseLocation=" + courseLocation +
+                ", location=" + location +
                 ", startTime=" + beginDate +
                 ", endTime=" + endDate +
                 ", groups=" + groups +

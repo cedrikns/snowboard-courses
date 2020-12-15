@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "groups")
-public class Group implements Identifired<Long> {
+public class Group extends CreateAtIdentified implements Identifired<Long> {
 
     /**
      * Идентификатор группы

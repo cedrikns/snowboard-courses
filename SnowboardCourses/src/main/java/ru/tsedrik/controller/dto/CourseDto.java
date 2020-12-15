@@ -1,7 +1,7 @@
 package ru.tsedrik.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.tsedrik.domain.CourseLocation;
+import ru.tsedrik.domain.Location;
 import ru.tsedrik.domain.Group;
 
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ public class CourseDto {
     /**
      * Место проведения курса
      */
-    private CourseLocation courseLocation;
+    private Location location;
 
     /**
      * Дата начала курса
@@ -48,10 +48,10 @@ public class CourseDto {
 
     public CourseDto(){}
 
-    public CourseDto(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount, Set<Group> groups) {
+    public CourseDto(Long id, String courseType, Location location, LocalDate startTime, LocalDate endTime, int groupCount, Set<Group> groups) {
         this.id = id;
         this.courseType = courseType;
-        this.courseLocation = courseLocation;
+        this.location = location;
         this.startTime = startTime;
         this.endTime = endTime;
         this.groupCount = groupCount;
@@ -74,12 +74,12 @@ public class CourseDto {
         this.courseType = courseType;
     }
 
-    public CourseLocation getCourseLocation() {
-        return courseLocation;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setCourseLocation(CourseLocation courseLocation) {
-        this.courseLocation = courseLocation;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public LocalDate getStartTime() {

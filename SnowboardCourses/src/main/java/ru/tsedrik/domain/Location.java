@@ -1,15 +1,30 @@
-package ru.tsedrik.controller.dto;
+package ru.tsedrik.domain;
 
-public class CourseLocationDto {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ * Location представляет собой место проведения курса.
+ * Каждый объект данного класса будет характеризоваться:
+ * - названием
+ * - местом нахождения
+ */
+@Entity
+@Table(name = "location")
+public class Location extends CreateAtIdentified implements Identifired<Long> {
 
     /**
      * Идентификатор места проведения курса
      */
+    @Id
     private Long id;
 
     /**
      * Название места проведения
      */
+    @Column(nullable = false)
     private String name;
 
     /**
@@ -22,9 +37,9 @@ public class CourseLocationDto {
      */
     private String city;
 
-    public CourseLocationDto(){}
+    public Location() {}
 
-    public CourseLocationDto(Long id, String name, String country, String city) {
+    public Location(Long id, String name, String country, String city) {
         this.id = id;
         this.name = name;
         this.country = country;
@@ -61,5 +76,15 @@ public class CourseLocationDto {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                '}';
     }
 }

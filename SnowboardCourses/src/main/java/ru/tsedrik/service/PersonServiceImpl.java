@@ -1,8 +1,12 @@
 package ru.tsedrik.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tsedrik.controller.dto.PageDto;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.exception.PersonNotFoundException;
@@ -10,10 +14,9 @@ import ru.tsedrik.domain.Person;
 import ru.tsedrik.domain.Role;
 import ru.tsedrik.repository.PersonRepository;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса PersonService
@@ -88,28 +91,40 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public List<PersonDto> getAllPerson(PersonSearchDto personSearchDto) {
-        Collection<Person> persons = new ArrayList<>();
-        if ((personSearchDto.getRole() != null) && (personSearchDto.getEmail() != null)){
-            persons = personRepository.getAllByEmailAndRole(personSearchDto.getEmail(),
-                    Role.valueOf(personSearchDto.getRole().toUpperCase()));
-        } else if (personSearchDto.getRole() != null){
-            persons = personRepository.getAllByRole(Role.valueOf(personSearchDto.getRole().toUpperCase()));
-        } else if (personSearchDto.getEmail() != null){
-            Person person = personRepository.getPersonByEmail(personSearchDto.getEmail());
-            if (person != null){
-                persons.add(person);
+    public PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable) {
+
+        Page<Person> page = personRepository.findAll(getSpecification(personSearchDto), pageable);
+
+        List<PersonDto> persons = page
+                .map(person ->
+                        new PersonDto(person.getId(), person.getFirstName(), person.getLastName(),
+                                person.getEmail(), person.getRole().toString())
+                )
+                .toList();
+
+        return new PageDto<>(persons, page.getTotalElements());
+    }
+
+    private Specification<Person> getSpecification(PersonSearchDto personSearchDto) {
+        return (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (personSearchDto.getRole() != null) {
+                predicates.add(root.get("role").in(Role.valueOf(personSearchDto.getRole().toUpperCase())));
             }
-        }
 
-        List<PersonDto> result = persons.stream().map(person -> {
-            PersonDto personDto = new PersonDto(
-                    person.getId(), person.getFirstName(), person.getLastName(),
-                    person.getEmail(), person.getRole().toString()
-            );
-            return personDto;
-        }).collect(Collectors.toList());
+            if (personSearchDto.getEmail() != null) {
+                predicates.add(root.get("email").in(personSearchDto.getEmail()));
+            }
 
-        return result;
+            if (personSearchDto.getFirstName() != null){
+                predicates.add(root.get("firstName").in(personSearchDto.getFirstName()));
+            }
+
+            if (personSearchDto.getLastName() != null){
+                predicates.add(root.get("lastName").in(personSearchDto.getLastName()));
+            }
+
+            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
     }
 }

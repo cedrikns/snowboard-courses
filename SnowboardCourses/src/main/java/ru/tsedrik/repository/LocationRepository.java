@@ -1,12 +1,13 @@
 package ru.tsedrik.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import ru.tsedrik.domain.CourseLocation;
+import ru.tsedrik.domain.Location;
 
 /**
- * Интерфейс управления персистентным состоянием объектов типа CourseLocation
+ * Интерфейс управления персистентным состоянием объектов типа Location
  */
 @Repository
-public interface LocationRepository extends JpaRepository<CourseLocation, Long> {
+public interface LocationRepository extends JpaRepository<Location, Long>, JpaSpecificationExecutor<Location> {
 }

@@ -1,10 +1,10 @@
 package ru.tsedrik.service;
 
+import org.springframework.data.domain.Pageable;
+import ru.tsedrik.controller.dto.PageDto;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.domain.Person;
-
-import java.util.List;
 
 /**
  * PersonService представляет интерфейс взаимодействия с классом Person
@@ -50,10 +50,11 @@ public interface PersonService {
     PersonDto updatePerson(PersonDto personDto);
 
     /**
-     * Получает всех участников, соответствующих параметрам поиска
+     * Получает всех участников, соответствующих наболу полей из personSearchDto
      *
-     * @param personSearchDto  параметры для поиска
-     * @return      список найденных участников
+     * @param personSearchDto набор параметров, по которым осуществляется поиск
+     * @param pageable  настройка отображения результата
+     * @return  страница найденных участников, соотвествующая настройкам объекта pageable
      */
-    List<PersonDto> getAllPerson(PersonSearchDto personSearchDto);
+    PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable);
 }

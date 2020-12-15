@@ -1,10 +1,11 @@
 package ru.tsedrik.service;
 
-import ru.tsedrik.controller.dto.CourseLocationDto;
-import ru.tsedrik.domain.CourseLocation;
+import org.springframework.data.domain.Pageable;
+import ru.tsedrik.controller.dto.*;
+import ru.tsedrik.domain.Location;
 
 /**
- * LocationService представляет интерфейс взаимодействия с классом CourseLocation
+ * LocationService представляет интерфейс взаимодействия с классом Location
  */
 public interface LocationService {
 
@@ -13,7 +14,7 @@ public interface LocationService {
      *
      * @param locationDto    новое место проведения курсов, которое было добавлено
      */
-    CourseLocationDto addLocation(CourseLocationDto locationDto);
+    LocationDto addLocation(LocationDto locationDto);
 
     /**
      * Удаляет существующее место проведения курса.
@@ -21,7 +22,7 @@ public interface LocationService {
      * @param location    существующее место проведения курса, которое будет удалено
      * @return  успешно ли прошло удаление
      */
-    boolean deleteLocation(CourseLocation location);
+    boolean deleteLocation(Location location);
 
     /**
      * Удаляет существующее место проведения курса по его идентификатору.
@@ -37,12 +38,21 @@ public interface LocationService {
      * @param id    идентификатор места проведения курса
      * @return  найденное место проведения курса
      */
-    CourseLocationDto getLocationById(Long id);
+    LocationDto getLocationById(Long id);
 
     /**
      * Обновляет место проведения курса.
      *
      * @param locationDto    место проведения курса, которое будет обновлено
      */
-    CourseLocationDto updateLocation(CourseLocationDto locationDto);
+    LocationDto updateLocation(LocationDto locationDto);
+
+    /**
+     * Получает все места проведения курсов, соответствующие наболу полей из locationSearchDto
+     *
+     * @param locationSearchDto набор параметров, по которым осуществляется поиск
+     * @param pageable  настройка отображения результата
+     * @return  страница найденных мест проведения курсов, соотвествующая настройкам объекта pageable
+     */
+    PageDto<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable);
 }

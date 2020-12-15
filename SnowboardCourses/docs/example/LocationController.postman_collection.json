@@ -118,6 +118,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Search Location",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Шерегеш\",\r\n    \"country\" : \"Российская Федерация\",\r\n    \"city\" : \"Шерегеш\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/snowboard-courses/api/v1/location",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"snowboard-courses",
+						"api",
+						"v1",
+						"location"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
