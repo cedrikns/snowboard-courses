@@ -30,13 +30,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Person getPersonByEmail(String email);
 
     /**
-     * Возвращает всех участников группы
-     * @param groupId  идентификатор группы
-     * @return  список найденных участников
-     */
-    Collection<Person> getAllByGroupId(Long groupId);
-
-    /**
      * Возвращает участников по их электронному адресу и роли
      * @param email электронный адрес участника
      * @param role  роль участника

@@ -3,7 +3,6 @@ package ru.tsedrik.service;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.domain.Person;
-import ru.tsedrik.domain.Role;
 
 import java.util.List;
 

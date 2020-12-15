@@ -32,7 +32,7 @@ public class PersonController {
     @PostMapping
     public ResponseEntity<PersonDto> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder){
         PersonDto resultPersonDto = personService.addPerson(personDto);
-        URI uri = uriComponentsBuilder.path("/person/" + resultPersonDto.getId()).buildAndExpand(resultPersonDto).toUri();
+        URI uri = uriComponentsBuilder.path("/api/v1/person/" + resultPersonDto.getId()).buildAndExpand(resultPersonDto).toUri();
         return ResponseEntity.created(uri).body(resultPersonDto);
     }
 

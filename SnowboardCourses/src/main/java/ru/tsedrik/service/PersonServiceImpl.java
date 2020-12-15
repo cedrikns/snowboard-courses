@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
-import ru.tsedrik.dao.PersonDAO;
 import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.domain.Person;
 import ru.tsedrik.domain.Role;
@@ -62,20 +61,6 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto getPersonByEmail(String email) {
-        Person person = personRepository.getPersonByEmail(email);
-        if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + "email = " + email);
-        }
-        PersonDto personDto = new PersonDto(
-                person.getId(), person.getFirstName(), person.getLastName(),
-                person.getEmail(), person.getRole().toString()
-        );
-
-        return personDto;
-    }
-
-    @Override
     public boolean deletePersonById(Long id) {
         personRepository.deleteById(id);
         return true;
@@ -103,30 +88,15 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public List<PersonDto> getAllPersonByRole(Role role) {
-        Collection<Person> persons = personRepository.getPersonByRole(role);
-
-        List<PersonDto> result = persons.stream().map(person -> {
-            PersonDto personDto = new PersonDto(
-                    person.getId(), person.getFirstName(), person.getLastName(),
-                    person.getEmail(), person.getRole().toString()
-            );
-            return personDto;
-        }).collect(Collectors.toList());
-
-        return result;
-    }
-
-    @Override
     public List<PersonDto> getAllPerson(PersonSearchDto personSearchDto) {
         Collection<Person> persons = new ArrayList<>();
         if ((personSearchDto.getRole() != null) && (personSearchDto.getEmail() != null)){
-            persons = personDAO.getAllByEmailAndRole(personSearchDto.getEmail(),
+            persons = personRepository.getAllByEmailAndRole(personSearchDto.getEmail(),
                     Role.valueOf(personSearchDto.getRole().toUpperCase()));
         } else if (personSearchDto.getRole() != null){
-            persons = personDAO.getAllByRole(Role.valueOf(personSearchDto.getRole().toUpperCase()));
+            persons = personRepository.getAllByRole(Role.valueOf(personSearchDto.getRole().toUpperCase()));
         } else if (personSearchDto.getEmail() != null){
-            Person person = personDAO.getPersonByEmail(personSearchDto.getEmail());
+            Person person = personRepository.getPersonByEmail(personSearchDto.getEmail());
             if (person != null){
                 persons.add(person);
             }
