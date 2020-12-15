@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import ru.tsedrik.model.Group;
 import ru.tsedrik.model.Person;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 
 /**
@@ -26,11 +27,10 @@ public class GroupDAOImpl implements GroupDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
-    public GroupDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
+    public GroupDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.simpleJdbcInsert = simpleJdbcInsert;
-        this.simpleJdbcInsert.withTableName("\"group\"");
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("\"group\"");
     }
 
     @Override

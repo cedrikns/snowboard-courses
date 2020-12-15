@@ -12,7 +12,7 @@ import java.net.URI;
  * Controller for CourseLocation
  */
 @RestController
-@RequestMapping("/courseLocation")
+@RequestMapping("/api/v1/location")
 public class CourseLocationController {
     private LocationService locationService;
 

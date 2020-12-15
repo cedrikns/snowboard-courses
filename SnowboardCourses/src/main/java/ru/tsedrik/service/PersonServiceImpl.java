@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.controller.dto.PersonDto;
+import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.dao.PersonDAO;
 import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.model.Person;
 import ru.tsedrik.model.Role;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,19 +62,6 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto getPersonByEmail(String email) {
-        Person person = personDAO.getPersonByEmail(email);
-        if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + "email = " + email);
-        }
-        PersonDto personDto = new PersonDto(
-                person.getId(), person.getFirstName(), person.getLastName(),
-                person.getEmail(), person.getRole().toString()
-        );
-        return personDto;
-    }
-
-    @Override
     public boolean deletePersonById(Long id) {
         return personDAO.deleteById(id);
     }
@@ -99,8 +88,19 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public List<PersonDto> getAllPersonByRole(Role role) {
-        Collection<Person> persons = personDAO.getAllByRole(role);
+    public List<PersonDto> getAllPerson(PersonSearchDto personSearchDto) {
+        Collection<Person> persons = new ArrayList<>();
+        if ((personSearchDto.getRole() != null) && (personSearchDto.getEmail() != null)){
+            persons = personDAO.getAllByEmailAndRole(personSearchDto.getEmail(),
+                    Role.valueOf(personSearchDto.getRole().toUpperCase()));
+        } else if (personSearchDto.getRole() != null){
+            persons = personDAO.getAllByRole(Role.valueOf(personSearchDto.getRole().toUpperCase()));
+        } else if (personSearchDto.getEmail() != null){
+            Person person = personDAO.getPersonByEmail(personSearchDto.getEmail());
+            if (person != null){
+                persons.add(person);
+            }
+        }
 
         List<PersonDto> result = persons.stream().map(person -> {
             PersonDto personDto = new PersonDto(

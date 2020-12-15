@@ -1,8 +1,8 @@
 package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.PersonDto;
+import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.model.Person;
-import ru.tsedrik.model.Role;
 
 import java.util.List;
 
@@ -43,26 +43,17 @@ public interface PersonService {
     PersonDto getPersonById(Long id);
 
     /**
-     * Запрашивает участника курса по его электронному адресу.
-     *
-     * @param email    электронный адрес запрашиваемого участника
-     * @return  найденный участник
-     */
-    PersonDto getPersonByEmail(String email);
-
-    /**
      * Обновляет участника курсов.
      *
-     * @param id    идентификатор участника, который будет обновлен
      * @param personDto    участник, который будет обновлен
      */
     PersonDto updatePerson(PersonDto personDto);
 
     /**
-     * Получает всех участников с указанной ролью
+     * Получает всех участников, соответствующих параметрам поиска
      *
-     * @param role  роль участника
-     * @return      список найденных участников с указанной ролью
+     * @param personSearchDto  параметры для поиска
+     * @return      список найденных участников
      */
-    List<PersonDto> getAllPersonByRole(Role role);
+    List<PersonDto> getAllPerson(PersonSearchDto personSearchDto);
 }

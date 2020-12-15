@@ -13,6 +13,7 @@ import ru.tsedrik.model.Course;
 import ru.tsedrik.model.CourseType;
 import ru.tsedrik.model.Person;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -28,11 +29,10 @@ public class CourseDAOImpl implements CourseDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private SimpleJdbcInsert simpleJdbcInsert;
 
-    public CourseDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
+    public CourseDAOImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.simpleJdbcInsert = simpleJdbcInsert;
-        this.simpleJdbcInsert.withTableName("course");
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("course");
     }
 
     @Override
