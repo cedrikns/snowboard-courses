@@ -1,7 +1,7 @@
 package ru.tsedrik.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.dao.GroupDAO;
@@ -24,7 +24,7 @@ public class GroupServiceImpl implements GroupService{
     private GroupDAO groupDAO;
     private PersonDAO personDAO;
 
-    private static final Logger logger = LogManager.getLogger(GroupServiceImpl.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(GroupServiceImpl.class.getName());
 
     public GroupServiceImpl(GroupDAO groupDAO, PersonDAO personDAO){
         this.groupDAO = groupDAO;

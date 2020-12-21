@@ -20,12 +20,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course",
+					"raw": "localhost:8080/snowboard-courses/course",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"snowboard-courses",
 						"course"
 					]
 				}
@@ -50,14 +51,15 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course/1603911916937",
+					"raw": "localhost:8080/snowboard-courses/course/1606667561014",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"snowboard-courses",
 						"course",
-						"1603911916937"
+						"1606667561014"
 					]
 				}
 			},
@@ -78,14 +80,15 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/person/1603897817375",
+					"raw": "localhost:8080/snowboard-courses/course/1606667561014",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"person",
-						"1603897817375"
+						"snowboard-courses",
+						"course",
+						"1606667561014"
 					]
 				}
 			},
@@ -106,23 +109,24 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/course/enroll?courseId&personId",
+					"raw": "localhost:8080/snowboard-courses/course/enroll?courseId=1606846750386&personId=1606846755424",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"snowboard-courses",
 						"course",
 						"enroll"
 					],
 					"query": [
 						{
 							"key": "courseId",
-							"value": null
+							"value": "1606846750386"
 						},
 						{
 							"key": "personId",
-							"value": null
+							"value": "1606846755424"
 						}
 					]
 				}

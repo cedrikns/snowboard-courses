@@ -1,7 +1,7 @@
 package ru.tsedrik.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -21,7 +21,7 @@ import java.util.Collection;
 @Repository
 public class GroupDAOImpl implements GroupDAO {
 
-    private static final Logger log = LogManager.getLogger(GroupDAOImpl.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(GroupDAOImpl.class.getName());
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

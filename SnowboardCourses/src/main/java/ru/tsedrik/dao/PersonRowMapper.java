@@ -1,7 +1,7 @@
 package ru.tsedrik.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import ru.tsedrik.model.Person;
 import ru.tsedrik.model.Role;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class PersonRowMapper implements RowMapper<Person> {
 
-    private static final Logger log = LogManager.getLogger(PersonRowMapper.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(PersonRowMapper.class.getName());
 
     @Override
     public Person mapRow(ResultSet resultSet, int rowNum) throws SQLException {
