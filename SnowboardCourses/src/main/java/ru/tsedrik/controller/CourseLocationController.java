@@ -23,7 +23,7 @@ public class CourseLocationController {
     @PostMapping
     public ResponseEntity<CourseLocationDto> createCourseLocation(@RequestBody CourseLocationDto courseLocationDto, UriComponentsBuilder uriComponentsBuilder){
         CourseLocationDto resultCourseLocationDto = locationService.addLocation(courseLocationDto);
-        URI uri = uriComponentsBuilder.path("/courseLocation/" + resultCourseLocationDto.getId()).buildAndExpand(resultCourseLocationDto).toUri();
+        URI uri = uriComponentsBuilder.path("/api/v1/location/" + resultCourseLocationDto.getId()).buildAndExpand(resultCourseLocationDto).toUri();
         return ResponseEntity.created(uri).body(resultCourseLocationDto);
     }
 

@@ -24,7 +24,7 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<CourseDto> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder){
         CourseDto resultCourseDto = courseService.addCourse(courseDto);
-        URI uri = uriComponentsBuilder.path("/course/" + resultCourseDto.getId()).buildAndExpand(resultCourseDto).toUri();
+        URI uri = uriComponentsBuilder.path("/api/v1/course/" + resultCourseDto.getId()).buildAndExpand(resultCourseDto).toUri();
         return ResponseEntity.created(uri).body(resultCourseDto);
     }
 

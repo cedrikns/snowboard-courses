@@ -2,7 +2,7 @@ package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
-import ru.tsedrik.model.Person;
+import ru.tsedrik.domain.Person;
 
 import java.util.List;
 
@@ -22,15 +22,15 @@ public interface PersonService {
      * Удаляет существующего участника курса.
      *
      * @param person    существующий участник курса, который будет удален
-     * @return  удаленный участник
+     * @return  успешно ли прошло удаление
      */
-    Person deletePerson(Person person);
+    boolean deletePerson(Person person);
 
     /**
      * Удаляет существующего участника курса по его идентификатору.
      *
      * @param id    идентификатор удаляемого участника
-     * @return  удаленный участник
+     * @return  успешно ли прошло удаление
      */
     boolean deletePersonById(Long id);
 

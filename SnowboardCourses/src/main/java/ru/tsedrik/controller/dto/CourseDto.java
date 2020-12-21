@@ -1,11 +1,11 @@
 package ru.tsedrik.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import ru.tsedrik.model.CourseLocation;
-import ru.tsedrik.model.Group;
+import ru.tsedrik.domain.CourseLocation;
+import ru.tsedrik.domain.Group;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public class CourseDto {
 
@@ -44,11 +44,11 @@ public class CourseDto {
     /**
      * Список групп курса
      */
-    private List<Group> groups;
+    private Set<Group> groups;
 
     public CourseDto(){}
 
-    public CourseDto(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount, List<Group> groups) {
+    public CourseDto(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount, Set<Group> groups) {
         this.id = id;
         this.courseType = courseType;
         this.courseLocation = courseLocation;
@@ -106,11 +106,11 @@ public class CourseDto {
         this.groupCount = groupCount;
     }
 
-    public List<Group> getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 }

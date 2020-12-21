@@ -1,14 +1,17 @@
-package ru.tsedrik.dao;
+package ru.tsedrik.repository;
 
-import ru.tsedrik.model.Person;
-import ru.tsedrik.model.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ru.tsedrik.domain.Person;
+import ru.tsedrik.domain.Role;
 
 import java.util.Collection;
 
 /**
  * Интерфейс управления персистентным состоянием объектов типа Person
  */
-public interface PersonDAO extends GenericDAO<Person, Long> {
+@Repository
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
     /**
      * Возвращает список записей об участниках с указанной ролью.
@@ -25,13 +28,6 @@ public interface PersonDAO extends GenericDAO<Person, Long> {
      * @return  найденный участник
      */
     Person getPersonByEmail(String email);
-
-    /**
-     * Возвращает всех участников группы
-     * @param groupId  идентификатор группы
-     * @return  список найденных участников
-     */
-    Collection<Person> getAllByGroupId(Long groupId);
 
     /**
      * Возвращает участников по их электронному адресу и роли

@@ -1,7 +1,7 @@
 package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.CourseLocationDto;
-import ru.tsedrik.model.CourseLocation;
+import ru.tsedrik.domain.CourseLocation;
 
 /**
  * LocationService представляет интерфейс взаимодействия с классом CourseLocation
@@ -19,15 +19,15 @@ public interface LocationService {
      * Удаляет существующее место проведения курса.
      *
      * @param location    существующее место проведения курса, которое будет удалено
-     * @return  удаленное место проведения
+     * @return  успешно ли прошло удаление
      */
-    CourseLocation deleteLocation(CourseLocation location);
+    boolean deleteLocation(CourseLocation location);
 
     /**
      * Удаляет существующее место проведения курса по его идентификатору.
      *
      * @param id    идентификатор удаляемого места проведения курса
-     * @return  было ли удалено место проведения курса по его идентификатору
+     * @return  успешно ли прошло удаление
      */
     boolean deleteLocationById(Long id);
 

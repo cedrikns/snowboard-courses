@@ -1,4 +1,4 @@
-package ru.tsedrik.model;
+package ru.tsedrik.domain;
 
 /**
  * CourseType задает тип курса, от которого зависит набор изучаемых на курсе элементов

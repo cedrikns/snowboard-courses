@@ -7,7 +7,7 @@
     <include file="person.xml" relativeToChangelogFile="true"/>
     <include file="location.xml" relativeToChangelogFile="true"/>
     <include file="course.xml" relativeToChangelogFile="true"/>
-    <include file="group.xml" relativeToChangelogFile="true"/>
+    <include file="groups.xml" relativeToChangelogFile="true"/>
     <include file="group_person.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
