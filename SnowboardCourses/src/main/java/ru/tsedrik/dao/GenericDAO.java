@@ -57,6 +57,6 @@ public interface GenericDAO <T extends Identifired<I>, I> {
      * @param id    идентификатор объекта, по которому запись будет удалена
      * @return  объект удаленной записи
      */
-    T deleteById(I id);
+    boolean deleteById(I id);
 
 }

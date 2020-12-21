@@ -1,7 +1,10 @@
 package ru.tsedrik.service;
 
 import ru.tsedrik.controller.dto.PersonDto;
+import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.model.Person;
+
+import java.util.List;
 
 /**
  * PersonService представляет интерфейс взаимодействия с классом Person
@@ -45,4 +48,12 @@ public interface PersonService {
      * @param personDto    участник, который будет обновлен
      */
     PersonDto updatePerson(PersonDto personDto);
+
+    /**
+     * Получает всех участников, соответствующих параметрам поиска
+     *
+     * @param personSearchDto  параметры для поиска
+     * @return      список найденных участников
+     */
+    List<PersonDto> getAllPerson(PersonSearchDto personSearchDto);
 }

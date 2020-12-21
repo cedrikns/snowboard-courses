@@ -6,17 +6,19 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.controller.dto.PersonDto;
+import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.service.PersonService;
 import ru.tsedrik.validator.PersonDtoValidator;
 
 import java.net.URI;
+import java.util.List;
 
 
 /**
  * Controller for Person
  */
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/v1/person")
 public class PersonController {
 
     private PersonService personService;
@@ -38,6 +40,12 @@ public class PersonController {
     public PersonDto getPerson(@PathVariable Long id){
         PersonDto personDto = personService.getPersonById(id);
         return personDto;
+    }
+
+    @GetMapping
+    public List<PersonDto> getAllPerson(@RequestBody PersonSearchDto personSearchDto){
+        List<PersonDto> persons = personService.getAllPerson(personSearchDto);
+        return persons;
     }
 
     @DeleteMapping(value = "/{id}")

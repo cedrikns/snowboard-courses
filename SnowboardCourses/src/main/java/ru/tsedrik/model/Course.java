@@ -32,12 +32,12 @@ public class Course implements Identifired<Long>{
     /**
      * Дата начала курса
      */
-    private LocalDate startTime;
+    private LocalDate beginDate;
 
     /**
      * Дата окончания курса
      */
-    private LocalDate endTime;
+    private LocalDate endDate;
 
     /**
      * Количество групп на курсе
@@ -49,12 +49,14 @@ public class Course implements Identifired<Long>{
      */
     private List<Group> groups;
 
-    public Course(Long id, String courseType, CourseLocation courseLocation, LocalDate startTime, LocalDate endTime, int groupCount) {
+    public Course(){}
+
+    public Course(Long id, String courseType, CourseLocation courseLocation, LocalDate beginDate, LocalDate endDate, int groupCount) {
         this.id = id;
         this.courseType = CourseType.valueOf(courseType.toUpperCase());
         this.courseLocation = courseLocation;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.beginDate = beginDate;
+        this.endDate = endDate;
         this.groupCount = groupCount;
         this.groups = new ArrayList<>();
     }
@@ -84,20 +86,20 @@ public class Course implements Identifired<Long>{
         this.courseLocation = courseLocation;
     }
 
-    public LocalDate getStartTime() {
-        return startTime;
+    public LocalDate getBeginDate() {
+        return beginDate;
     }
 
-    public void setStartTime(LocalDate startTime) {
-        this.startTime = startTime;
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public LocalDate getEndTime() {
-        return endTime;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(LocalDate endTime) {
-        this.endTime = endTime;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public int getGroupCount() {
@@ -130,8 +132,8 @@ public class Course implements Identifired<Long>{
                 "id=" + id +
                 ", courseType=" + courseType +
                 ", courseLocation=" + courseLocation +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", startTime=" + beginDate +
+                ", endTime=" + endDate +
                 ", groups=" + groups +
                 '}';
     }

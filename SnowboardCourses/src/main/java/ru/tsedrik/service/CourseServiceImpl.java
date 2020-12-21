@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.controller.dto.CourseDto;
 import ru.tsedrik.dao.CourseDAO;
 import ru.tsedrik.dao.PersonDAO;
@@ -17,11 +18,13 @@ import ru.tsedrik.model.Person;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса CourseService
  */
 @Service
+@Transactional
 public class CourseServiceImpl implements CourseService{
 
     /**
@@ -87,21 +90,19 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public CourseDto addCourse(CourseDto courseDto) {
 
-        logger.info("Work after asyncMethod was called.");
-
         Course course = new Course(
                 System.currentTimeMillis(), courseDto.getCourseType(), courseDto.getCourseLocation(),
                 courseDto.getStartTime(), courseDto.getEndTime(),
                 courseDto.getGroupCount()
         );
 
+        courseDAO.create(course);
+
         for (int i = 0; i < course.getGroupCount(); i++){
-            Group group = new Group(System.currentTimeMillis(), Integer.parseInt(maxPersonPerGroup));
+            Group group = new Group(System.currentTimeMillis(), course.getId(), Integer.parseInt(maxPersonPerGroup));
             groupService.addGroup(group);
             course.getGroups().add(group);
         }
-
-        courseDAO.create(course);
 
         courseDto.setId(course.getId());
         courseDto.setGroups(course.getGroups());
@@ -111,20 +112,14 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course deleteCourse(Course course) {
+        course.getGroups().forEach(g -> groupService.deleteGroup(g));
         return courseDAO.delete(course);
     }
 
     @Override
     public boolean deleteCourseById(Long id) {
-        Course course = courseDAO.deleteById(id);
-        boolean deletingResult;
-        if (course != null) {
-            deletingResult = true;
-        } else {
-            deletingResult = false;
-        }
-
-        return deletingResult;
+        groupService.getAllByCourseId(id).forEach(g -> groupService.deleteGroup(g));
+        return courseDAO.deleteById(id);
     }
 
     @Override
@@ -139,9 +134,12 @@ public class CourseServiceImpl implements CourseService{
         if (course == null){
             throw new CourseNotFoundException(courseNotFoundExMsg + id);
         }
+
+        course.setGroups(groupService.getAllByCourseId(course.getId()).stream().collect(Collectors.toList()));
+
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                course.getStartTime(), course.getEndTime(),
+                course.getBeginDate(), course.getEndDate(),
                 course.getGroupCount(), course.getGroups()
         );
 
@@ -155,13 +153,15 @@ public class CourseServiceImpl implements CourseService{
             throw new CourseNotFoundException(courseNotFoundExMsg + courseId);
         }
 
+        course.setGroups(groupService.getAllByCourseId(course.getId()).stream().collect(Collectors.toList()));
+
         if (!course.isAvailableGroupExist()){
             throw new IllegalArgumentException("There is no available places on this course");
         }
 
         Person person = personDAO.getById(personId);
         if (person == null){
-            throw new PersonNotFoundException(personNotFoundExMsg + personId);
+            throw new PersonNotFoundException(personNotFoundExMsg + "with id = " + personId);
         }
 
         Group group = course.getAvailableGroup();
@@ -170,11 +170,12 @@ public class CourseServiceImpl implements CourseService{
         group.setStudents(students);
         group.setAvailableNumberOfPlaces(group.getAvailableNumberOfPlaces() - 1);
 
+        groupService.addPersonToGroup(group.getId(), personId);
         groupService.updateGroup(group);
 
         CourseDto courseDto = new CourseDto(
                 course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
-                course.getStartTime(), course.getEndTime(),
+                course.getBeginDate(), course.getEndDate(),
                 course.getGroupCount(), course.getGroups()
         );
 

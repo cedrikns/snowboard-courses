@@ -1,6 +1,5 @@
 package ru.tsedrik.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,7 +12,7 @@ import java.net.URI;
  * Controller for Course
  */
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/api/v1/course")
 public class CourseController {
 
     private CourseService courseService;
