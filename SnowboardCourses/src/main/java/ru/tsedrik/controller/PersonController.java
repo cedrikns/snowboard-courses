@@ -1,18 +1,20 @@
 package ru.tsedrik.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.tsedrik.controller.dto.PageDto;
 import ru.tsedrik.controller.dto.PersonDto;
 import ru.tsedrik.controller.dto.PersonSearchDto;
 import ru.tsedrik.service.PersonService;
 import ru.tsedrik.validator.PersonDtoValidator;
 
 import java.net.URI;
-import java.util.List;
-
 
 /**
  * Controller for Person
@@ -43,9 +45,9 @@ public class PersonController {
     }
 
     @GetMapping
-    public List<PersonDto> getAllPerson(@RequestBody PersonSearchDto personSearchDto){
-        List<PersonDto> persons = personService.getAllPerson(personSearchDto);
-        return persons;
+    public PageDto<PersonDto> getPersons(@RequestBody PersonSearchDto personSearchDto,
+                                         @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
+        return personService.getPersons(personSearchDto, pageable);
     }
 
     @DeleteMapping(value = "/{id}")

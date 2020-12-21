@@ -202,16 +202,13 @@
 			"response": []
 		},
 		{
-			"name": "Get Person By Role",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "Search Person",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n    \"firstName\" : \"Иван\",\r\n    \"lastName\" : \"Иванов\",\r\n    \"email\" : \"ivanov2@gmail.com\",\r\n    \"role\" : \"STUDENT\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -219,55 +216,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/person?role=student",
+					"raw": "localhost:8080/person",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"person"
-					],
-					"query": [
-						{
-							"key": "role",
-							"value": "student"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Person By Email",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/person?email=leonov@gmail.com",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"person"
-					],
-					"query": [
-						{
-							"key": "email",
-							"value": "leonov@gmail.com"
-						}
 					]
 				}
 			},

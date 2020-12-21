@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "person")
-public class Person  implements Identifired<Long> {
+public class Person extends CreateAtIdentified implements Identifired<Long> {
 
     /**
      * Идентификатор участника

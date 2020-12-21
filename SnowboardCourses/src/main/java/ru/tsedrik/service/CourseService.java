@@ -1,10 +1,8 @@
 package ru.tsedrik.service;
 
-import ru.tsedrik.controller.dto.CourseDto;
+import org.springframework.data.domain.Pageable;
+import ru.tsedrik.controller.dto.*;
 import ru.tsedrik.domain.Course;
-import ru.tsedrik.domain.CourseType;
-
-import java.util.Collection;
 
 /**
  * CourseService представляет интерфейс взаимодействия с классом Course
@@ -43,18 +41,19 @@ public interface CourseService {
     CourseDto getCourseById(Long id);
 
     /**
-     * Запрашивает набор всех курсов указанного типа CourseType.
-     *
-     * @param type  тип курсов для поиска
-     * @return  список всех найденных курсов указанного типа
-     */
-    Collection<Course> getCourseByType(CourseType type);
-
-    /**
      * Записывает Участника на конкретный курс
      * @param courseId  идентификатор курса, на который будет записан Участник
      * @param personId  идентификатор Участника
      * @return  Обновленный курс
      */
     CourseDto enroll(Long courseId, Long personId);
+
+    /**
+     * Получает все курсы, соответствующие наболу полей из courseSearchDto
+     *
+     * @param courseSearchDto набор параметров, по которым осуществляется поиск
+     * @param pageable  настройка отображения результата
+     * @return  страница найденных курсов, соотвествующая настройкам объекта pageable
+     */
+    PageDto<CourseDto> getCourses(CourseSearchDto courseSearchDto, Pageable pageable);
 }

@@ -4,19 +4,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tsedrik.controller.dto.CourseDto;
+import ru.tsedrik.controller.dto.*;
+import ru.tsedrik.domain.*;
 import ru.tsedrik.exception.CourseNotFoundException;
 import ru.tsedrik.exception.PersonNotFoundException;
-import ru.tsedrik.domain.Course;
-import ru.tsedrik.domain.CourseType;
-import ru.tsedrik.domain.Group;
-import ru.tsedrik.domain.Person;
 import ru.tsedrik.repository.CourseRepository;
 import ru.tsedrik.repository.PersonRepository;
 
-import java.util.Collection;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -76,7 +78,7 @@ public class CourseServiceImpl implements CourseService{
     public CourseDto addCourse(CourseDto courseDto) {
 
         Course course = new Course(
-                System.currentTimeMillis(), courseDto.getCourseType(), courseDto.getCourseLocation(),
+                System.currentTimeMillis(), courseDto.getCourseType(), courseDto.getLocation(),
                 courseDto.getStartTime(), courseDto.getEndTime(),
                 courseDto.getGroupCount()
         );
@@ -107,15 +109,10 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Collection<Course> getCourseByType(CourseType type) {
-        return courseRepository.getCourseByCourseType(type);
-    }
-
-    @Override
     public CourseDto getCourseById(Long id) {
         CourseDto courseDto = courseRepository.findById(id)
                 .map(course -> new CourseDto(
-                        course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
+                        course.getId(), course.getCourseType().toString(), course.getLocation(),
                         course.getBeginDate(), course.getEndDate(),
                         course.getGroupCount(), course.getGroups()))
                 .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + id));
@@ -146,7 +143,7 @@ public class CourseServiceImpl implements CourseService{
         courseRepository.save(course);
 
         CourseDto courseDto = new CourseDto(
-                course.getId(), course.getCourseType().toString(), course.getCourseLocation(),
+                course.getId(), course.getCourseType().toString(), course.getLocation(),
                 course.getBeginDate(), course.getEndDate(),
                 course.getGroupCount(), course.getGroups()
         );
@@ -154,4 +151,40 @@ public class CourseServiceImpl implements CourseService{
         return courseDto;
     }
 
+    @Override
+    public PageDto<CourseDto> getCourses(CourseSearchDto courseSearchDto, Pageable pageable) {
+        Page<Course> page = courseRepository.findAll(getSpecification(courseSearchDto), pageable);
+
+        List<CourseDto> courses = page
+                .map(course ->
+                        new CourseDto(
+                                course.getId(), course.getCourseType().toString(), course.getLocation(),
+                                course.getBeginDate(), course.getEndDate(),
+                                course.getGroupCount(), course.getGroups())
+                )
+                .toList();
+
+        return new PageDto<>(courses, page.getTotalElements());
+    }
+
+    private Specification<Course> getSpecification(CourseSearchDto courseSearchDto) {
+        return (root, query, builder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (courseSearchDto.getCourseType() != null) {
+                predicates.add(root.get("courseType").in(CourseType.valueOf(courseSearchDto.getCourseType().toUpperCase())));
+            }
+
+            if (courseSearchDto.getStartTime() != null){
+                predicates.add(builder.greaterThanOrEqualTo(root.get("beginDate"), courseSearchDto.getStartTime()));
+            }
+
+            if (courseSearchDto.getEndTime() != null){
+                predicates.add(builder.lessThanOrEqualTo(root.get("endDate"), courseSearchDto.getEndTime()));
+            }
+
+            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+    }
 }

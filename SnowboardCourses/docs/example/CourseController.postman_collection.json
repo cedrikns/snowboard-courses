@@ -132,6 +132,34 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Search Course",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"courseType\" : \"CARVING\",\r\n    \"startTime\" : \"2020-11-15\",\r\n    \"endTime\" : \"2020-11-25\",\r\n    \"groupCount\" : \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/snowboard-courses/course",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"snowboard-courses",
+						"course"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
