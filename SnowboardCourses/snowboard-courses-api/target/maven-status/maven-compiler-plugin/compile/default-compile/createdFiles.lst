@@ -1,0 +1,13 @@
+ru\tsedrik\resource\dto\PageDto.class
+ru\tsedrik\resource\dto\GroupDto.class
+ru\tsedrik\resource\dto\PersonDto.class
+ru\tsedrik\resource\dto\CourseDto.class
+ru\tsedrik\resource\dto\ResponseError.class
+ru\tsedrik\resource\dto\LocationSearchDto.class
+ru\tsedrik\resource\LocationResource.class
+ru\tsedrik\resource\PersonResource.class
+ru\tsedrik\resource\dto\LocationDto.class
+ru\tsedrik\resource\CourseResource.class
+ru\tsedrik\resource\dto\CourseSearchDto.class
+ru\tsedrik\resource\dto\PersonFormValidationError.class
+ru\tsedrik\resource\dto\PersonSearchDto.class

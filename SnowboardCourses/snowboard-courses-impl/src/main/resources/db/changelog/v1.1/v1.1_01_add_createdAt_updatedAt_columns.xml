@@ -1,0 +1,119 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person"/>
+            <not>
+                <columnExists tableName="person" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="person">
+            <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты создания</comment>
+    </changeSet>
+
+    <changeSet id="2" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="person"/>
+            <not>
+                <columnExists tableName="person" columnName="updated_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="person">
+            <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты обновления</comment>
+    </changeSet>
+
+    <changeSet id="3" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="location"/>
+            <not>
+                <columnExists tableName="location" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="location">
+            <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты создания</comment>
+    </changeSet>
+
+    <changeSet id="4" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="location"/>
+            <not>
+                <columnExists tableName="location" columnName="updated_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="location">
+            <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты обновления</comment>
+    </changeSet>
+
+    <changeSet id="5" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="course"/>
+            <not>
+                <columnExists tableName="course" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="course">
+            <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты создания</comment>
+    </changeSet>
+
+    <changeSet id="6" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="course"/>
+            <not>
+                <columnExists tableName="course" columnName="updated_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="course">
+            <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты обновления</comment>
+    </changeSet>
+
+    <changeSet id="7" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="groups"/>
+            <not>
+                <columnExists tableName="groups" columnName="created_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="groups">
+            <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты создания</comment>
+    </changeSet>
+
+    <changeSet id="8" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="groups"/>
+            <not>
+                <columnExists tableName="groups" columnName="updated_at"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="groups">
+            <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
+        </addColumn>
+        <comment>Задача по добавление поля даты обновления</comment>
+    </changeSet>
+
+</databaseChangeLog>
