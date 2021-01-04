@@ -88,4 +88,12 @@ public class GroupDto {
         this.students = students;
     }
 
+    @Override
+    public String toString() {
+        return "GroupDto{" +
+                "id=" + id +
+                ", totalNumberOfPlaces=" + totalNumberOfPlaces +
+                ", availableNumberOfPlaces=" + availableNumberOfPlaces +
+                '}';
+    }
 }

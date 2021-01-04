@@ -63,4 +63,13 @@ public class CourseSearchDto {
     public void setEndTime(LocalDate endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "CourseSearchDto{" +
+                "courseType='" + courseType + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

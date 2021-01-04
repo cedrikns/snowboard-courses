@@ -12,6 +12,7 @@
     <modules>
         <module>snowboard-courses-api</module>
         <module>snowboard-courses-impl</module>
+        <module>snowboard-courses-audit</module>
     </modules>
 
 </project>

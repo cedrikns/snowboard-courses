@@ -40,7 +40,7 @@ spring:
 logging:
   level:
     ROOT: INFO
-    ru.iteco: DEBUG
+    ru.tsedrik: DEBUG
     org.springframework: INFO
     org.hibernate:
       SQL: DEBUG
