@@ -9,8 +9,28 @@
     <property name="ASPECT_ARCHIVE" value="${ASPECT_PATH}/archive"/>
 
     <springProperty name="ASPECT_FILE_ENABLED" source="aspect.logging.file.enabled" defaultValue="true"/>
-    <if condition='p("ASPECT_FILE_ENABLED").equals("true")'>
+    <springProperty name="ASPECT_DB_ENABLED" source="aspect.logging.db.enabled" defaultValue="false"/>
+    <springProperty name="DB_DRIVER_CLASS" source="spring.datasource.driverClassName"/>
+    <springProperty name="DB_URL" source="spring.datasource.url"/>
+    <springProperty name="DB_USER" source="spring.datasource.username"/>
+    <springProperty name="DB_PASSWORD" source="spring.datasource.password"/>
+
+    <if condition='p("ASPECT_DB_ENABLED").equals("true")'>
         <then>
+            <appender name="ASPECT_DB" class="ru.tsedrik.aspect.appender.AuditMessageDBAppender">
+                <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+                    <driverClass>${DB_DRIVER_CLASS}</driverClass>
+                    <url>${DB_URL}</url>
+                    <user>${DB_USER}</user>
+                    <password>${DB_PASSWORD}</password>
+                </connectionSource>
+            </appender>
+
+            <logger name="ru.tsedrik.aspect.AspectService" level="INFO" additivity="false">
+                <appender-ref ref="ASPECT_DB"/>
+            </logger>
+        </then>
+        <else>
             <appender name="ASPECT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                     <Pattern>%msg%n</Pattern>
@@ -27,7 +47,7 @@
             <logger name="ru.tsedrik.aspect.AspectService" level="INFO" additivity="false">
                 <appender-ref ref="ASPECT_FILE"/>
             </logger>
-        </then>
+        </else>
     </if>
 
     <springProperty name="CONSOLE_ENABLED" source="logging.appenders.console.enabled"/>
@@ -55,7 +75,7 @@
 
                 <file>${LOG_PATH}/${FILE_NAME}.log</file>
                 <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                    <fileNamePattern>${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <fileNamePattern>${LOG_PATH}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
                     <maxHistory>${MAX_HISTORY}</maxHistory>
                 </rollingPolicy>
             </appender>

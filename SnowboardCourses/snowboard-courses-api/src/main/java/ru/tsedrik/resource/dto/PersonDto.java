@@ -89,14 +89,4 @@ public class PersonDto {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "PersonDto{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
 }

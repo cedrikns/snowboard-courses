@@ -64,12 +64,4 @@ public class CourseSearchDto {
         this.endTime = endTime;
     }
 
-    @Override
-    public String toString() {
-        return "CourseSearchDto{" +
-                "courseType='" + courseType + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                '}';
-    }
 }

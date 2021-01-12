@@ -4,7 +4,49 @@ package ru.tsedrik.aspect.annotation;
  * Справочник действий, производящихся в системе
  */
 public enum AuditCode {
-    PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE,
-    COURSE_CREATE, COURSE_UPDATE, COURSE_DELETE,
-    LOCATION_CREATE, LOCATION_UPDATE, LOCATION_DELETE
+
+    /**
+     * Действие по созданию участника курсов
+     */
+    PERSON_CREATE,
+
+    /**
+     * Действие по обновлению участника курсов
+     */
+    PERSON_UPDATE,
+
+    /**
+     * Действие по удалению участника курсов
+     */
+    PERSON_DELETE,
+
+    /**
+     * Действие по созданию курса
+     */
+    COURSE_CREATE,
+
+    /**
+     * Действие по обновлению курса
+     */
+    COURSE_UPDATE,
+
+    /**
+     * Действие по удалению курса
+     */
+    COURSE_DELETE,
+
+    /**
+     * Действие по созданию места проведения курсов
+     */
+    LOCATION_CREATE,
+
+    /**
+     * Действие по обновлению места проведения курсов
+     */
+    LOCATION_UPDATE,
+
+    /**
+     * Действие по удалению места проведения курсов
+     */
+    LOCATION_DELETE
 }

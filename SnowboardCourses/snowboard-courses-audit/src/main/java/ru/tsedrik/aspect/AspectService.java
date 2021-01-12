@@ -1,6 +1,8 @@
 package ru.tsedrik.aspect;
 
-import org.aspectj.lang.JoinPoint;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -9,9 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.aspect.annotation.Audit;
+import ru.tsedrik.aspect.annotation.AuditCode;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * Aspect для логирования изменений в системе
@@ -22,46 +27,104 @@ public class AspectService {
 
     private static final Logger logger = LoggerFactory.getLogger(AspectService.class.getName());
 
-    private AuditMessage auditMessage;
-
     @Pointcut("@annotation(ru.tsedrik.aspect.annotation.Audit) && execution(public * *(..))")
     public void publicAspectMethod() {
     }
 
     @Around("publicAspectMethod()")
     public Object aspect(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        UUID uuid = UUID.randomUUID();
 
-        auditMessage = new AuditMessage();
+        AuditMessage auditMessage = new AuditMessage();
+        auditMessage.setUuid(uuid);
         auditMessage.setAuditCode(((MethodSignature) proceedingJoinPoint.getSignature())
                 .getMethod().getAnnotation(Audit.class).value());
         auditMessage.setAuditMessageEvent(AuditMessageEvent.START);
         auditMessage.setStartTime(LocalDateTime.now());
         Object[] args = Arrays.stream(proceedingJoinPoint.getArgs())
                 .filter(o -> !(o instanceof UriComponentsBuilder)).toArray();
-        auditMessage.setParams(args);
+        auditMessage.setParams(serializeInJson(args));
 
-        logger.info(auditMessage.toString());
+        logger.info(serializeAuditMessageToString(auditMessage));
 
-        Object proceed = proceedingJoinPoint.proceed();
+        Object proceed;
 
-        auditMessage.setAuditMessageEvent(AuditMessageEvent.SUCCESS);
-        auditMessage.setEndTime(LocalDateTime.now());
-        auditMessage.setResult(proceed);
+        try {
+            proceed = proceedingJoinPoint.proceed();
+            auditMessage.setAuditMessageEvent(AuditMessageEvent.SUCCESS);
+            auditMessage.setEndTime(LocalDateTime.now());
+            auditMessage.setResult(serializeInJson(proceed));
 
-        logger.info(auditMessage.toString());
+            logger.info(serializeAuditMessageToString(auditMessage));
+
+        } catch (Exception e){
+            auditMessage.setAuditMessageEvent(AuditMessageEvent.FAILURE);
+            auditMessage.setEndTime(LocalDateTime.now());
+            auditMessage.setResult(e.getClass()+ ": " + e.getMessage());
+            logger.info(serializeAuditMessageToString(auditMessage));
+            throw e;
+        }
 
         return proceed;
     }
 
-    @AfterThrowing(value = "publicAspectMethod()", throwing = "e")
-    public void aspectAfterThrowing(JoinPoint joinPoint, Exception e) throws Throwable {
+    private String serializeInJson(Object o){
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .findAndAddModules()
+                .build();
 
-        auditMessage.setAuditMessageEvent(AuditMessageEvent.FAILURE);
-        auditMessage.setEndTime(LocalDateTime.now());
-        auditMessage.setResult(e.getClass()+ ": " + e.getMessage());
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        String serializedMessage = "";
 
-        logger.info(auditMessage.toString());
+        try {
+            serializedMessage = objectMapper.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
+        return serializedMessage;
+    }
+
+    public static String serializeAuditMessageToString(AuditMessage auditMessage){
+
+        String result = String.join(";",
+                auditMessage.getUuid().toString(),
+                auditMessage.getAuditCode().name(),
+                auditMessage.getAuditMessageEvent().name(),
+                auditMessage.getStartTime() == null ? "" : auditMessage.getStartTime().toString(),
+                auditMessage.getEndTime() == null ? "" : auditMessage.getEndTime().toString(),
+                auditMessage.getUserName(),
+                auditMessage.getParams(),
+                auditMessage.getResult());
+
+        return result;
+    }
+
+    public static AuditMessage deserializeAuditMessageFromString(String msg){
+        AuditMessage auditMessage = new AuditMessage();
+
+        String []  data = msg.split(";");
+
+        int counter = 0;
+        auditMessage.setUuid(UUID.fromString(data[counter++]));
+        auditMessage.setAuditCode(AuditCode.valueOf(data[counter++]));
+        auditMessage.setAuditMessageEvent(AuditMessageEvent.valueOf(data[counter++]));
+
+        String startTime = data[counter++];
+        if (!startTime.isEmpty()) {
+            auditMessage.setStartTime(LocalDateTime.parse(startTime));
+        }
+
+        String endTime = data[counter++];
+        if (!endTime.isEmpty()) {
+            auditMessage.setStartTime(LocalDateTime.parse(endTime));
+        }
+
+        auditMessage.setUserName(data[counter++]);
+        auditMessage.setParams(data[counter++]);
+        auditMessage.setResult(data[counter++]);
+
+        return auditMessage;
     }
 
 }

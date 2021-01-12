@@ -59,12 +59,4 @@ public class LocationSearchDto {
         this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return "LocationSearchDto{" +
-                "name='" + name + '\'' +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }
 }

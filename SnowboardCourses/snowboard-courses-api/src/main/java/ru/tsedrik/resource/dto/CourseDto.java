@@ -125,16 +125,4 @@ public class CourseDto {
         this.groups = groups;
     }
 
-    @Override
-    public String toString() {
-        return "CourseDto{" +
-                "id=" + id +
-                ", courseType='" + courseType + '\'' +
-                ", location=" + location +
-                ", beginDate=" + beginDate +
-                ", endDate=" + endDate +
-                ", groupCount=" + groupCount +
-                ", groups=" + groups +
-                '}';
-    }
 }

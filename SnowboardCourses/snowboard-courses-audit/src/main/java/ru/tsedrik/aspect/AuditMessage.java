@@ -1,7 +1,5 @@
 package ru.tsedrik.aspect;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.tsedrik.aspect.annotation.AuditCode;
 
 import java.time.LocalDateTime;
@@ -14,7 +12,7 @@ public class AuditMessage {
     /**
      * Идентификатор события аудита.
      */
-    private final UUID uuid;
+    private UUID uuid;
 
     /**
      * Уникальный код события аудита
@@ -42,17 +40,24 @@ public class AuditMessage {
     private String userName = "";
 
     /**
-     * Входящие параметры запроса
+     * Входящие параметры запроса в формате JSON
      */
-    private Object[] params;
+    private String params;
 
     /**
-     * Возвращаемое значение в результате выполнения метода
+     * Возвращаемое значение в результате выполнения метода в формате JSON
      */
-    private Object result;
+    private String result;
 
     public AuditMessage() {
-        this.uuid = UUID.randomUUID();
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public AuditCode getAuditCode() {
@@ -95,44 +100,20 @@ public class AuditMessage {
         this.userName = userName;
     }
 
-    public Object[] getParams() {
+    public String getParams() {
         return params;
     }
 
-    public void setParams(Object[] params) {
+    public void setParams(String params) {
         this.params = params;
     }
 
-    public Object getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
-    @Override
-    public String toString() {
-        return uuid +
-                ";" + auditCode +
-                ";" + auditMessageEvent +
-                ";" + (startTime == null ? "" : startTime) +
-                ";" + (endTime == null ? "" : endTime) +
-                ";" + userName +
-                ";" + serializeInJson(params) +
-                ";" + serializeInJson(result);
-    }
-
-    private String serializeInJson(Object o){
-        ObjectMapper objectMapper = new ObjectMapper();
-        String serializedMessage = "";
-
-        try {
-            serializedMessage = objectMapper.writeValueAsString(o);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        return serializedMessage;
-    }
 }
