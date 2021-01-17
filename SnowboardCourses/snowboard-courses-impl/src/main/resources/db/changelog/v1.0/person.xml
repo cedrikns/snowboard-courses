@@ -7,11 +7,11 @@
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="person"/>
+                <tableExists schemaName="sc_core" tableName="person"/>
             </not>
         </preConditions>
 
-        <createTable tableName="person"
+        <createTable schemaName="sc_core" tableName="person"
                      remarks="Таблица зарегистрированных участников курсов">
             <column name="id" type="bigint"
                     remarks="Идентификатор записи">
@@ -40,10 +40,10 @@
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="person" indexName="person_email_uidx"/>
+                <indexExists schemaName="sc_core" tableName="person" indexName="person_email_uidx"/>
             </not>
         </preConditions>
-        <createIndex tableName="person" indexName="person_email_uidx" unique="true">
+        <createIndex schemaName="sc_core" tableName="person" indexName="person_email_uidx" unique="true">
             <column name="email"/>
         </createIndex>
         <comment>Индекс для поиска по электронному адресу</comment>

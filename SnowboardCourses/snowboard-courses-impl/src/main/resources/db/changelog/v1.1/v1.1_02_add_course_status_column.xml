@@ -6,13 +6,13 @@
 
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="course"/>
+            <tableExists schemaName="sc_core" tableName="course"/>
             <not>
-                <columnExists tableName="course" columnName="status"/>
+                <columnExists schemaName="sc_core" tableName="course" columnName="status"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="course">
+        <addColumn schemaName="sc_core" tableName="course">
             <column name="status" type="varchar(255)" remarks="Статус курса"/>
         </addColumn>
         <comment>Задача по добавление поля статуса для курсов</comment>

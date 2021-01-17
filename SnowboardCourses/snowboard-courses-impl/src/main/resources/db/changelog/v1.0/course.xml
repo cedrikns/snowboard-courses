@@ -7,11 +7,11 @@
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="course"/>
+                <tableExists schemaName="sc_core" tableName="course"/>
             </not>
         </preConditions>
 
-        <createTable tableName="course"
+        <createTable schemaName="sc_core" tableName="course"
                      remarks="Таблица созданных курсов">
             <column name="id" type="bigint"
                     remarks="Идентификатор записи">
@@ -27,6 +27,7 @@
             <column name="location_id" type="bigint"
                     remarks="Идентификатор записи в таблице location">
                 <constraints foreignKeyName="location_fk"
+                             referencedTableSchemaName="sc_core"
                              referencedTableName="location"
                              referencedColumnNames="id"/>
             </column>
@@ -47,10 +48,10 @@
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="course" indexName="course_type_date_idx"/>
+                <indexExists schemaName="sc_core" tableName="course" indexName="course_type_date_idx"/>
             </not>
         </preConditions>
-        <createIndex tableName="course" indexName="course_type_date_idx">
+        <createIndex schemaName="sc_core" tableName="course" indexName="course_type_date_idx">
             <column name="course_type"/>
             <column name="begin_date"/>
             <column name="end_date"/>

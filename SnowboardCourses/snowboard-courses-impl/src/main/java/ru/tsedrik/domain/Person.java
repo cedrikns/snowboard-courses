@@ -8,7 +8,7 @@ import java.util.Objects;
  * Включает в себя как инструкторов, так и непосредственных участников.
  */
 @Entity
-@Table(name = "person")
+@Table(schema = "sc_core", name = "person")
 public class Person extends CreateAtIdentified implements Identifired<Long> {
 
     /**

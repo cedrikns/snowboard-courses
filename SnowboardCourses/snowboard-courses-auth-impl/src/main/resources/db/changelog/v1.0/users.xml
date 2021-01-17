@@ -1,0 +1,64 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="sc_auth" tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="sc_auth" tableName="users"
+                     remarks="Таблица зарегистрированных пользователей">
+            <column name="id" type="bigint"
+                    remarks="Идентификатор записи">
+                <constraints primaryKey="true"
+                             primaryKeyName="user_pk"
+                             nullable="false"/>
+            </column>
+            <column name="user_name" type="varchar(255)"
+                    remarks="Имя пользователя">
+            </column>
+            <column name="password" type="varchar(255)"
+                    remarks="Пароль пользователя">
+            </column>
+            <column name="email" type="varchar(255)"
+                    remarks="Электронный адрес пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)"
+                    remarks="Роль пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)"
+                    remarks="Статус пользователя">
+            </column>
+            <column name="enabled" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp with time zone"
+                    remarks="Дата создания">
+            </column>
+            <column name="updated_at" type="timestamp with time zone"
+                    remarks="Дата обновления">
+            </column>
+        </createTable>
+        <comment>Задача по созданию пользователя системы</comment>
+    </changeSet>
+
+    <changeSet id="2" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="sc_auth" tableName="users" indexName="users_users_name_idx"/>
+            </not>
+        </preConditions>
+        <createIndex schemaName="sc_auth" tableName="users" indexName="users_users_name_idx">
+            <column name="user_name"/>
+        </createIndex>
+        <comment>Индекс для поиска по имени пользователя</comment>
+    </changeSet>
+
+</databaseChangeLog>

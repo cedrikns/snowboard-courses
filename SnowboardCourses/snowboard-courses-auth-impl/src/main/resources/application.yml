@@ -1,0 +1,76 @@
+server:
+  port: ${APP_PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    context-path: /snowboard-courses
+    application-display-name: SnowboardCourses
+  tomcat:
+    max-connections: 1000
+    accept-count: 100
+    connection-timeout: 30000
+
+spring:
+  application:
+    name: snowboard-courses-auth
+    token:
+      key: 84FiStd1PDDkXOfAHgfPxCC7xThp7QrGs9Xpy9QUTWU=
+      lifetime: 300000
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.xml
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+    show-sql: false
+    hibernate:
+      hbm2ddl:
+        auto: none
+      default_schema: sc_auth
+      use_sql_comments: true
+      format_sql: true
+
+logging:
+  level:
+    ROOT: INFO
+    ru.tsedrik: DEBUG
+    org.springframework: INFO
+    org.hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+  metrics:
+    export:
+      atlas:
+        enabled: true
+
+system:
+  id: snowboard-courses-auth
+
+course:
+  maxGroupCount: 2
+group:
+  maxPersonPerGroup: 2
+
+swagger:
+  title: Snowboard Courses
+  description: API для проекта
+  contact:
+    mail: tsedrik@i-teco.ru
+    name: Наталья Ц
+    url: http://iteco.ru

@@ -7,11 +7,11 @@
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="group_person"/>
+                <tableExists schemaName="sc_core" tableName="group_person"/>
             </not>
         </preConditions>
 
-        <createTable tableName="group_person"
+        <createTable schemaName="sc_core" tableName="group_person"
                      remarks="Таблица связи участников и групп">
             <column name="id" type="integer" autoIncrement="true" generationType="ALWAYS" incrementBy="1"
                     remarks="Идентификатор записи">
@@ -22,6 +22,7 @@
             <column name="person_id" type="bigint"
                     remarks="Идентификатор записи в таблице person">
                 <constraints foreignKeyName="person_id_fk"
+                             referencedTableSchemaName="sc_core"
                              referencedTableName="person"
                              referencedColumnNames="id"
                              nullable="false"/>
@@ -29,6 +30,7 @@
             <column name="group_id" type="bigint"
                     remarks="Идентификатор записи в таблице group">
                 <constraints foreignKeyName="group_id_fk"
+                             referencedTableSchemaName="sc_core"
                              referencedTableName="groups"
                              referencedColumnNames="id"
                              nullable="false"/>
@@ -40,10 +42,10 @@
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists tableName="group_person" indexName="group_person_idx"/>
+                <indexExists schemaName="sc_core" tableName="group_person" indexName="group_person_idx"/>
             </not>
         </preConditions>
-        <createIndex tableName="group_person" indexName="group_person_idx">
+        <createIndex schemaName="sc_core" tableName="group_person" indexName="group_person_idx">
             <column name="person_id"/>
             <column name="group_id"/>
         </createIndex>

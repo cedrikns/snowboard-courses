@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "52bfc63b-b6b7-4ab7-923c-5d3f7364c014",
+		"name": "AuthController",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\" : \"user\",\r\n    \"password\" : \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/snowboard-courses/api/v1/auth",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"snowboard-courses",
+						"api",
+						"v1",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
