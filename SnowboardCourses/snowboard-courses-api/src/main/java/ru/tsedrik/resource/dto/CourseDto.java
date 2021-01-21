@@ -124,4 +124,5 @@ public class CourseDto {
     public void setGroups(Set<GroupDto> groups) {
         this.groups = groups;
     }
+
 }

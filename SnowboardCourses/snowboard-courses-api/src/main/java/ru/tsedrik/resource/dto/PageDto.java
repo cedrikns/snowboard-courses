@@ -43,4 +43,12 @@ public class PageDto <T>{
     public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
+
+    @Override
+    public String toString() {
+        return "PageDto{" +
+                "data=" + data +
+                ", totalCount=" + totalCount +
+                '}';
+    }
 }

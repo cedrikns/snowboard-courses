@@ -3,6 +3,8 @@ package ru.tsedrik.schedule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.tsedrik.aspect.annotation.Audit;
+import ru.tsedrik.aspect.annotation.AuditCode;
 import ru.tsedrik.service.CourseService;
 
 /**
@@ -19,6 +21,7 @@ public class CronSchedule {
     }
 
     @Scheduled(cron = "${scheduling.cron.expression}")
+    @Audit(AuditCode.COURSE_UPDATE)
     public void changeOldCourseStatus() {
 
         courseService.changeOldCourseStatus();

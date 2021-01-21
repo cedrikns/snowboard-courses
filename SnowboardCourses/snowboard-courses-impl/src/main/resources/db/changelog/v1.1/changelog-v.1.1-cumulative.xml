@@ -6,5 +6,6 @@
 
     <include file="v1.1_01_add_createdAt_updatedAt_columns.xml" relativeToChangelogFile="true"/>
     <include file="v1.1_02_add_course_status_column.xml" relativeToChangelogFile="true"/>
+    <include file="v1.1_03_add_audit_message_table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

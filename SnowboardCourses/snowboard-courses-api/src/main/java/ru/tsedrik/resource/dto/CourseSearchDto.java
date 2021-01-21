@@ -63,4 +63,5 @@ public class CourseSearchDto {
     public void setEndTime(LocalDate endTime) {
         this.endTime = endTime;
     }
+
 }

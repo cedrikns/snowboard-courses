@@ -202,6 +202,33 @@
 			"response": []
 		},
 		{
+			"name": "Create Student With Validation Errors Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\" : \"Павел\",\r\n    \"lastName\" : \"Главный\",\r\n    \"email\" : \"\",\r\n    \"role\" : \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/person",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Search Person",
 			"request": {
 				"method": "POST",
@@ -228,6 +255,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

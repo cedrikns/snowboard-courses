@@ -70,4 +70,5 @@ public class LocationDto {
     public void setCity(String city) {
         this.city = city;
     }
+
 }

@@ -1,0 +1,98 @@
+<configuration>
+
+    <springProperty name="LOG_PATH" source="logging.appenders.file.path" defaultValue="log"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="ASPECT_PATH" source="aspect.path" defaultValue="${LOG_PATH}/aspect"/>
+    <springProperty scope="context" name="ASPECT_NAME" source="aspect.logName" defaultValue="aspect"/>
+    <springProperty scope="context" name="ASPECT_MAX_HISTORY" source="aspect.maxHistory" defaultValue="300"/>
+    <property name="ASPECT_ARCHIVE" value="${ASPECT_PATH}/archive"/>
+
+    <springProperty name="ASPECT_FILE_ENABLED" source="aspect.logging.file.enabled" defaultValue="true"/>
+    <springProperty name="ASPECT_DB_ENABLED" source="aspect.logging.db.enabled" defaultValue="false"/>
+    <springProperty name="DB_DRIVER_CLASS" source="spring.datasource.driverClassName"/>
+    <springProperty name="DB_URL" source="spring.datasource.url"/>
+    <springProperty name="DB_USER" source="spring.datasource.username"/>
+    <springProperty name="DB_PASSWORD" source="spring.datasource.password"/>
+
+    <if condition='p("ASPECT_DB_ENABLED").equals("true")'>
+        <then>
+            <appender name="ASPECT_DB" class="ru.tsedrik.aspect.appender.AuditMessageDBAppender">
+                <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+                    <driverClass>${DB_DRIVER_CLASS}</driverClass>
+                    <url>${DB_URL}</url>
+                    <user>${DB_USER}</user>
+                    <password>${DB_PASSWORD}</password>
+                </connectionSource>
+            </appender>
+
+            <logger name="ru.tsedrik.aspect.AspectService" level="INFO" additivity="false">
+                <appender-ref ref="ASPECT_DB"/>
+            </logger>
+        </then>
+        <else>
+            <appender name="ASPECT_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <Pattern>%msg%n</Pattern>
+                    <charset>UTF-8</charset>
+                </encoder>
+
+                <file>${ASPECT_PATH}/${ASPECT_NAME}.csv</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${ASPECT_ARCHIVE}/${ASPECT_NAME}.%d{yyyy-MM-dd}.csv</fileNamePattern>
+                    <maxHistory>${ASPECT_MAX_HISTORY}</maxHistory>
+                </rollingPolicy>
+            </appender>
+
+            <logger name="ru.tsedrik.aspect.AspectService" level="INFO" additivity="false">
+                <appender-ref ref="ASPECT_FILE"/>
+            </logger>
+        </else>
+    </if>
+
+    <springProperty name="CONSOLE_ENABLED" source="logging.appenders.console.enabled"/>
+    <if condition='p("CONSOLE_ENABLED").equals("true")'>
+        <then>
+            <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+                <encoder>
+                    <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+
+    <springProperty scope="context" name="FILE_NAME" source="logging.appenders.file.fileName" defaultValue="snowboard-courses"/>
+    <springProperty scope="context" name="MAX_HISTORY" source="logging.appenders.file.maxHistory" defaultValue="300"/>
+
+    <springProperty name="FILE_ENABLED" source="logging.appenders.file.enabled"/>
+    <if condition='p("FILE_ENABLED").equals("true")'>
+        <then>
+            <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <encoder>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
+                    <charset>UTF-8</charset>
+                </encoder>
+
+                <file>${LOG_PATH}/${FILE_NAME}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${LOG_PATH}/${FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <maxHistory>${MAX_HISTORY}</maxHistory>
+                </rollingPolicy>
+            </appender>
+        </then>
+    </if>
+
+    <root level="INFO">
+        <if condition='p("CONSOLE_ENABLED").equals("true")'>
+            <then>
+                <appender-ref ref="console"/>
+            </then>
+        </if>
+        <if condition='p("FILE_ENABLED").equals("true")'>
+            <then>
+                <appender-ref ref="file"/>
+            </then>
+        </if>
+    </root>
+
+</configuration>
