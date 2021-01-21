@@ -1,0 +1,27 @@
+spring:
+  config:
+    use-legacy-processing: true
+  profiles:
+    active: local
+    include: swagger
+
+logging:
+  level:
+    ROOT: INFO
+    ru.iteco: DEBUG
+    org.springframework: INFO
+    org.springframework.security: DEBUG
+    ru.iteco.aspect: DEBUG
+  appenders:
+    console:
+      enabled: true
+    file:
+      enabled: true
+      maxHistory: 1000
+
+
+aspect:
+  logging:
+    file:
+      enabled: true
+  maxHistory: 300

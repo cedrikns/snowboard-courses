@@ -7,11 +7,11 @@
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="audit_message"/>
+                <tableExists schemaName="sc_core" tableName="audit_message"/>
             </not>
         </preConditions>
 
-        <createTable tableName="audit_message"
+        <createTable schemaName="sc_core" tableName="audit_message"
                      remarks="Таблица аудита">
             <column name="id" type="uuid"
                     remarks="Идентификатор события">

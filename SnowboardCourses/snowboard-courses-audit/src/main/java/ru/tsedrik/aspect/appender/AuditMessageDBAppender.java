@@ -14,25 +14,44 @@ import java.sql.*;
  */
 public class AuditMessageDBAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
+    /**
+     * Схема, в которой находится таблица audit_message
+     */
+    protected String schema;
 
     /**
      * Запрос для вставки данных сообщения AuditMessage в БД
      */
-    protected final String insertSQL = "INSERT INTO audit_message " +
-            "(id, audit_сode, event_status, start_time, end_time, user_name, params, return_value) " +
-            "values (?, ?, ?, ?, ?, ?, ?, ?)";
+    protected String insertSQL;
 
     /**
      * Подключение к БД
      */
     protected ConnectionSource connectionSource;
 
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
 
     @Override
     public void start() {
 
         if (connectionSource == null) {
             throw new IllegalStateException("DBAppender cannot function without a connection source");
+        }
+
+        if (schema == null || schema.isEmpty()){
+            insertSQL = "INSERT INTO audit_message " +
+                    "(id, audit_сode, event_status, start_time, end_time, user_name, params, return_value) " +
+                    "values (?, ?, ?, ?, ?, ?, ?, ?)";
+        } else {
+            insertSQL = "INSERT INTO " + schema + ".audit_message " +
+                    "(id, audit_сode, event_status, start_time, end_time, user_name, params, return_value) " +
+                    "values (?, ?, ?, ?, ?, ?, ?, ?)";
         }
 
         super.start();

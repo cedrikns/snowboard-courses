@@ -18,6 +18,7 @@
     <if condition='p("ASPECT_DB_ENABLED").equals("true")'>
         <then>
             <appender name="ASPECT_DB" class="ru.tsedrik.aspect.appender.AuditMessageDBAppender">
+                <schema>"sc_core"</schema>
                 <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
                     <driverClass>${DB_DRIVER_CLASS}</driverClass>
                     <url>${DB_URL}</url>

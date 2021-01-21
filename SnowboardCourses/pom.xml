@@ -13,6 +13,9 @@
         <module>snowboard-courses-api</module>
         <module>snowboard-courses-impl</module>
         <module>snowboard-courses-audit</module>
+        <module>snowboard-courses-auth-api</module>
+        <module>snowboard-courses-auth-impl</module>
+        <module>snowboard-courses-auth-validate</module>
     </modules>
 
 </project>

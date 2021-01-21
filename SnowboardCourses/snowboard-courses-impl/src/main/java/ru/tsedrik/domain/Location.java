@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * - местом нахождения
  */
 @Entity
-@Table(name = "location")
+@Table(schema = "sc_core", name = "location")
 public class Location extends CreateAtIdentified implements Identifired<Long> {
 
     /**

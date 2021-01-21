@@ -10,7 +10,7 @@ import java.util.Set;
  * и одного инструктора.
  */
 @Entity
-@Table(name = "groups")
+@Table(schema = "sc_core", name = "groups")
 public class Group extends CreateAtIdentified implements Identifired<Long> {
 
     /**

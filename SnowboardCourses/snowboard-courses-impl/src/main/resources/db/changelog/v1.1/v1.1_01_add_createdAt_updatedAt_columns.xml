@@ -6,13 +6,13 @@
 
     <changeSet id="1" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="person"/>
+            <tableExists schemaName="sc_core" tableName="person"/>
             <not>
-                <columnExists tableName="person" columnName="created_at"/>
+                <columnExists schemaName="sc_core" tableName="person" columnName="created_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="person">
+        <addColumn schemaName="sc_core" tableName="person">
             <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
         </addColumn>
         <comment>Задача по добавление поля даты создания</comment>
@@ -20,13 +20,13 @@
 
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="person"/>
+            <tableExists schemaName="sc_core" tableName="person"/>
             <not>
-                <columnExists tableName="person" columnName="updated_at"/>
+                <columnExists schemaName="sc_core" tableName="person" columnName="updated_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="person">
+        <addColumn schemaName="sc_core" tableName="person">
             <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
         </addColumn>
         <comment>Задача по добавление поля даты обновления</comment>
@@ -34,13 +34,13 @@
 
     <changeSet id="3" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="location"/>
+            <tableExists schemaName="sc_core" tableName="location"/>
             <not>
-                <columnExists tableName="location" columnName="created_at"/>
+                <columnExists schemaName="sc_core" tableName="location" columnName="created_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="location">
+        <addColumn schemaName="sc_core" tableName="location">
             <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
         </addColumn>
         <comment>Задача по добавление поля даты создания</comment>
@@ -48,13 +48,13 @@
 
     <changeSet id="4" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="location"/>
+            <tableExists schemaName="sc_core" tableName="location"/>
             <not>
-                <columnExists tableName="location" columnName="updated_at"/>
+                <columnExists schemaName="sc_core" tableName="location" columnName="updated_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="location">
+        <addColumn schemaName="sc_core" tableName="location">
             <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
         </addColumn>
         <comment>Задача по добавление поля даты обновления</comment>
@@ -62,13 +62,13 @@
 
     <changeSet id="5" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="course"/>
+            <tableExists schemaName="sc_core" tableName="course"/>
             <not>
-                <columnExists tableName="course" columnName="created_at"/>
+                <columnExists schemaName="sc_core" tableName="course" columnName="created_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="course">
+        <addColumn schemaName="sc_core" tableName="course">
             <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
         </addColumn>
         <comment>Задача по добавление поля даты создания</comment>
@@ -76,13 +76,13 @@
 
     <changeSet id="6" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="course"/>
+            <tableExists schemaName="sc_core" tableName="course"/>
             <not>
-                <columnExists tableName="course" columnName="updated_at"/>
+                <columnExists schemaName="sc_core" tableName="course" columnName="updated_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="course">
+        <addColumn schemaName="sc_core" tableName="course">
             <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
         </addColumn>
         <comment>Задача по добавление поля даты обновления</comment>
@@ -90,13 +90,13 @@
 
     <changeSet id="7" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="groups"/>
+            <tableExists schemaName="sc_core" tableName="groups"/>
             <not>
-                <columnExists tableName="groups" columnName="created_at"/>
+                <columnExists schemaName="sc_core" tableName="groups" columnName="created_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="groups">
+        <addColumn schemaName="sc_core" tableName="groups">
             <column name="created_at" type="timestamp with time zone" remarks="Дата создания"/>
         </addColumn>
         <comment>Задача по добавление поля даты создания</comment>
@@ -104,13 +104,13 @@
 
     <changeSet id="8" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="groups"/>
+            <tableExists schemaName="sc_core" tableName="groups"/>
             <not>
-                <columnExists tableName="groups" columnName="updated_at"/>
+                <columnExists schemaName="sc_core" tableName="groups" columnName="updated_at"/>
             </not>
         </preConditions>
 
-        <addColumn tableName="groups">
+        <addColumn schemaName="sc_core" tableName="groups">
             <column name="updated_at" type="timestamp with time zone" remarks="Дата обновления"/>
         </addColumn>
         <comment>Задача по добавление поля даты обновления</comment>

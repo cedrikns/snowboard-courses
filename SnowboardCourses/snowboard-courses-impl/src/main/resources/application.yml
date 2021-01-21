@@ -33,7 +33,7 @@ spring:
     hibernate:
       hbm2ddl:
         auto: none
-      default_schema: public
+      default_schema: sc_core
       use_sql_comments: true
       format_sql: true
 

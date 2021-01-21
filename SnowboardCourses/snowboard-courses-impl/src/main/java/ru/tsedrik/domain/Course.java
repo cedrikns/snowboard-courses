@@ -14,7 +14,7 @@ import java.util.Set;
  * - набором групп обучающихся
  */
 @Entity
-@Table(name = "course")
+@Table(schema = "sc_core", name = "course")
 public class Course extends CreateAtIdentified implements Identifired<Long> {
 
     /**
