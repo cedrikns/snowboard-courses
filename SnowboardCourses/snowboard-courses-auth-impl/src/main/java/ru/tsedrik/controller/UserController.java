@@ -6,18 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
+import ru.tsedrik.config.security.TokenAuthentication;
+import ru.tsedrik.config.security.UserPrincipal;
 import ru.tsedrik.resource.UserResource;
-import ru.tsedrik.resource.dto.PageDto;
-import ru.tsedrik.resource.dto.UserDto;
-import ru.tsedrik.resource.dto.UserSearchDto;
-import ru.tsedrik.resource.dto.UserWithPasswordDto;
+import ru.tsedrik.resource.dto.*;
 import ru.tsedrik.service.UserService;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for User
@@ -81,4 +83,16 @@ public class UserController implements UserResource {
         return userDto;
     }
 
+    @Override
+    public ResponseEntity<UserInfoDto> getUserInfo() {
+        TokenAuthentication auth = (TokenAuthentication) SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+        List<String> roles = principal.getAuthorities().stream().map(a -> a.toString()).collect(Collectors.toList());
+        UserInfoDto userInfoDto = new UserInfoDto(
+                auth.getToken(),
+                auth.getName(),
+                principal.getEmail(),
+                roles);
+        return ResponseEntity.ok(userInfoDto);
+    }
 }

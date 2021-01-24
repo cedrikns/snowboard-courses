@@ -14,6 +14,10 @@ server:
 spring:
   application:
     name: snowboard-courses
+    token:
+      key: 84FiStd1PDDkXOfAHgfPxCC7xThp7QrGs9Xpy9QUTWU=
+      lifetime: 3600000
+      issuer: snowboard-courses-auth
   datasource:
     url: jdbc:postgresql://localhost:5432/test
     username: postgres
@@ -55,9 +59,6 @@ management:
     export:
       atlas:
         enabled: true
-
-system:
-  id: snowboard-courses
 
 course:
   maxGroupCount: 2

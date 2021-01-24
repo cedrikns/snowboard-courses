@@ -1,3 +1,6 @@
+server:
+  port: ${APP_PORT:8081}
+
 spring:
   config:
     use-legacy-processing: true
@@ -8,10 +11,10 @@ spring:
 logging:
   level:
     ROOT: INFO
-    ru.iteco: DEBUG
+    ru.tsedrik: DEBUG
     org.springframework: INFO
     org.springframework.security: DEBUG
-    ru.iteco.aspect: DEBUG
+    ru.tsedrik.aspect: DEBUG
   appenders:
     console:
       enabled: true

@@ -49,7 +49,7 @@ public class Group extends CreateAtIdentified implements Identifired<Long> {
      * Список участников, которые будут обучатья в группе
      */
     @ManyToMany(cascade={CascadeType.PERSIST, })
-    @JoinTable(name="group_person", joinColumns=@JoinColumn(name="group_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
+    @JoinTable(schema = "sc_core", name="group_person", joinColumns=@JoinColumn(name="group_id"), inverseJoinColumns=@JoinColumn(name="person_id"))
     private Set<Person> students;
 
     public Group() {}

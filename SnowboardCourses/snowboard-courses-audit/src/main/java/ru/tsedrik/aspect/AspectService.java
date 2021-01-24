@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.aspect.annotation.Audit;
@@ -41,6 +42,7 @@ public class AspectService {
                 .getMethod().getAnnotation(Audit.class).value());
         auditMessage.setAuditMessageEvent(AuditMessageEvent.START);
         auditMessage.setStartTime(LocalDateTime.now());
+        auditMessage.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
         Object[] args = Arrays.stream(proceedingJoinPoint.getArgs())
                 .filter(o -> !(o instanceof UriComponentsBuilder)).toArray();
         auditMessage.setParams(serializeInJson(args));

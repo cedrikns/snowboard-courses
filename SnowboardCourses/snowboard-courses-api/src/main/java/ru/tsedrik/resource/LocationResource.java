@@ -21,6 +21,8 @@ public interface LocationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Место проведения курсов успешно создано", response = LocationDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     ResponseEntity<LocationDto> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder);
 
@@ -29,6 +31,8 @@ public interface LocationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Место проведения курсов успешно найдено", response = LocationDto.class),
             @ApiResponse(code = 400, message = "Место проведения курсов не найдено либо произошла другая непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     LocationDto getLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
 
@@ -37,6 +41,8 @@ public interface LocationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Место проведения курсов успешно удалено", response = Boolean.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     boolean deleteLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
 
@@ -45,6 +51,8 @@ public interface LocationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Место проведения курсов успешно обновлено", response = LocationDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     LocationDto updateLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id, @RequestBody LocationDto locationDto);
 
@@ -53,6 +61,8 @@ public interface LocationResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список найденных мест проведения курсов", response = LocationDto.class, responseContainer = "PageDto"),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "Номер страницы, которую нужно отобразить",

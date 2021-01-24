@@ -21,6 +21,7 @@
             </column>
             <column name="user_name" type="varchar(255)"
                     remarks="Имя пользователя">
+                <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(255)"
                     remarks="Пароль пользователя">
@@ -52,10 +53,10 @@
     <changeSet id="2" author="Natallia Tsedrik">
         <preConditions onFail="MARK_RAN">
             <not>
-                <indexExists schemaName="sc_auth" tableName="users" indexName="users_users_name_idx"/>
+                <indexExists schemaName="sc_auth" tableName="users" indexName="users_users_name_uidx"/>
             </not>
         </preConditions>
-        <createIndex schemaName="sc_auth" tableName="users" indexName="users_users_name_idx">
+        <createIndex schemaName="sc_auth" tableName="users" indexName="users_users_name_uidx" unique="true">
             <column name="user_name"/>
         </createIndex>
         <comment>Индекс для поиска по имени пользователя</comment>

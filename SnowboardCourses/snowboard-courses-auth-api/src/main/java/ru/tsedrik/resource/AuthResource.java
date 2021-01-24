@@ -13,7 +13,7 @@ import ru.tsedrik.resource.dto.*;
 /**
  * API для AuthController
  */
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @Api(value = "API для работы с аутенфикацией пользователей")
 public interface AuthResource {
 
@@ -22,6 +22,7 @@ public interface AuthResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Токен успешно создан", response = TokenDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class)
     })
     ResponseEntity<TokenDto> createToken(@RequestBody AuthUserDto authUserDto);
 

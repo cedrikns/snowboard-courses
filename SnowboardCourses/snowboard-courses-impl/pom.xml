@@ -34,6 +34,16 @@
             <artifactId>snowboard-courses-audit</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.tsedrik</groupId>
+            <artifactId>snowboard-courses-auth-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.tsedrik</groupId>
+            <artifactId>snowboard-courses-auth-validate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
