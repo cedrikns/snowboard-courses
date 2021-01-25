@@ -1,6 +1,7 @@
 package ru.tsedrik.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.tsedrik.domain.Person;
 import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.PersonDto;
@@ -16,6 +17,7 @@ public interface PersonService {
      *
      * @param personDto    новый участник, который будет добавлен
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     PersonDto addPerson(PersonDto personDto);
 
     /**
@@ -24,6 +26,7 @@ public interface PersonService {
      * @param person    существующий участник курса, который будет удален
      * @return  успешно ли прошло удаление
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deletePerson(Person person);
 
     /**
@@ -32,6 +35,7 @@ public interface PersonService {
      * @param id    идентификатор удаляемого участника
      * @return  успешно ли прошло удаление
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deletePersonById(Long id);
 
     /**
@@ -40,6 +44,7 @@ public interface PersonService {
      * @param id    идентификатор запрашиваемого участника
      * @return  найденный участник
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     PersonDto getPersonById(Long id);
 
     /**
@@ -47,6 +52,7 @@ public interface PersonService {
      *
      * @param personDto    участник, который будет обновлен
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     PersonDto updatePerson(PersonDto personDto);
 
     /**
@@ -56,5 +62,6 @@ public interface PersonService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных участников, соотвествующая настройкам объекта pageable
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable);
 }

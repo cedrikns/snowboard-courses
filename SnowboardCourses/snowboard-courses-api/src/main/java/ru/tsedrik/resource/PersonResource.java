@@ -22,6 +22,8 @@ public interface PersonResource {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Участник курсов успешно создан", response = PersonDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     ResponseEntity<PersonDto> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder);
 
@@ -30,6 +32,8 @@ public interface PersonResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Участник курсов успешно найден", response = PersonDto.class),
             @ApiResponse(code = 400, message = "Участник курсов не найден либо произошла другая непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     PersonDto getPerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
 
@@ -38,6 +42,8 @@ public interface PersonResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список найденных участников курсов", response = PersonDto.class, responseContainer = "PageDto"),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "Номер страницы, которую нужно отобразить",
@@ -55,6 +61,8 @@ public interface PersonResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Участник курсов успешно удален", response = Boolean.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     boolean deletePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
 
@@ -63,6 +71,8 @@ public interface PersonResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Участник курсов успешно обновлен", response = Boolean.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     PersonDto updatePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id, @RequestBody PersonDto personDto);
 

@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService{
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(user.getUserName())
                 .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(lifetime)))
-                .setAudience(systemName)
+                .setAudience(authUserDto.getSystemName())
                 .setIssuedAt(new Date())
                 .setId(randomUUID().toString())
                 .setIssuer(systemName)

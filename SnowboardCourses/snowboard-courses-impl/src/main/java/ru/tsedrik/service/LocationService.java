@@ -1,6 +1,7 @@
 package ru.tsedrik.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.tsedrik.domain.Location;
 import ru.tsedrik.resource.dto.LocationDto;
 import ru.tsedrik.resource.dto.LocationSearchDto;
@@ -16,6 +17,7 @@ public interface LocationService {
      *
      * @param locationDto    новое место проведения курсов, которое было добавлено
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     LocationDto addLocation(LocationDto locationDto);
 
     /**
@@ -24,6 +26,7 @@ public interface LocationService {
      * @param location    существующее место проведения курса, которое будет удалено
      * @return  успешно ли прошло удаление
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deleteLocation(Location location);
 
     /**
@@ -32,6 +35,7 @@ public interface LocationService {
      * @param id    идентификатор удаляемого места проведения курса
      * @return  успешно ли прошло удаление
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deleteLocationById(Long id);
 
     /**
@@ -40,6 +44,7 @@ public interface LocationService {
      * @param id    идентификатор места проведения курса
      * @return  найденное место проведения курса
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     LocationDto getLocationById(Long id);
 
     /**
@@ -47,6 +52,7 @@ public interface LocationService {
      *
      * @param locationDto    место проведения курса, которое будет обновлено
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     LocationDto updateLocation(LocationDto locationDto);
 
     /**
@@ -56,5 +62,6 @@ public interface LocationService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных мест проведения курсов, соотвествующая настройкам объекта pageable
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     PageDto<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable);
 }

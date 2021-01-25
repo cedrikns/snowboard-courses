@@ -24,6 +24,8 @@ public interface CourseResource {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Курс успешно создан", response = CourseDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     ResponseEntity<CourseDto> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder);
 
@@ -32,6 +34,8 @@ public interface CourseResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Курс успешно найден", response = CourseDto.class),
             @ApiResponse(code = 400, message = "Курс не найден либо произошла другая непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     CourseDto getCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
 
@@ -40,6 +44,8 @@ public interface CourseResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Курс успешно удален", response = Boolean.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     boolean deleteCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
 
@@ -48,6 +54,8 @@ public interface CourseResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Список найденных курсов", response = CourseDto.class, responseContainer = "PageDto"),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "Номер страницы, которую нужно отобразить",
@@ -65,6 +73,8 @@ public interface CourseResource {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Участник успешно записан на курс", response = CourseDto.class),
             @ApiResponse(code = 400, message = "Непредвиденная ошибка", response = ResponseError.class),
+            @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
+            @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
     CourseDto enrollCourse(@ApiParam(value = "Идентификатор курса", required = true) @RequestParam Long courseId,
                            @ApiParam(value = "Идентификатор участника курсов", required = true) @RequestParam Long personId);

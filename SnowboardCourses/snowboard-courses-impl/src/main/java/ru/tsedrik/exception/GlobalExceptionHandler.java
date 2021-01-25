@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     /**
      * Идентификатор системы, в которой произошло исключение
      */
-    @Value("${system.id}")
+    @Value("${spring.application.name}")
     private String systemId;
 
     /**

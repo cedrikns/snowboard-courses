@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
         user.setId(System.currentTimeMillis());
         if (user.getRole() == null){
-            user.setRole(Role.ROLE_USER);
+            user.setRole(Role.USER);
         }
         user.setStatus(UserStatus.ACTIVED);
 

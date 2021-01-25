@@ -1,6 +1,7 @@
 package ru.tsedrik.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.UserDto;
 import ru.tsedrik.resource.dto.UserSearchDto;
@@ -16,6 +17,7 @@ public interface UserService {
      *
      * @param userWithPasswordDto    новый пользователь, который будет добавлен
      */
+    @PreAuthorize("hasRole('ADMIN')")
     UserDto addUser(UserWithPasswordDto userWithPasswordDto);
 
     /**
@@ -24,6 +26,7 @@ public interface UserService {
      * @param id    идентификатор пользователя
      * @return  успешно ли прошло удаление
      */
+    @PreAuthorize("hasRole('ADMIN')")
     boolean deleteUserById(Long id);
 
     /**
@@ -32,6 +35,7 @@ public interface UserService {
      * @param id    идентификатор запрашиваемого пользователя
      * @return  найденный пользователь
      */
+    @PreAuthorize("hasRole('ADMIN')")
     UserDto getUserById(Long id);
 
     /**
@@ -39,6 +43,7 @@ public interface UserService {
      *
      * @param userWithPasswordDto    пользователь, который будет обновлен
      */
+    @PreAuthorize("hasRole('ADMIN')")
     UserDto updateUser(UserWithPasswordDto userWithPasswordDto);
 
     /**
@@ -48,5 +53,6 @@ public interface UserService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных пользователей, соотвествующая настройкам объекта pageable
      */
+    @PreAuthorize("hasRole('ADMIN')")
     PageDto<UserDto> getUsers(UserSearchDto userSearchDto, Pageable pageable);
 }
