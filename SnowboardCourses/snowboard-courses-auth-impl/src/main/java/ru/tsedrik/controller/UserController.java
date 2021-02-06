@@ -89,7 +89,6 @@ public class UserController implements UserResource {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         List<String> roles = principal.getAuthorities().stream().map(a -> a.toString()).collect(Collectors.toList());
         UserInfoDto userInfoDto = new UserInfoDto(
-                auth.getToken(),
                 auth.getName(),
                 principal.getEmail(),
                 roles);

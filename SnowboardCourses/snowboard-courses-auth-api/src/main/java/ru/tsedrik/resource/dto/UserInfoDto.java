@@ -12,12 +12,6 @@ import java.util.List;
 public class UserInfoDto {
 
     /**
-     * Токен пользователя
-     */
-    @ApiModelProperty(value = "Токен пользователя", allowEmptyValue = false)
-    private String token;
-
-    /**
      * Имя пользователя
      */
     @ApiModelProperty(value = "Имя пользователя в системе", example = "ivanov", allowEmptyValue = false)
@@ -38,19 +32,10 @@ public class UserInfoDto {
     public UserInfoDto() {
     }
 
-    public UserInfoDto(String token, String userName, String email, List<String> roles) {
-        this.token = token;
+    public UserInfoDto(String userName, String email, List<String> roles) {
         this.userName = userName;
         this.email = email;
         this.roles = roles;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getUserName() {
