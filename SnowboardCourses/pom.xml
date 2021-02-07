@@ -16,6 +16,8 @@
         <module>snowboard-courses-auth-api</module>
         <module>snowboard-courses-auth-impl</module>
         <module>snowboard-courses-auth-validate</module>
+        <module>invoker-api</module>
+        <module>publisher</module>
     </modules>
 
 </project>

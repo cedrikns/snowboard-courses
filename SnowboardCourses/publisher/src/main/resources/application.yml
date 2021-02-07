@@ -1,0 +1,23 @@
+server:
+  port: ${APP_PORT:8082}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    context-path: /publisher
+    application-display-name: ForecastService
+  tomcat:
+    max-connections: 1000
+    accept-count: 100
+    connection-timeout: 30000
+
+spring:
+  application:
+    name: publisher
+
+logging:
+  level:
+    ROOT: INFO
+    ru.tsedrik: DEBUG
+    org.springframework: INFO
+

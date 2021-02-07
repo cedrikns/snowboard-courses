@@ -10,13 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
+import ru.tsedrik.invoker.Forecast;
+import ru.tsedrik.invoker.ForecastService;
 import ru.tsedrik.resource.CourseResource;
 import ru.tsedrik.resource.dto.CourseDto;
 import ru.tsedrik.resource.dto.CourseSearchDto;
+import ru.tsedrik.resource.dto.CourseWithForecastDto;
 import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.service.CourseService;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Controller for Course
@@ -28,8 +33,11 @@ public class CourseController implements CourseResource {
 
     private CourseService courseService;
 
-    public CourseController(CourseService courseService){
+    private ForecastService forecastService;
+
+    public CourseController(CourseService courseService, ForecastService forecastService) {
         this.courseService = courseService;
+        this.forecastService = forecastService;
     }
 
     @Audit(AuditCode.COURSE_CREATE)
@@ -46,6 +54,17 @@ public class CourseController implements CourseResource {
     public CourseDto getCourse(@PathVariable Long id){
         logger.debug("getCourse with {} - start ", id);
         CourseDto courseDto = courseService.getCourseById(id);
+        Map<LocalDate, Forecast> forecast = forecastService.getForecastForThePeriod(
+                courseDto.getLocation().getName(),
+                courseDto.getBeginDate(),
+                courseDto.getEndDate());
+
+        if ((courseDto.getLocation() != null) && (forecast != null) && (!forecast.isEmpty())){
+            CourseWithForecastDto courseWithForecastDto = new CourseWithForecastDto(courseDto, forecast);
+            logger.debug("getCourse end with result {}", courseWithForecastDto);
+            return courseWithForecastDto;
+        }
+
         logger.debug("getCourse end with result {}", courseDto);
         return courseDto;
     }
