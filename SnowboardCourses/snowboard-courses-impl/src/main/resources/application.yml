@@ -79,4 +79,4 @@ scheduling:
     expression: "0 0 01 * * *"
 
 forecast-service:
-  url: "http://localhost:8082/publisher/remoting/forecastService"
+  url: "http://localhost:8082/publisher"

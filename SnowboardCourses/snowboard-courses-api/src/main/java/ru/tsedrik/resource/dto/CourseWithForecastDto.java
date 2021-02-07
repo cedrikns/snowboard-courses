@@ -1,6 +1,6 @@
 package ru.tsedrik.resource.dto;
 
-import ru.tsedrik.invoker.Forecast;
+import ru.tsedrik.invoker.dto.ForecastDto;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -14,21 +14,21 @@ public class CourseWithForecastDto extends CourseDto{
     /**
      * Погода на даты курса
      */
-    private Map<LocalDate, Forecast> forecast;
+    private Map<LocalDate, ForecastDto> forecast;
 
     public CourseWithForecastDto() {
     }
 
-    public CourseWithForecastDto(Map<LocalDate, Forecast> forecast) {
+    public CourseWithForecastDto(Map<LocalDate, ForecastDto> forecast) {
         this.forecast = forecast;
     }
 
-    public CourseWithForecastDto(Long id, String courseType, LocationDto location, LocalDate beginDate, LocalDate endDate, int groupCount, Set<GroupDto> groups, Map<LocalDate, Forecast> forecast) {
+    public CourseWithForecastDto(Long id, String courseType, LocationDto location, LocalDate beginDate, LocalDate endDate, int groupCount, Set<GroupDto> groups, Map<LocalDate, ForecastDto> forecast) {
         super(id, courseType, location, beginDate, endDate, groupCount, groups);
         this.forecast = forecast;
     }
 
-    public CourseWithForecastDto(CourseDto courseDto, Map<LocalDate, Forecast> forecast){
+    public CourseWithForecastDto(CourseDto courseDto, Map<LocalDate, ForecastDto> forecast){
         super(courseDto.getId(), courseDto.getCourseType(),
                 courseDto.getLocation(), courseDto.getBeginDate(),
                 courseDto.getEndDate(), courseDto.getGroupCount(),
@@ -36,11 +36,11 @@ public class CourseWithForecastDto extends CourseDto{
         this.forecast = forecast;
     }
 
-    public Map<LocalDate, Forecast> getForecast() {
+    public Map<LocalDate, ForecastDto> getForecast() {
         return forecast;
     }
 
-    public void setForecast(Map<LocalDate, Forecast> forecast) {
+    public void setForecast(Map<LocalDate, ForecastDto> forecast) {
         this.forecast = forecast;
     }
 }

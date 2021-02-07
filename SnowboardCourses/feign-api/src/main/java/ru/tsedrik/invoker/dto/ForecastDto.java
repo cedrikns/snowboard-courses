@@ -1,11 +1,11 @@
-package ru.tsedrik.invoker;
+package ru.tsedrik.invoker.dto;
 
 import java.io.Serializable;
 
 /**
  * Класс для возврата прогноза погоды
  */
-public class Forecast implements Serializable{
+public class ForecastDto implements Serializable{
 
     /**
      * Средняя дневная температура по дням
@@ -22,10 +22,10 @@ public class Forecast implements Serializable{
      */
     private Integer windSpeed;
 
-    public Forecast() {
+    public ForecastDto() {
     }
 
-    public Forecast(Integer temperature, Integer airHumidity, Integer windSpeed) {
+    public ForecastDto(Integer temperature, Integer airHumidity, Integer windSpeed) {
         this.temperature = temperature;
         this.airHumidity = airHumidity;
         this.windSpeed = windSpeed;

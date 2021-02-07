@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>ru.tsedrik</groupId>
-            <artifactId>invoker-api</artifactId>
+            <artifactId>feign-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -72,6 +72,12 @@
             <groupId>net.rakugakibox.spring.boot</groupId>
             <artifactId>orika-spring-boot-starter</artifactId>
             <version>1.9.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>

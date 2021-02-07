@@ -1,9 +1,10 @@
 package ru.tsedrik.invoker;
 
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+import ru.tsedrik.invoker.dto.ForecastDto;
+import ru.tsedrik.invoker.dto.ForecastSearchDto;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -11,17 +12,17 @@ import java.util.TreeMap;
 /**
  * Реализация интерфейса ForecastService для возврата погоды
  */
-@Service
-public class ForecastServiceImpl implements ForecastService{
+@RestController
+public class ForecastController implements ForecastResource {
 
     @Override
-    public Map<LocalDate, Forecast> getForecastForThePeriod(String name, LocalDate startDate, LocalDate endDate) {
-        Map<LocalDate, Forecast> forecasts = new TreeMap<>();
+    public Map<LocalDate, ForecastDto> getForecastForThePeriod(ForecastSearchDto forecastSearchDto) {
+        Map<LocalDate, ForecastDto> forecasts = new TreeMap<>();
         Random random = new Random();
 
-        LocalDate tmpDate = startDate;
-        while (!tmpDate.isAfter(endDate)){
-            Forecast forecast = new Forecast(
+        LocalDate tmpDate = forecastSearchDto.getBeginDate();
+        while (!tmpDate.isAfter(forecastSearchDto.getEndDate())){
+            ForecastDto forecast = new ForecastDto(
                     random.nextInt(0 + 25) -25,
                     random.nextInt(99 - 10) + 10,
                     random.nextInt(20 - 1) + 1

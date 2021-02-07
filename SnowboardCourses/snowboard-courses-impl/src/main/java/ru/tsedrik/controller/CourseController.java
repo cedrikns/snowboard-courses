@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
-import ru.tsedrik.invoker.Forecast;
-import ru.tsedrik.invoker.ForecastService;
+import ru.tsedrik.invoker.dto.ForecastDto;
+import ru.tsedrik.invoker.ForecastResource;
+import ru.tsedrik.invoker.dto.ForecastSearchDto;
 import ru.tsedrik.resource.CourseResource;
 import ru.tsedrik.resource.dto.CourseDto;
 import ru.tsedrik.resource.dto.CourseSearchDto;
@@ -33,9 +34,9 @@ public class CourseController implements CourseResource {
 
     private CourseService courseService;
 
-    private ForecastService forecastService;
+    private ForecastResource forecastService;
 
-    public CourseController(CourseService courseService, ForecastService forecastService) {
+    public CourseController(CourseService courseService, ForecastResource forecastService) {
         this.courseService = courseService;
         this.forecastService = forecastService;
     }
@@ -54,10 +55,12 @@ public class CourseController implements CourseResource {
     public CourseDto getCourse(@PathVariable Long id){
         logger.debug("getCourse with {} - start ", id);
         CourseDto courseDto = courseService.getCourseById(id);
-        Map<LocalDate, Forecast> forecast = forecastService.getForecastForThePeriod(
+        ForecastSearchDto forecastSearchDto = new ForecastSearchDto(
                 courseDto.getLocation().getName(),
                 courseDto.getBeginDate(),
-                courseDto.getEndDate());
+                courseDto.getEndDate()
+        );
+        Map<LocalDate, ForecastDto> forecast = forecastService.getForecastForThePeriod(forecastSearchDto);
 
         if ((courseDto.getLocation() != null) && (forecast != null) && (!forecast.isEmpty())){
             CourseWithForecastDto courseWithForecastDto = new CourseWithForecastDto(courseDto, forecast);
