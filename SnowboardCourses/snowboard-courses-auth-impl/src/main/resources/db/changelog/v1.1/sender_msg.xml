@@ -1,0 +1,40 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="1" author="Natallia Tsedrik">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="sc_auth" tableName="sender_msg"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="sc_auth" tableName="sender_msg"
+                     remarks="Таблица отправленный в очередь сообщений">
+            <column name="id" type="uuid"
+                    remarks="Идентификатор сообщения">
+                <constraints primaryKey="true"
+                             primaryKeyName="sender_msg_pk"
+                             nullable="false"/>
+            </column>
+            <column name="message" type="varchar(1000)"
+                    remarks="Тело сообщения">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)"
+                    remarks="Статус сообщения">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp with time zone"
+                    remarks="Дата создания">
+            </column>
+            <column name="updated_at" type="timestamp with time zone"
+                    remarks="Дата обновления">
+            </column>
+        </createTable>
+        <comment>Задача по ведению лога отправленных в очередь сообщений</comment>
+    </changeSet>
+
+</databaseChangeLog>

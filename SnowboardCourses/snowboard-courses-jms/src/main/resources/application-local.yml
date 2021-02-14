@@ -1,12 +1,11 @@
 server:
-  port: ${APP_PORT:8081}
+  port: ${APP_PORT:8083}
 
 spring:
   config:
     use-legacy-processing: true
   profiles:
     active: local
-    include: swagger
   activemq:
     broker-url: "tcp://localhost:61616"
     password: admin
@@ -18,7 +17,7 @@ logging:
     ROOT: INFO
     ru.tsedrik: DEBUG
     org.springframework: INFO
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
     ru.tsedrik.aspect: DEBUG
   appenders:
     console:
@@ -27,20 +26,8 @@ logging:
       enabled: true
       maxHistory: 1000
 
-
-aspect:
-  logging:
-    file:
-      enabled: true
-  maxHistory: 300
-
 sc:
   jms:
     user:
       send-queue: "sc.jms.user.out"
       receive-queue: "sc.jms.user.in"
-
-scheduling:
-  cron:
-    enabled: true
-    expression: "0 0 * * * *"
