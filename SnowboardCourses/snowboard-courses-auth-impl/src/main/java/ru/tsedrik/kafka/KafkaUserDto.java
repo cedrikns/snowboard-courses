@@ -1,14 +1,11 @@
-package ru.tsedrik.jms;
+package ru.tsedrik.kafka;
 
 import ru.tsedrik.domain.UserStatus;
-
-import java.io.Serializable;
 
 /**
  * Класс для передачи данных об изменении статуса пользователя
  */
-public class JMSUserDto implements Serializable {
-
+public class KafkaUserDto {
     /**
      * Идентификатор пользователя
      */
@@ -19,9 +16,10 @@ public class JMSUserDto implements Serializable {
      */
     private UserStatus status;
 
-    public JMSUserDto(){}
+    public KafkaUserDto() {
+    }
 
-    public JMSUserDto(Long id, UserStatus status) {
+    public KafkaUserDto(Long id, UserStatus status) {
         this.id = id;
         this.status = status;
     }
@@ -44,7 +42,7 @@ public class JMSUserDto implements Serializable {
 
     @Override
     public String toString() {
-        return "JMSUserDto{" +
+        return "KafkaUserDto{" +
                 "id=" + id +
                 ", status=" + status +
                 '}';

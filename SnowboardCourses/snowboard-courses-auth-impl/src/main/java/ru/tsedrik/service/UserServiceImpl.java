@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.domain.User;
 import ru.tsedrik.domain.Role;
 import ru.tsedrik.domain.UserStatus;
-import ru.tsedrik.jms.JMSSender;
-import ru.tsedrik.jms.JMSUserDto;
+import ru.tsedrik.kafka.KafkaSender;
+import ru.tsedrik.kafka.KafkaUserDto;
 import ru.tsedrik.repository.UserRepository;
 import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.UserDto;
@@ -31,15 +31,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     /**
-     * Очередь для отправки данных об изменении пользователя
+     * Топик для отправки данных об изменении пользователя
      */
-    @Value("${sc.jms.user.send-queue}")
+    @Value("${sc.kafka.user.send-topic}")
     private String sendUserQueue;
 
     /**
      * Объект для отправки данных в очередь jms
      */
-    private JMSSender jmsSender;
+    private KafkaSender kafkaSender;
 
     /**
      * Объект для управления персистентным состоянием объектов типа User
@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
     private UserDtoValidator userDtoValidator;
 
 
-    public UserServiceImpl(UserRepository userRepository, MapperFacade mapperFacade, UserDtoValidator userDtoValidator, JMSSender jmsSender){
+    public UserServiceImpl(UserRepository userRepository, MapperFacade mapperFacade, UserDtoValidator userDtoValidator, KafkaSender kafkaSender){
         this.userRepository = userRepository;
         this.mapperFacade = mapperFacade;
         this.userDtoValidator = userDtoValidator;
-        this.jmsSender = jmsSender;
+        this.kafkaSender = kafkaSender;
     }
 
     @Override
@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        JMSUserDto jmsUserDto = new JMSUserDto(user.getId(), user.getStatus());
-        jmsSender.sendMessageJMSUserDto(sendUserQueue, jmsUserDto);
+        KafkaUserDto kafkaUserDto = new KafkaUserDto(user.getId(), user.getStatus());
+        kafkaSender.sendMessage(sendUserQueue, kafkaUserDto);
 
         UserDto userDto = mapperFacade.map(user, UserDto.class);
 
@@ -97,8 +97,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteUserById(Long id) {
         userRepository.updateUserSetStatusForId(UserStatus.DELETED, id);
-        JMSUserDto jmsUserDto = new JMSUserDto(id, UserStatus.DELETED);
-        jmsSender.sendMessageJMSUserDto(sendUserQueue, jmsUserDto);
+        KafkaUserDto kafkaUserDto = new KafkaUserDto(id, UserStatus.DELETED);
+        kafkaSender.sendMessage(sendUserQueue, kafkaUserDto);
         return true;
     }
 
@@ -115,8 +115,8 @@ public class UserServiceImpl implements UserService {
         mapperFacade.map(userWithPasswordDto, user);
         userRepository.save(user);
 
-        JMSUserDto jmsUserDto = new JMSUserDto(user.getId(), user.getStatus());
-        jmsSender.sendMessageJMSUserDto(sendUserQueue, jmsUserDto);
+        KafkaUserDto kafkaUserDto = new KafkaUserDto(user.getId(), user.getStatus());
+        kafkaSender.sendMessage(sendUserQueue, kafkaUserDto);
 
         UserDto userDto = mapperFacade.map(user, UserDto.class);
 

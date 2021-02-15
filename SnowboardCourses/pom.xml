@@ -16,7 +16,7 @@
         <module>snowboard-courses-auth-api</module>
         <module>snowboard-courses-auth-impl</module>
         <module>snowboard-courses-auth-validate</module>
-        <module>snowboard-courses-jms</module>
+        <module>snowboard-courses-kafka</module>
     </modules>
 
 </project>
