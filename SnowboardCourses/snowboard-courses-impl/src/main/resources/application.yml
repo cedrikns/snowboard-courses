@@ -40,6 +40,25 @@ spring:
       default_schema: sc_core
       use_sql_comments: true
       format_sql: true
+  quartz:
+    auto-startup: true
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      #       Передача управления транзакциями в quartz. Не использовать при JTA.
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+      #       Настройка используется если запущено больше 1 экземпляра quartz
+      org.quartz.jobStore.isClustered: true
+      #       Максимальное количество тригеров обработанных за 1 раз. Не делать больше 20(по умолчанию).
+      org.quartz.jobStore.maxMisfiresToHandleAtATime: 1
+      org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+      #       Количество запущенных воркеров для выполнения задач на текущей ноде
+      org.quartz.threadPool.threadCount: 2
+      org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread: true
+      org.quartz.scheduler.instanceName: snowboard-courses-quartz
+      org.quartz.scheduler.instanceId: AUTO
 
 logging:
   level:
@@ -76,4 +95,5 @@ swagger:
 scheduling:
   cron:
     enabled: true
-    expression: "0 0 01 * * *"
+    updating-course-status:
+      expression: "* * 00 ? * *"
