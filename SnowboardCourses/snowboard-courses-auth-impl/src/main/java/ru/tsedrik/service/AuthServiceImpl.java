@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tsedrik.domain.User;
+import ru.tsedrik.domain.UserStatus;
 import ru.tsedrik.repository.UserRepository;
 import ru.tsedrik.resource.dto.AuthUserDto;
 import ru.tsedrik.resource.dto.TokenDto;
@@ -54,7 +55,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public TokenDto createToken(AuthUserDto authUserDto) {
-        User user = userRepository.findUserByUserName(authUserDto.getUserName())
+        User user = userRepository.findUserByUserNameAndStatusIsNot(authUserDto.getUserName(), UserStatus.DELETED)
                 .orElseThrow(() -> new AuthenticationCredentialsNotFoundException(USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(authUserDto.getPassword(), user.getPassword())) {
