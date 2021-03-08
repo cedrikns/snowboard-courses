@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findUserByUserName(String userName);
 
+    boolean existsByIdAndStatusIsNot(Long id, UserStatus status);
+
     @Modifying
     @Query("update User u set u.status = :status where u.id = :id")
     int updateUserSetStatusForId(@Param("status") UserStatus status, @Param("id") Long id);

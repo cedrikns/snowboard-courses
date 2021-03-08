@@ -78,8 +78,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUserById(Long id) {
-        userRepository.updateUserSetStatusForId(UserStatus.DELETED, id);
-        return true;
+        boolean result = false;
+        if (userRepository.existsByIdAndStatusIsNot(id, UserStatus.DELETED)) {
+            userRepository.updateUserSetStatusForId(UserStatus.DELETED, id);
+            result = true;
+        }
+        return result;
     }
 
     @Override
