@@ -17,7 +17,7 @@ public interface CourseService {
      *
      * @param courseDto    новый курс, который будет добавлен
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_CREATE, \"Вы не можете создавать курс\")")
     CourseDto addCourse(CourseDto courseDto);
 
     /**
@@ -26,7 +26,7 @@ public interface CourseService {
      * @param course    существующий курс, который будет удален
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_DELETE, \"Вы не можете удалять курс\")")
     boolean deleteCourse(Course course);
 
     /**
@@ -35,7 +35,7 @@ public interface CourseService {
      * @param id    идентификатор удаляемого курса
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_DELETE, \"Вы не можете удалять курс\")")
     boolean deleteCourseById(Long id);
 
     /**
@@ -44,7 +44,7 @@ public interface CourseService {
      * @param id    идентификатор запрашиваемого курса
      * @return  найденный курс
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_VIEW, \"Вы не можете просматривать курс\")")
     CourseDto getCourseById(Long id);
 
     /**
@@ -53,7 +53,7 @@ public interface CourseService {
      * @param personId  идентификатор Участника
      * @return  Обновленный курс
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_ENROLL, \"Вы не можете делать записи на курс\")")
     CourseDto enroll(Long courseId, Long personId);
 
     /**
@@ -63,7 +63,7 @@ public interface CourseService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных курсов, соотвествующая настройкам объекта pageable
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).COURSE_VIEW, \"Вы не можете просматривать курсы\")")
     PageDto<CourseDto> getCourses(CourseSearchDto courseSearchDto, Pageable pageable);
 
     /**

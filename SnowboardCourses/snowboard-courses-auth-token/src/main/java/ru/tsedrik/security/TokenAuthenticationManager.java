@@ -35,10 +35,11 @@ public class TokenAuthenticationManager implements AuthenticationManager {
         MyClaims claims = tokenValidateService.parseAndValidate(token);
 
         UserPrincipal.UserPrincipalBuilder user = UserPrincipal.username(claims.getSubject());
-        user.roles(claims.getRole());
+        String role = claims.getRole();
+        user.roles(role);
         user.email(claims.getEmail());
         UserDetails userDetails = user.build();
-        TokenAuthentication tokenAuthentication = new TokenAuthentication(token, userDetails);
+        TokenAuthentication tokenAuthentication = new TokenAuthentication(token, userDetails, role);
         tokenAuthentication.setAuthenticated(true);
         return tokenAuthentication;
 

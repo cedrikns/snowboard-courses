@@ -17,7 +17,7 @@ public interface PersonService {
      *
      * @param personDto    новый участник, который будет добавлен
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_CREATE, \"Вы не можете создавать участника курса\")")
     PersonDto addPerson(PersonDto personDto);
 
     /**
@@ -26,7 +26,7 @@ public interface PersonService {
      * @param person    существующий участник курса, который будет удален
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_DELETE, \"Вы не можете удалять участника курса\")")
     boolean deletePerson(Person person);
 
     /**
@@ -35,7 +35,7 @@ public interface PersonService {
      * @param id    идентификатор удаляемого участника
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_DELETE, \"Вы не можете удалять участника курса\")")
     boolean deletePersonById(Long id);
 
     /**
@@ -44,7 +44,7 @@ public interface PersonService {
      * @param id    идентификатор запрашиваемого участника
      * @return  найденный участник
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_VIEW, \"Вы не можете просматривать участника курса\")")
     PersonDto getPersonById(Long id);
 
     /**
@@ -52,7 +52,7 @@ public interface PersonService {
      *
      * @param personDto    участник, который будет обновлен
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_UPDATE, \"Вы не можете изменять участника курса\")")
     PersonDto updatePerson(PersonDto personDto);
 
     /**
@@ -62,6 +62,6 @@ public interface PersonService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных участников, соотвествующая настройкам объекта pageable
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_VIEW, \"Вы не можете просматривать участников курса\")")
     PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable);
 }

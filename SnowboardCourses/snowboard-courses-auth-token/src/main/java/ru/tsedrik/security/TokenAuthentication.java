@@ -26,9 +26,12 @@ public class TokenAuthentication implements Authentication {
      */
     private UserDetails principal;
 
-    public TokenAuthentication(String token, UserDetails principal) {
+    private String role;
+
+    public TokenAuthentication(String token, UserDetails principal, String role) {
         this.token = token;
         this.principal = principal;
+        this.role = role;
     }
 
     @Override
@@ -72,5 +75,9 @@ public class TokenAuthentication implements Authentication {
 
     public String getToken() {
         return token;
+    }
+
+    public String getRole() {
+        return role;
     }
 }
