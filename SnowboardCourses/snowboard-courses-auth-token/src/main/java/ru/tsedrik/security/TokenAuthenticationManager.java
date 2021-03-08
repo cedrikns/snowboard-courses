@@ -1,4 +1,4 @@
-package ru.tsedrik.config.security;
+package ru.tsedrik.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

@@ -36,6 +36,11 @@
         </dependency>
         <dependency>
             <groupId>ru.tsedrik</groupId>
+            <artifactId>snowboard-courses-auth-token</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.tsedrik</groupId>
             <artifactId>snowboard-courses-auth-validate</artifactId>
             <version>${project.version}</version>
         </dependency>
