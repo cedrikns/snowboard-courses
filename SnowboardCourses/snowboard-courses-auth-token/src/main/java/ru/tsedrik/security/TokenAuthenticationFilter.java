@@ -1,4 +1,4 @@
-package ru.tsedrik.config.security;
+package ru.tsedrik.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;

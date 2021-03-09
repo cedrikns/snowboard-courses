@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tsedrik.resource.dto.PersonFormValidationError;
@@ -61,6 +63,30 @@ public class GlobalExceptionHandler {
                 systemId);
 
         return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Метод для перехвата и обработки исключения AccessDeniedException
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseError> accessDeniedException(AccessDeniedException e){
+        ResponseError responseError = new ResponseError(System.currentTimeMillis(),
+                e.getMessage(),
+                "accessDeniedException",
+                systemId);
+        return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    /**
+     * Метод для перехвата и обработки исключения AuthenticationException
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ResponseError> authenticationException(AuthenticationException e){
+        ResponseError responseError = new ResponseError(System.currentTimeMillis(),
+                e.getMessage(),
+                "authenticationException",
+                systemId);
+        return new ResponseEntity<>(responseError, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
     }
 
     /**

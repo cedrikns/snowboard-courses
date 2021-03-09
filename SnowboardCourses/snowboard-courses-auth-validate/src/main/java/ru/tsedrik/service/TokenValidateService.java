@@ -30,11 +30,16 @@ public class TokenValidateService {
     public MyClaims parseAndValidate(String token){
         Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 
-        MyClaims myClaims = new MyClaims(Jwts.parserBuilder()
-                .setSigningKey(new SecretKeySpec(Decoders.BASE64.decode(secretKey), SignatureAlgorithm.HS256.getJcaName()))
-                .build()
-                .parseClaimsJws(token)
-                .getBody());
+        MyClaims myClaims = null;
+        try {
+            myClaims = new MyClaims(Jwts.parserBuilder()
+                    .setSigningKey(new SecretKeySpec(Decoders.BASE64.decode(secretKey), SignatureAlgorithm.HS256.getJcaName()))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody());
+        }catch (Exception e){
+            throw new InvalidTokenException(e.getMessage());
+        }
 
         validate(myClaims);
 

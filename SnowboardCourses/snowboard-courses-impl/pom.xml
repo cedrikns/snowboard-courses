@@ -36,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>ru.tsedrik</groupId>
-            <artifactId>snowboard-courses-auth-impl</artifactId>
+            <artifactId>snowboard-courses-auth-token</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -48,6 +48,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
