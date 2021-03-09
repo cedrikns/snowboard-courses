@@ -55,10 +55,12 @@ public class AccessControlSecurityExpressionRoot extends SecurityExpressionRoot 
     }
 
     public boolean hasPermission(BusinessOperation permission, String msg) {
-        SimplePermission perm = Optional.ofNullable(roleFactory.getRoles().get(tokenAuthentication.getRole()))
-                .map(role -> role.getPermissions().get(permission.name())).orElse(null);
-        if (perm != null) {
-            return true;
+        for (String role: tokenAuthentication.getRole()) {
+            SimplePermission perm = Optional.ofNullable(roleFactory.getRoles().get(role))
+                    .map(r -> r.getPermissions().get(permission.name())).orElse(null);
+            if (perm != null) {
+                return true;
+            }
         }
         throw new AccessDeniedException(msg);
     }

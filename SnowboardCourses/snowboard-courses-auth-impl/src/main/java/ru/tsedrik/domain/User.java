@@ -37,8 +37,7 @@ public class User extends CreateAtIdentified implements Identifired<Long> {
     /**
      * Роль пользователя
      */
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String role;
 
     /**
      * Статус пользователя
@@ -48,7 +47,7 @@ public class User extends CreateAtIdentified implements Identifired<Long> {
 
     public User(){}
 
-    public User(Long id, String userName, String password, String email, Role role, UserStatus status) {
+    public User(Long id, String userName, String password, String email, String role, UserStatus status) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -90,11 +89,11 @@ public class User extends CreateAtIdentified implements Identifired<Long> {
         this.email = email;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
