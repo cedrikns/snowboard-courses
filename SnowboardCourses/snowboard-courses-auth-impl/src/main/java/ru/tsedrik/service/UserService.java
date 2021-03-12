@@ -17,7 +17,7 @@ public interface UserService {
      *
      * @param userWithPasswordDto    новый пользователь, который будет добавлен
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).USER_CREATE, \"Вы не можете создавать пользователя\")")
     UserDto addUser(UserWithPasswordDto userWithPasswordDto);
 
     /**
@@ -26,7 +26,7 @@ public interface UserService {
      * @param id    идентификатор пользователя
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).USER_DELETE, \"Вы не можете удалять пользователя\")")
     boolean deleteUserById(Long id);
 
     /**
@@ -35,7 +35,7 @@ public interface UserService {
      * @param id    идентификатор запрашиваемого пользователя
      * @return  найденный пользователь
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).USER_VIEW, \"Вы не можете просматривать пользователя\")")
     UserDto getUserById(Long id);
 
     /**
@@ -43,7 +43,7 @@ public interface UserService {
      *
      * @param userWithPasswordDto    пользователь, который будет обновлен
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).USER_UPDATE, \"Вы не можете обновлять пользователя\")")
     UserDto updateUser(UserWithPasswordDto userWithPasswordDto);
 
     /**
@@ -53,6 +53,6 @@ public interface UserService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных пользователей, соотвествующая настройкам объекта pageable
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).USER_VIEW, \"Вы не можете просматривать пользователей\")")
     PageDto<UserDto> getUsers(UserSearchDto userSearchDto, Pageable pageable);
 }

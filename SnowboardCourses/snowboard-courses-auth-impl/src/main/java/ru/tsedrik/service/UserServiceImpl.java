@@ -19,6 +19,7 @@ import ru.tsedrik.validator.UserDtoValidator;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Реализация интерфейса UserService
@@ -54,10 +55,19 @@ public class UserServiceImpl implements UserService {
 
         User user = mapperFacade.map(userWithPasswordDto, User.class);
 
-        user.setId(System.currentTimeMillis());
         if (user.getRole() == null){
-            user.setRole(Role.USER);
+            user.setRole(Role.USER.name());
+        } else {
+            StringJoiner joiner = new StringJoiner(";");
+            for(String role : user.getRole().split(";")){
+                Role.valueOf(role.trim().toUpperCase());
+                joiner.add(role.trim().toUpperCase());
+            }
+            user.setRole(joiner.toString());
         }
+
+        user.setId(System.currentTimeMillis());
+
         user.setStatus(UserStatus.ACTIVED);
 
         userRepository.save(user);
@@ -94,6 +104,15 @@ public class UserServiceImpl implements UserService {
 
         if (!user.getUserName().equals(userWithPasswordDto.getUserName())){
             throw new IllegalArgumentException("Изменять имя пользователя запрещено.");
+        }
+
+        if (userWithPasswordDto.getRole() != null){
+            StringJoiner joiner = new StringJoiner(";");
+            for(String role : userWithPasswordDto.getRole().split(";")){
+                Role.valueOf(role.trim().toUpperCase());
+                joiner.add(role.trim().toUpperCase());
+            }
+            userWithPasswordDto.setRole(joiner.toString());
         }
 
         mapperFacade.map(userWithPasswordDto, user);

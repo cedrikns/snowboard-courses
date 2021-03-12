@@ -17,7 +17,7 @@ public interface LocationService {
      *
      * @param locationDto    новое место проведения курсов, которое было добавлено
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_CREATE, \"Вы не можете создавать место проведения курса\")")
     LocationDto addLocation(LocationDto locationDto);
 
     /**
@@ -26,7 +26,7 @@ public interface LocationService {
      * @param location    существующее место проведения курса, которое будет удалено
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_DELETE, \"Вы не можете удалять место проведения курса\")")
     boolean deleteLocation(Location location);
 
     /**
@@ -35,7 +35,7 @@ public interface LocationService {
      * @param id    идентификатор удаляемого места проведения курса
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_DELETE, \"Вы не можете удалять место проведения курса\")")
     boolean deleteLocationById(Long id);
 
     /**
@@ -44,7 +44,7 @@ public interface LocationService {
      * @param id    идентификатор места проведения курса
      * @return  найденное место проведения курса
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_VIEW, \"Вы не можете просматривать место проведения курса\")")
     LocationDto getLocationById(Long id);
 
     /**
@@ -52,7 +52,7 @@ public interface LocationService {
      *
      * @param locationDto    место проведения курса, которое будет обновлено
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_UPDATE, \"Вы не можете изменять место проведения курса\")")
     LocationDto updateLocation(LocationDto locationDto);
 
     /**
@@ -62,6 +62,6 @@ public interface LocationService {
      * @param pageable  настройка отображения результата
      * @return  страница найденных мест проведения курсов, соотвествующая настройкам объекта pageable
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_VIEW, \"Вы не можете просматривать места проведения курса\")")
     PageDto<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable);
 }

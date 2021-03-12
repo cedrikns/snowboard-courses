@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Данные о текущем пользвоателе с токеном
@@ -26,9 +27,12 @@ public class TokenAuthentication implements Authentication {
      */
     private UserDetails principal;
 
-    public TokenAuthentication(String token, UserDetails principal) {
+    private List<String> role;
+
+    public TokenAuthentication(String token, UserDetails principal, List<String> role) {
         this.token = token;
         this.principal = principal;
+        this.role = role;
     }
 
     @Override
@@ -72,5 +76,9 @@ public class TokenAuthentication implements Authentication {
 
     public String getToken() {
         return token;
+    }
+
+    public List<String> getRole() {
+        return role;
     }
 }

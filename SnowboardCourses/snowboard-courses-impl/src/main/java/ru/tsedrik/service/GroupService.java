@@ -1,6 +1,5 @@
 package ru.tsedrik.service;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import ru.tsedrik.domain.Group;
 
 /**
@@ -13,7 +12,6 @@ public interface GroupService {
      *
      * @param group    новая группа, которая будет добавлена
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     void addGroup(Group group);
 
     /**
@@ -22,7 +20,6 @@ public interface GroupService {
      * @param group    существующая группа, которая будет удалена
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deleteGroup(Group group);
 
     /**
@@ -31,7 +28,6 @@ public interface GroupService {
      * @param id    идентификатор удаляемой группы
      * @return  успешно ли прошло удаление
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     boolean deleteGroupById(Long id);
 
     /**
@@ -40,7 +36,6 @@ public interface GroupService {
      * @param id    идентификатор запрашиваемой группы
      * @return  найденная группа
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     Group getGroupById(Long id);
 
     /**
@@ -48,7 +43,6 @@ public interface GroupService {
      *
      * @param group    группа, которая будет обновлена
      */
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     Group updateGroup(Group group);
 
 }

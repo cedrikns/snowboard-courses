@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.tsedrik.service.MyClaims;
 import ru.tsedrik.service.TokenValidateService;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -35,10 +36,11 @@ public class TokenAuthenticationManager implements AuthenticationManager {
         MyClaims claims = tokenValidateService.parseAndValidate(token);
 
         UserPrincipal.UserPrincipalBuilder user = UserPrincipal.username(claims.getSubject());
-        user.roles(claims.getRole());
+        String[] roles = claims.getRole().split(";");
+        user.roles(roles);
         user.email(claims.getEmail());
         UserDetails userDetails = user.build();
-        TokenAuthentication tokenAuthentication = new TokenAuthentication(token, userDetails);
+        TokenAuthentication tokenAuthentication = new TokenAuthentication(token, userDetails, Arrays.asList(roles));
         tokenAuthentication.setAuthenticated(true);
         return tokenAuthentication;
 
