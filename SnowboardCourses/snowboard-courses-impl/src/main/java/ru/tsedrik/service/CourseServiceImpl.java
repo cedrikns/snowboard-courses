@@ -5,11 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.domain.*;
 import ru.tsedrik.exception.CourseNotFoundException;
 import ru.tsedrik.exception.PersonNotFoundException;
@@ -17,7 +18,6 @@ import ru.tsedrik.repository.CourseRepository;
 import ru.tsedrik.repository.PersonRepository;
 import ru.tsedrik.resource.dto.CourseDto;
 import ru.tsedrik.resource.dto.CourseSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Реализация интерфейса CourseService
@@ -90,7 +91,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public CourseDto addCourse(CourseDto courseDto) {
+    public Mono<CourseDto> addCourse(CourseDto courseDto) {
 
         if ((courseDto.getBeginDate().isBefore(LocalDate.now())) || (courseDto.getEndDate().isBefore(LocalDate.now()))){
             throw new IllegalArgumentException("Begin and End date of course must be greater than current");
@@ -108,79 +109,87 @@ public class CourseServiceImpl implements CourseService{
 
         course.setGroups(groups);
 
-        course = courseRepository.save(course);
-        courseDto = mapperFacade.map(course, CourseDto.class);
-
-        return courseDto;
+        Mono<Void> dbRequest = Mono.fromRunnable(() -> courseRepository.save(course));
+        return Mono.when(dbRequest).then(Mono.fromSupplier(() -> mapperFacade.map(course, CourseDto.class)));
     }
 
     @Override
-    public boolean deleteCourse(Course course) {
-        courseRepository.delete(course);
-        return true;
+    public Mono<Boolean> deleteCourse(Course course) {
+        return Mono.fromSupplier(() -> {
+            courseRepository.delete(course);
+            return true;
+        });
     }
 
     @Override
-    public boolean deleteCourseById(Long id) {
-        courseRepository.deleteById(id);
-        return true;
+    public Mono<Boolean> deleteCourseById(Long id) {
+        return Mono.fromSupplier(() -> {
+            courseRepository.deleteById(id);
+            return true;
+        });
     }
 
     @Override
-    public CourseDto getCourseById(Long id) {
-        CourseDto courseDto = courseRepository.findById(id)
+    public Mono<CourseDto> getCourseById(Long id) {
+        return Mono.fromSupplier(() ->
+            courseRepository.findById(id)
+                    .map(course -> mapperFacade.map(course, CourseDto.class))
+                    .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + id))
+        );
+    }
+
+    public Mono<CourseDto> enroll(Long courseId, Long personId){
+        Mono<Course> foundedCourse = Mono.fromSupplier(() -> {
+            Course course = courseRepository.findById(courseId)
+                    .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + courseId));
+
+            if (course.getCourseStatus() == CourseStatus.CLOSE){
+                throw new IllegalArgumentException("This course is closed. Please, choose another one.");
+            }
+            if (!course.isAvailableGroupExist()){
+                throw new IllegalArgumentException("There is no available places on this course");
+            }
+
+            boolean isPersonNotExistInCourse = course.getGroups().stream()
+                    .flatMap(group -> group.getStudents().stream())
+                    .noneMatch(p -> p.getId().equals(personId));
+
+            if (!isPersonNotExistInCourse){
+                throw new IllegalArgumentException("Person with id = " + personId + " is already enrolled on course with id = " + courseId);
+            }
+            return course;
+        });
+
+        Mono<Person> foundedPerson = Mono.fromSupplier(() -> {
+            Person person = personRepository.findById(personId)
+                    .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "with id = " + personId));
+            return person;
+        });
+
+        BiFunction<Course, Person, CourseDto> updateCoursDto = (course, person) -> {
+            Group group = course.getAvailableGroup();
+            Set<Person> students = group.getStudents();
+            if (students.add(person)) {
+                group.setStudents(students);
+                group.setAvailableNumberOfPlaces(group.getTotalNumberOfPlaces() - students.size());
+            } else {
+                throw new IllegalArgumentException("Участник " + person.getId() + " не был добавлен на курс.");
+            }
+
+            courseRepository.save(course);
+            CourseDto courseDto = mapperFacade.map(course, CourseDto.class);
+            return courseDto;
+        };
+
+        return Mono.when(foundedCourse, foundedPerson).then(Mono.zip(foundedCourse, foundedPerson, updateCoursDto));
+    }
+
+    @Override
+    public Flux<CourseDto> getCourses(CourseSearchDto courseSearchDto, Pageable pageable) {
+        return Flux.fromIterable(courseRepository.findAll(getSpecification(courseSearchDto), pageable)
                 .map(course -> mapperFacade.map(course, CourseDto.class))
-                .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + id));
-
-        return courseDto;
-    }
-
-    public CourseDto enroll(Long courseId, Long personId){
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException(courseNotFoundExMsg + courseId));
-
-        if (course.getCourseStatus() == CourseStatus.CLOSE){
-            throw new IllegalArgumentException("This course is closed. Please, choose another one.");
-        }
-        if (!course.isAvailableGroupExist()){
-            throw new IllegalArgumentException("There is no available places on this course");
-        }
-
-        boolean isPersonNotExistInCourse = course.getGroups().stream()
-                .flatMap(group -> group.getStudents().stream())
-                .noneMatch(p -> p.getId().equals(personId));
-
-        if (!isPersonNotExistInCourse){
-            throw new IllegalArgumentException("Person with id = " + personId + " is already enrolled on course with id = " + courseId);
-        }
-
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "with id = " + personId));
-
-        Group group = course.getAvailableGroup();
-        Set<Person> students = group.getStudents();
-        if (students.add(person)) {
-            group.setStudents(students);
-            group.setAvailableNumberOfPlaces(group.getTotalNumberOfPlaces() - students.size());
-        } else {
-            throw new IllegalArgumentException("Участник " + person.getId() + " не был добавлен на курс.");
-        }
-
-        courseRepository.save(course);
-        CourseDto courseDto = mapperFacade.map(course, CourseDto.class);
-
-        return courseDto;
-    }
-
-    @Override
-    public PageDto<CourseDto> getCourses(CourseSearchDto courseSearchDto, Pageable pageable) {
-        Page<Course> page = courseRepository.findAll(getSpecification(courseSearchDto), pageable);
-
-        List<CourseDto> courses = page
-                .map(course -> mapperFacade.map(course, CourseDto.class))
-                .toList();
-
-        return new PageDto<>(courses, page.getTotalElements());
+                .toList()
+        );
     }
 
     @Override

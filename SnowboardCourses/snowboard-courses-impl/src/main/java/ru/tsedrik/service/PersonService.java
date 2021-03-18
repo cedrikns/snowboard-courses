@@ -2,8 +2,9 @@ package ru.tsedrik.service;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.domain.Person;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.PersonDto;
 import ru.tsedrik.resource.dto.PersonSearchDto;
 
@@ -18,7 +19,7 @@ public interface PersonService {
      * @param personDto    новый участник, который будет добавлен
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_CREATE, \"Вы не можете создавать участника курса\")")
-    PersonDto addPerson(PersonDto personDto);
+    Mono<PersonDto> addPerson(PersonDto personDto);
 
     /**
      * Удаляет существующего участника курса.
@@ -27,7 +28,7 @@ public interface PersonService {
      * @return  успешно ли прошло удаление
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_DELETE, \"Вы не можете удалять участника курса\")")
-    boolean deletePerson(Person person);
+    Mono<Boolean> deletePerson(Person person);
 
     /**
      * Удаляет существующего участника курса по его идентификатору.
@@ -36,7 +37,7 @@ public interface PersonService {
      * @return  успешно ли прошло удаление
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_DELETE, \"Вы не можете удалять участника курса\")")
-    boolean deletePersonById(Long id);
+    Mono<Boolean> deletePersonById(Long id);
 
     /**
      * Запрашивает участника курса по его идентификатору.
@@ -45,7 +46,7 @@ public interface PersonService {
      * @return  найденный участник
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_VIEW, \"Вы не можете просматривать участника курса\")")
-    PersonDto getPersonById(Long id);
+    Mono<PersonDto> getPersonById(Long id);
 
     /**
      * Обновляет участника курсов.
@@ -53,7 +54,7 @@ public interface PersonService {
      * @param personDto    участник, который будет обновлен
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_UPDATE, \"Вы не можете изменять участника курса\")")
-    PersonDto updatePerson(PersonDto personDto);
+    Mono<PersonDto> updatePerson(PersonDto personDto);
 
     /**
      * Получает всех участников, соответствующих наболу полей из personSearchDto
@@ -63,5 +64,5 @@ public interface PersonService {
      * @return  страница найденных участников, соотвествующая настройкам объекта pageable
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).PERSON_VIEW, \"Вы не можете просматривать участников курса\")")
-    PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable);
+    Flux<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable);
 }

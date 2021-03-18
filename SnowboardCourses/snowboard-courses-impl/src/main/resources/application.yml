@@ -12,6 +12,8 @@ server:
     connection-timeout: 30000
 
 spring:
+  webflux:
+    base-path: /snowboard-courses
   application:
     name: snowboard-courses
     token:

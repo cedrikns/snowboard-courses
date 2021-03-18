@@ -2,16 +2,16 @@ package ru.tsedrik.service;
 
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.exception.PersonNotFoundException;
 import ru.tsedrik.domain.Person;
 import ru.tsedrik.domain.Role;
 import ru.tsedrik.repository.PersonRepository;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.PersonDto;
 import ru.tsedrik.resource.dto.PersonSearchDto;
 
@@ -48,59 +48,55 @@ public class PersonServiceImpl implements PersonService{
     }
 
     @Override
-    public PersonDto addPerson(PersonDto personDto) {
+    public Mono<PersonDto> addPerson(PersonDto personDto) {
         Person person = mapperFacade.map(personDto, Person.class);
         person.setId(System.currentTimeMillis());
-        personRepository.save(person);
-        personDto = mapperFacade.map(person, PersonDto.class);
 
-        return personDto;
+        Mono<Void> dbRequest = Mono.fromRunnable(() -> personRepository.save(person));
+
+        return Mono.when(dbRequest).then(Mono.fromSupplier(() -> mapperFacade.map(person, PersonDto.class)));
     }
 
     @Override
-    public PersonDto getPersonById(Long id) {
-        PersonDto personDto = personRepository.findById(id)
+    public Mono<PersonDto> getPersonById(Long id) {
+        return Mono.fromSupplier(() -> personRepository.findById(id)
                 .map(person -> mapperFacade.map(person, PersonDto.class))
-                .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "id = " + id));
-
-        return personDto;
+                .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "id = " + id)));
     }
 
     @Override
-    public boolean deletePersonById(Long id) {
-        personRepository.deleteById(id);
-        return true;
+    public Mono<Boolean> deletePersonById(Long id) {
+        return Mono.fromCallable(() -> {
+            personRepository.deleteById(id);
+            return true;
+        });
     }
 
     @Override
-    public boolean deletePerson(Person person) {
-        personRepository.delete(person);
-        return true;
+    public Mono<Boolean> deletePerson(Person person) {
+        return Mono.fromCallable(() -> {
+            personRepository.delete(person);
+            return true;
+        });
     }
 
     @Override
-    public PersonDto updatePerson(PersonDto personDto) {
-        Long id = personDto.getId();
-        Person person = personRepository.findById(id)
-                .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "id = " + id));
-
-        mapperFacade.map(personDto, person);
-        personRepository.save(person);
-        personDto = mapperFacade.map(person, PersonDto.class);
-
-        return personDto;
-    }
+    public Mono<PersonDto> updatePerson(PersonDto personDto) {
+        return Mono.fromSupplier(() -> {
+            Long id = personDto.getId();
+            Person person = personRepository.findById(id)
+                    .orElseThrow(() -> new PersonNotFoundException(personNotFoundExMsg + "id = " + id));
+            mapperFacade.map(personDto, person);
+            personRepository.save(person);
+            return person;
+        }).flatMap(person -> Mono.just(mapperFacade.map(person, PersonDto.class)));
+   }
 
     @Override
-    public PageDto<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable) {
-
-        Page<Person> page = personRepository.findAll(getSpecification(personSearchDto), pageable);
-
-        List<PersonDto> persons = page
+    public Flux<PersonDto> getPersons(PersonSearchDto personSearchDto, Pageable pageable) {
+        return Flux.fromIterable(personRepository.findAll(getSpecification(personSearchDto), pageable)
                 .map(person -> mapperFacade.map(person, PersonDto.class))
-                .toList();
-
-        return new PageDto<>(persons, page.getTotalElements());
+                .toList());
     }
 
     private Specification<Person> getSpecification(PersonSearchDto personSearchDto) {

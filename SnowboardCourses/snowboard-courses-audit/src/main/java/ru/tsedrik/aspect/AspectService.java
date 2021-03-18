@@ -42,7 +42,11 @@ public class AspectService {
                 .getMethod().getAnnotation(Audit.class).value());
         auditMessage.setAuditMessageEvent(AuditMessageEvent.START);
         auditMessage.setStartTime(LocalDateTime.now());
-        auditMessage.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (SecurityContextHolder.getContext().getAuthentication() == null){
+            auditMessage.setUserName("system");
+        } else {
+            auditMessage.setUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+        }
         Object[] args = Arrays.stream(proceedingJoinPoint.getArgs())
                 .filter(o -> !(o instanceof UriComponentsBuilder)).toArray();
         auditMessage.setParams(serializeInJson(args));

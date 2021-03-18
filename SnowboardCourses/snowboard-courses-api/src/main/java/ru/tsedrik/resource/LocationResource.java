@@ -7,6 +7,8 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.resource.dto.*;
 
 /**
@@ -24,7 +26,7 @@ public interface LocationResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    ResponseEntity<LocationDto> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder);
+    Mono<ResponseEntity<LocationDto>> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder);
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "Детальная информация по месту проведения курсов")
@@ -34,7 +36,7 @@ public interface LocationResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    LocationDto getLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
+    Mono<LocationDto> getLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Удаление места проведения курсов")
@@ -44,7 +46,7 @@ public interface LocationResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    boolean deleteLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
+    Mono<Boolean> deleteLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id);
 
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Обновление места проведения курсов")
@@ -54,7 +56,7 @@ public interface LocationResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    LocationDto updateLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id, @RequestBody LocationDto locationDto);
+    Mono<LocationDto> updateLocation(@ApiParam(value = "Идентификатор места проведения курсов", required = true) @PathVariable Long id, @RequestBody LocationDto locationDto);
 
     @GetMapping
     @ApiOperation(value = "Поиск по местам проведения курсов")
@@ -72,6 +74,6 @@ public interface LocationResource {
             @ApiImplicitParam(name = "sort", value = "Критерии сортировки", allowMultiple = true,
                     defaultValue = "id", allowableValues = "id, name, country, city, desc|asc", dataType = "String", paramType = "query")
     })
-    PageDto<LocationDto> getLocations(@RequestBody LocationSearchDto locationSearchDto,
-                                      @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
+    Flux<LocationDto> getLocations(@RequestBody LocationSearchDto locationSearchDto,
+                                   @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
 }

@@ -65,7 +65,7 @@ public class Course extends CreateAtIdentified implements Identifired<Long> {
     /**
      * Список групп курса
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id")
     private Set<Group> groups;
 

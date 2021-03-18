@@ -7,9 +7,10 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.resource.dto.CourseDto;
 import ru.tsedrik.resource.dto.CourseSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.ResponseError;
 
 /**
@@ -27,7 +28,7 @@ public interface CourseResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    ResponseEntity<CourseDto> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder);
+    Mono<ResponseEntity<CourseDto>> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder);
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "Детальная информация по курсу")
@@ -37,7 +38,7 @@ public interface CourseResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    CourseDto getCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
+    Mono<CourseDto> getCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Удаление курса")
@@ -47,7 +48,7 @@ public interface CourseResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    boolean deleteCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
+    Mono<Boolean> deleteCourse(@ApiParam(value = "Идентификатор курса", required = true) @PathVariable Long id);
 
     @GetMapping
     @ApiOperation(value = "Поиск по курсам")
@@ -65,8 +66,8 @@ public interface CourseResource {
             @ApiImplicitParam(name = "sort", value = "Критерии сортировки", allowMultiple = true,
                     defaultValue = "id", allowableValues = "id, courseType, startTime, endTime, desc|asc", dataType = "String", paramType = "query")
     })
-    PageDto<CourseDto> getCourses(@RequestBody CourseSearchDto courseSearchDto,
-                                  @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
+    Flux<CourseDto> getCourses(@RequestBody CourseSearchDto courseSearchDto,
+                               @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
 
     @PostMapping(value = "/enroll")
     @ApiOperation(value = "Запись участника на курс")
@@ -76,7 +77,7 @@ public interface CourseResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    CourseDto enrollCourse(@ApiParam(value = "Идентификатор курса", required = true) @RequestParam Long courseId,
+    Mono<CourseDto> enrollCourse(@ApiParam(value = "Идентификатор курса", required = true) @RequestParam Long courseId,
                            @ApiParam(value = "Идентификатор участника курсов", required = true) @RequestParam Long personId);
 
 }

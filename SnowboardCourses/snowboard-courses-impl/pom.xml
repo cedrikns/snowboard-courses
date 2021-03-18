@@ -34,25 +34,25 @@
             <artifactId>snowboard-courses-audit</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>ru.tsedrik</groupId>
-            <artifactId>snowboard-courses-auth-token</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.tsedrik</groupId>
-            <artifactId>snowboard-courses-auth-validate</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ru.tsedrik</groupId>-->
+<!--            <artifactId>snowboard-courses-auth-token</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>ru.tsedrik</groupId>-->
+<!--            <artifactId>snowboard-courses-auth-validate</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
