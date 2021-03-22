@@ -38,19 +38,17 @@ public class CourseController implements CourseResource {
     public Mono<ResponseEntity<CourseDto>> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createCourse with {} - start ", courseDto);
         Mono<CourseDto> resultCourseDto = courseService.addCourse(courseDto);
-        logger.debug("createCourse end with result {}", resultCourseDto);
         return resultCourseDto.flatMap(createdPerson -> {
             URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdPerson.getId()).buildAndExpand(createdPerson).toUri();
             return Mono.just(ResponseEntity.created(uri).body(createdPerson));
-        });
+        }).doOnSuccess(result -> logger.debug("createCourse end with result {}", result));
     }
 
     @Override
     public Mono<CourseDto> getCourse(@PathVariable Long id){
         logger.debug("getCourse with {} - start ", id);
         Mono<CourseDto> courseDto = courseService.getCourseById(id);
-        logger.debug("getCourse end with result {}", courseDto);
-        return courseDto;
+        return courseDto.doOnSuccess(result -> logger.debug("getCourse end with result {}", result));
     }
 
     @Audit(AuditCode.COURSE_DELETE)
@@ -58,8 +56,7 @@ public class CourseController implements CourseResource {
     public Mono<Boolean> deleteCourse(@PathVariable Long id){
         logger.debug("deleteCourse with {} - start ", id);
         Mono<Boolean> isDeleted = courseService.deleteCourseById(id);
-        logger.debug("deleteCourse end with result {}", isDeleted);
-        return isDeleted;
+        return isDeleted.doOnSuccess(result -> logger.debug("deleteCourse end with result {}", result));
     }
 
     @Override
@@ -67,7 +64,6 @@ public class CourseController implements CourseResource {
                                       @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getCourses with {}, {} - start ", courseSearchDto, pageable);
         Flux<CourseDto> result = courseService.getCourses(courseSearchDto, pageable);
-        logger.debug("getCourses end with result {}", result);
         return result;
     }
 
@@ -76,8 +72,7 @@ public class CourseController implements CourseResource {
     public Mono<CourseDto> enrollCourse(@RequestParam Long courseId, Long personId){
         logger.debug("enrollCourse with {}, {} - start ", courseId, personId);
         Mono<CourseDto> courseDto = courseService.enroll(courseId, personId);
-        logger.debug("enrollCourse end with result {}", courseDto);
-        return courseDto;
+        return courseDto.doOnSuccess(result -> logger.debug("enrollCourse end with result {}", result));
     }
 
 }

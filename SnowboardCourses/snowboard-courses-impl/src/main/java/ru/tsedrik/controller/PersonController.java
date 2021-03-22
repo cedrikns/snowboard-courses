@@ -43,19 +43,17 @@ public class PersonController implements PersonResource {
     public Mono<ResponseEntity<PersonDto>> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createPerson with {} - start ", personDto);
         Mono<PersonDto> resultPersonDto = personService.addPerson(personDto);
-        logger.debug("createPerson end with result {}", resultPersonDto);
         return resultPersonDto.flatMap(createdPerson -> {
             URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdPerson.getId()).buildAndExpand(createdPerson).toUri();
             return Mono.just(ResponseEntity.created(uri).body(createdPerson));
-        });
+        }).doOnSuccess(result -> logger.debug("createPerson end with result {}", result));
     }
 
     @Override
     public Mono<PersonDto> getPerson(@PathVariable Long id){
         logger.debug("getPerson with {} - start ", id);
         Mono<PersonDto> personDto = personService.getPersonById(id);
-        logger.debug("getPerson end with result {}", personDto);
-        return personDto;
+        return personDto.doOnSuccess(result -> logger.debug("getPerson end with result {}", result));
     }
 
     @Override
@@ -63,7 +61,6 @@ public class PersonController implements PersonResource {
                                          @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getPersons with {}, {} - start ", personSearchDto, pageable);
         Flux<PersonDto> result = personService.getPersons(personSearchDto, pageable);
-        logger.debug("getPersons end with result {}", result);
         return result;
     }
 
@@ -72,8 +69,7 @@ public class PersonController implements PersonResource {
     public Mono<Boolean> deletePerson(@PathVariable Long id){
         logger.debug("deletePerson with {} - start ", id);
         Mono<Boolean> isDeleted = personService.deletePersonById(id);
-        logger.debug("deletePerson end with result {}", isDeleted);
-        return isDeleted;
+        return isDeleted.doOnSuccess(result -> logger.debug("deletePerson end with result {}", result));
     }
 
     @Audit(AuditCode.PERSON_UPDATE)
@@ -84,8 +80,7 @@ public class PersonController implements PersonResource {
             throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + personDto.getId());
         }
         Mono<PersonDto> updatedPersonDto = personService.updatePerson(personDto);
-        logger.debug("updatePerson end with result {}", personDto);
-        return updatedPersonDto;
+        return updatedPersonDto.doOnSuccess(result -> logger.debug("updatePerson end with result {}", result));
     }
 
     @ModelAttribute

@@ -38,20 +38,18 @@ public class LocationController implements LocationResource {
     public Mono<ResponseEntity<LocationDto>> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createLocation with {} - start ", locationDto);
         Mono<LocationDto> resultLocationDto = locationService.addLocation(locationDto);
-        logger.debug("createLocation end with result {}", resultLocationDto);
 
         return resultLocationDto.flatMap(createdLocation -> {
             URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdLocation.getId()).buildAndExpand(createdLocation).toUri();
             return Mono.just(ResponseEntity.created(uri).body(createdLocation));
-        });
+        }).doOnSuccess(result -> logger.debug("createLocation end with result {}", result));
     }
 
     @Override
     public Mono<LocationDto> getLocation(@PathVariable Long id){
         logger.debug("getLocation with {} - start ", id);
         Mono<LocationDto> locationDto = locationService.getLocationById(id);
-        logger.debug("getLocation end with result {}", locationDto);
-        return locationDto;
+        return locationDto.doOnSuccess(result -> logger.debug("getLocation end with result {}", result));
     }
 
     @Audit(AuditCode.LOCATION_DELETE)
@@ -59,8 +57,7 @@ public class LocationController implements LocationResource {
     public Mono<Boolean> deleteLocation(@PathVariable Long id){
         logger.debug("deleteLocation with {} - start ", id);
         Mono<Boolean> isDeleted = locationService.deleteLocationById(id);
-        logger.debug("deleteLocation end with result {}", isDeleted);
-        return isDeleted;
+        return isDeleted.doOnSuccess(result -> logger.debug("deleteLocation end with result {}", result));
     }
 
     @Audit(AuditCode.LOCATION_UPDATE)
@@ -71,8 +68,7 @@ public class LocationController implements LocationResource {
             throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + locationDto.getId());
         }
         Mono<LocationDto> updatedLocationDto = locationService.updateLocation(locationDto);
-        logger.debug("updateLocation end with result {}", locationDto);
-        return updatedLocationDto;
+        return updatedLocationDto.doOnSuccess(result -> logger.debug("updateLocation end with result {}", result));
     }
 
     @Override
@@ -80,7 +76,6 @@ public class LocationController implements LocationResource {
                                                    @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getLocations with {}, {} - start ", locationSearchDto, pageable);
         Flux<LocationDto> result = locationService.getLocations(locationSearchDto, pageable);
-        logger.debug("getLocations end with result {}", result);
         return result;
     }
 }
