@@ -2,10 +2,11 @@ package ru.tsedrik.service;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.domain.Location;
 import ru.tsedrik.resource.dto.LocationDto;
 import ru.tsedrik.resource.dto.LocationSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 
 /**
  * LocationService представляет интерфейс взаимодействия с классом Location
@@ -18,7 +19,7 @@ public interface LocationService {
      * @param locationDto    новое место проведения курсов, которое было добавлено
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_CREATE, \"Вы не можете создавать место проведения курса\")")
-    LocationDto addLocation(LocationDto locationDto);
+    Mono<LocationDto> addLocation(LocationDto locationDto);
 
     /**
      * Удаляет существующее место проведения курса.
@@ -27,7 +28,7 @@ public interface LocationService {
      * @return  успешно ли прошло удаление
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_DELETE, \"Вы не можете удалять место проведения курса\")")
-    boolean deleteLocation(Location location);
+    Mono<Boolean> deleteLocation(Location location);
 
     /**
      * Удаляет существующее место проведения курса по его идентификатору.
@@ -36,7 +37,7 @@ public interface LocationService {
      * @return  успешно ли прошло удаление
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_DELETE, \"Вы не можете удалять место проведения курса\")")
-    boolean deleteLocationById(Long id);
+    Mono<Boolean> deleteLocationById(Long id);
 
     /**
      * Запрашивает место проведения курса по его идентификатору.
@@ -45,7 +46,7 @@ public interface LocationService {
      * @return  найденное место проведения курса
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_VIEW, \"Вы не можете просматривать место проведения курса\")")
-    LocationDto getLocationById(Long id);
+    Mono<LocationDto> getLocationById(Long id);
 
     /**
      * Обновляет место проведения курса.
@@ -53,7 +54,7 @@ public interface LocationService {
      * @param locationDto    место проведения курса, которое будет обновлено
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_UPDATE, \"Вы не можете изменять место проведения курса\")")
-    LocationDto updateLocation(LocationDto locationDto);
+    Mono<LocationDto> updateLocation(LocationDto locationDto);
 
     /**
      * Получает все места проведения курсов, соответствующие наболу полей из locationSearchDto
@@ -63,5 +64,5 @@ public interface LocationService {
      * @return  страница найденных мест проведения курсов, соотвествующая настройкам объекта pageable
      */
     @PreAuthorize("hasPermission(T(ru.tsedrik.security.BusinessOperation).LOCATION_VIEW, \"Вы не можете просматривать места проведения курса\")")
-    PageDto<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable);
+    Flux<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable);
 }

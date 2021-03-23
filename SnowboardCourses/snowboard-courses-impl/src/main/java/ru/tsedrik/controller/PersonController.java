@@ -10,10 +10,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
 import ru.tsedrik.resource.PersonResource;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.resource.dto.PersonDto;
 import ru.tsedrik.resource.dto.PersonSearchDto;
 import ru.tsedrik.service.PersonService;
@@ -39,50 +40,47 @@ public class PersonController implements PersonResource {
 
     @Audit(AuditCode.PERSON_CREATE)
     @Override
-    public ResponseEntity<PersonDto> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder){
+    public Mono<ResponseEntity<PersonDto>> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createPerson with {} - start ", personDto);
-        PersonDto resultPersonDto = personService.addPerson(personDto);
-        URI uri = uriComponentsBuilder.path("/api/v1/person/" + resultPersonDto.getId()).buildAndExpand(resultPersonDto).toUri();
-        logger.debug("createPerson end with result {}", resultPersonDto);
-        return ResponseEntity.created(uri).body(resultPersonDto);
+        Mono<PersonDto> resultPersonDto = personService.addPerson(personDto);
+        return resultPersonDto.flatMap(createdPerson -> {
+            URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdPerson.getId()).buildAndExpand(createdPerson).toUri();
+            return Mono.just(ResponseEntity.created(uri).body(createdPerson));
+        }).doOnSuccess(result -> logger.debug("createPerson end with result {}", result));
     }
 
     @Override
-    public PersonDto getPerson(@PathVariable Long id){
+    public Mono<PersonDto> getPerson(@PathVariable Long id){
         logger.debug("getPerson with {} - start ", id);
-        PersonDto personDto = personService.getPersonById(id);
-        logger.debug("getPerson end with result {}", personDto);
-        return personDto;
+        Mono<PersonDto> personDto = personService.getPersonById(id);
+        return personDto.doOnSuccess(result -> logger.debug("getPerson end with result {}", result));
     }
 
     @Override
-    public PageDto<PersonDto> getPersons(@RequestBody PersonSearchDto personSearchDto,
+    public Flux<PersonDto> getPersons(@RequestBody PersonSearchDto personSearchDto,
                                          @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getPersons with {}, {} - start ", personSearchDto, pageable);
-        PageDto<PersonDto> result = personService.getPersons(personSearchDto, pageable);
-        logger.debug("getPersons end with result {}", result);
+        Flux<PersonDto> result = personService.getPersons(personSearchDto, pageable);
         return result;
     }
 
     @Audit(AuditCode.PERSON_DELETE)
     @Override
-    public boolean deletePerson(@PathVariable Long id){
+    public Mono<Boolean> deletePerson(@PathVariable Long id){
         logger.debug("deletePerson with {} - start ", id);
-        boolean isDeleted = personService.deletePersonById(id);
-        logger.debug("deletePerson end with result {}", isDeleted);
-        return isDeleted;
+        Mono<Boolean> isDeleted = personService.deletePersonById(id);
+        return isDeleted.doOnSuccess(result -> logger.debug("deletePerson end with result {}", result));
     }
 
     @Audit(AuditCode.PERSON_UPDATE)
     @Override
-    public PersonDto updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto){
+    public Mono<PersonDto> updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto){
         logger.debug("updatePerson with {}, {} - start ", id, personDto);
         if (!id.equals(personDto.getId())){
             throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + personDto.getId());
         }
-        personService.updatePerson(personDto);
-        logger.debug("updatePerson end with result {}", personDto);
-        return personDto;
+        Mono<PersonDto> updatedPersonDto = personService.updatePerson(personDto);
+        return updatedPersonDto.doOnSuccess(result -> logger.debug("updatePerson end with result {}", result));
     }
 
     @ModelAttribute

@@ -1,17 +1,17 @@
 package ru.tsedrik.service;
 
 import ma.glasnost.orika.MapperFacade;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.exception.LocationNotFoundException;
 import ru.tsedrik.domain.Location;
 import ru.tsedrik.repository.LocationRepository;
 import ru.tsedrik.resource.dto.LocationDto;
 import ru.tsedrik.resource.dto.LocationSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -39,56 +39,55 @@ public class LocationServiceImpl implements LocationService{
     }
 
     @Override
-    public LocationDto addLocation(LocationDto locationDto) {
+    public Mono<LocationDto> addLocation(LocationDto locationDto) {
         Location location = mapperFacade.map(locationDto, Location.class);
         location.setId(System.currentTimeMillis());
-        locationRepository.save(location);
-        locationDto = mapperFacade.map(location, LocationDto.class);
-        return locationDto;
+        Mono<Void> dbRequest = Mono.fromRunnable(() -> locationRepository.save(location));
+        return Mono.when(dbRequest).then(Mono.fromSupplier(() -> mapperFacade.map(location, LocationDto.class)));
     }
 
     @Override
-    public boolean deleteLocation(Location location) {
-        locationRepository.delete(location);
-        return true;
+    public Mono<Boolean> deleteLocation(Location location) {
+        return Mono.fromRunnable(() -> locationRepository.delete(location)).thenReturn(true);
     }
 
     @Override
-    public boolean deleteLocationById(Long id) {
-        locationRepository.deleteById(id);
-        return true;
+    public Mono<Boolean> deleteLocationById(Long id) {
+        return Mono.fromCallable(() -> {
+            locationRepository.deleteById(id);
+            return true;
+        });
     }
 
     @Override
-    public LocationDto getLocationById(Long id) {
-        LocationDto locationDto = locationRepository.findById(id)
+    public Mono<LocationDto> getLocationById(Long id) {
+        return Mono.fromSupplier(() ->
+            locationRepository.findById(id)
+                    .map(location -> mapperFacade.map(location, LocationDto.class))
+                    .orElseThrow(() -> new LocationNotFoundException("There wasn't found course location with id = " + id))
+        );
+    }
+
+    @Override
+    public Mono<LocationDto> updateLocation(LocationDto locationDto) {
+        Mono<Location> foundedLocation = Mono.fromSupplier(() -> {
+            Location location = locationRepository.findById(locationDto.getId())
+                    .orElseThrow(() -> new LocationNotFoundException("There wasn't found course location with id = " + locationDto.getId()));
+            System.out.println("From DB: " + location);
+            mapperFacade.map(locationDto, location);
+            System.out.println("After map: " + location);
+            locationRepository.save(location);
+            return location;
+        });
+
+        return foundedLocation.flatMap(location -> Mono.just(mapperFacade.map(location, LocationDto.class)));
+    }
+
+    @Override
+    public Flux<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable) {
+        return Flux.fromIterable(locationRepository.findAll(getSpecification(locationSearchDto), pageable)
                 .map(location -> mapperFacade.map(location, LocationDto.class))
-                .orElseThrow(() -> new LocationNotFoundException("There wasn't found course location with id = " + id));
-
-        return locationDto;
-    }
-
-    @Override
-    public LocationDto updateLocation(LocationDto locationDto) {
-        Location location = locationRepository.findById(locationDto.getId())
-                .orElseThrow(() -> new LocationNotFoundException("There wasn't found course location with id = " + locationDto.getId()));
-
-        mapperFacade.map(locationDto, location);
-
-        locationRepository.save(location);
-
-        return mapperFacade.map(location, LocationDto.class);
-    }
-
-    @Override
-    public PageDto<LocationDto> getLocations(LocationSearchDto locationSearchDto, Pageable pageable) {
-        Page<Location> page = locationRepository.findAll(getSpecification(locationSearchDto), pageable);
-
-        List<LocationDto> locations = page
-                .map(location -> mapperFacade.map(location, LocationDto.class))
-                .toList();
-
-        return new PageDto<>(locations, page.getTotalElements());
+                .toList());
     }
 
     private Specification<Location> getSpecification(LocationSearchDto locationSearchDto) {

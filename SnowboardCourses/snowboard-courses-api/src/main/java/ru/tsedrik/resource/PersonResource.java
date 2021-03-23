@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.resource.dto.*;
 
 /**
@@ -25,7 +27,7 @@ public interface PersonResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    ResponseEntity<PersonDto> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder);
+    Mono<ResponseEntity<PersonDto>> createPerson(@Validated @RequestBody PersonDto personDto, UriComponentsBuilder uriComponentsBuilder);
 
     @GetMapping(value = "/{id}")
     @ApiOperation(value = "Детальная информация об участнике курсов")
@@ -35,7 +37,7 @@ public interface PersonResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    PersonDto getPerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
+    Mono<PersonDto> getPerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
 
     @GetMapping
     @ApiOperation(value = "Поиск по участникам курсов")
@@ -53,8 +55,8 @@ public interface PersonResource {
             @ApiImplicitParam(name = "sort", value = "Критерии сортировки", allowMultiple = true,
                     defaultValue = "id", allowableValues = "id, firstName, lastName, email, role, desc|asc", dataType = "String", paramType = "query")
     })
-    PageDto<PersonDto> getPersons(@RequestBody PersonSearchDto personSearchDto,
-                                  @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
+    Flux<PersonDto> getPersons(@RequestBody PersonSearchDto personSearchDto,
+                               @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable);
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Удаление участника курсов")
@@ -64,7 +66,7 @@ public interface PersonResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    boolean deletePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
+    Mono<Boolean> deletePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id);
 
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Обновление участника курсов")
@@ -74,6 +76,6 @@ public interface PersonResource {
             @ApiResponse(code = 401, message = "Ошибка аутентификации", response = ResponseError.class),
             @ApiResponse(code = 403, message = "Не достаточно прав", response = ResponseError.class)
     })
-    PersonDto updatePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id, @RequestBody PersonDto personDto);
+    Mono<PersonDto> updatePerson(@ApiParam(value = "Идентификатор участника курсов", required = true) @PathVariable Long id, @RequestBody PersonDto personDto);
 
 }

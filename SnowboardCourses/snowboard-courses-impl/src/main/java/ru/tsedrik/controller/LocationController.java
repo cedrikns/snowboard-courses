@@ -8,12 +8,13 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
 import ru.tsedrik.resource.LocationResource;
 import ru.tsedrik.resource.dto.LocationDto;
 import ru.tsedrik.resource.dto.LocationSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.service.LocationService;
 
 import java.net.URI;
@@ -34,49 +35,47 @@ public class LocationController implements LocationResource {
 
     @Audit(AuditCode.LOCATION_CREATE)
     @Override
-    public ResponseEntity<LocationDto> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder){
+    public Mono<ResponseEntity<LocationDto>> createLocation(@RequestBody LocationDto locationDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createLocation with {} - start ", locationDto);
-        LocationDto resultLocationDto = locationService.addLocation(locationDto);
-        URI uri = uriComponentsBuilder.path("/api/v1/location/" + resultLocationDto.getId()).buildAndExpand(resultLocationDto).toUri();
-        logger.debug("createLocation end with result {}", resultLocationDto);
-        return ResponseEntity.created(uri).body(resultLocationDto);
+        Mono<LocationDto> resultLocationDto = locationService.addLocation(locationDto);
+
+        return resultLocationDto.flatMap(createdLocation -> {
+            URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdLocation.getId()).buildAndExpand(createdLocation).toUri();
+            return Mono.just(ResponseEntity.created(uri).body(createdLocation));
+        }).doOnSuccess(result -> logger.debug("createLocation end with result {}", result));
     }
 
     @Override
-    public LocationDto getLocation(@PathVariable Long id){
+    public Mono<LocationDto> getLocation(@PathVariable Long id){
         logger.debug("getLocation with {} - start ", id);
-        LocationDto locationDto = locationService.getLocationById(id);
-        logger.debug("getLocation end with result {}", locationDto);
-        return locationDto;
+        Mono<LocationDto> locationDto = locationService.getLocationById(id);
+        return locationDto.doOnSuccess(result -> logger.debug("getLocation end with result {}", result));
     }
 
     @Audit(AuditCode.LOCATION_DELETE)
     @Override
-    public boolean deleteLocation(@PathVariable Long id){
+    public Mono<Boolean> deleteLocation(@PathVariable Long id){
         logger.debug("deleteLocation with {} - start ", id);
-        boolean isDeleted = locationService.deleteLocationById(id);
-        logger.debug("deleteLocation end with result {}", isDeleted);
-        return isDeleted;
+        Mono<Boolean> isDeleted = locationService.deleteLocationById(id);
+        return isDeleted.doOnSuccess(result -> logger.debug("deleteLocation end with result {}", result));
     }
 
     @Audit(AuditCode.LOCATION_UPDATE)
     @Override
-    public LocationDto updateLocation(@PathVariable Long id, @RequestBody LocationDto locationDto){
+    public Mono<LocationDto> updateLocation(@PathVariable Long id, @RequestBody LocationDto locationDto){
         logger.debug("updateLocation with {}, {} - start ", id, locationDto);
         if (!id.equals(locationDto.getId())){
             throw new IllegalArgumentException("Идентификатор в пути запроса " + id + " не совпадает с идентификатором в теле запроса " + locationDto.getId());
         }
-        locationService.updateLocation(locationDto);
-        logger.debug("updateLocation end with result {}", locationDto);
-        return locationDto;
+        Mono<LocationDto> updatedLocationDto = locationService.updateLocation(locationDto);
+        return updatedLocationDto.doOnSuccess(result -> logger.debug("updateLocation end with result {}", result));
     }
 
     @Override
-    public PageDto<LocationDto> getLocations(@RequestBody LocationSearchDto locationSearchDto,
-                                             @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
+    public Flux<LocationDto> getLocations(@RequestBody LocationSearchDto locationSearchDto,
+                                                   @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getLocations with {}, {} - start ", locationSearchDto, pageable);
-        PageDto<LocationDto> result = locationService.getLocations(locationSearchDto, pageable);
-        logger.debug("getLocations end with result {}", result);
+        Flux<LocationDto> result = locationService.getLocations(locationSearchDto, pageable);
         return result;
     }
 }

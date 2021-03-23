@@ -8,12 +8,13 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.tsedrik.aspect.annotation.Audit;
 import ru.tsedrik.aspect.annotation.AuditCode;
 import ru.tsedrik.resource.CourseResource;
 import ru.tsedrik.resource.dto.CourseDto;
 import ru.tsedrik.resource.dto.CourseSearchDto;
-import ru.tsedrik.resource.dto.PageDto;
 import ru.tsedrik.service.CourseService;
 
 import java.net.URI;
@@ -34,47 +35,44 @@ public class CourseController implements CourseResource {
 
     @Audit(AuditCode.COURSE_CREATE)
     @Override
-    public ResponseEntity<CourseDto> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder){
+    public Mono<ResponseEntity<CourseDto>> createCourse(@RequestBody CourseDto courseDto, UriComponentsBuilder uriComponentsBuilder){
         logger.debug("createCourse with {} - start ", courseDto);
-        CourseDto resultCourseDto = courseService.addCourse(courseDto);
-        URI uri = uriComponentsBuilder.path("/api/v1/course/" + resultCourseDto.getId()).buildAndExpand(resultCourseDto).toUri();
-        logger.debug("createCourse end with result {}", resultCourseDto);
-        return ResponseEntity.created(uri).body(resultCourseDto);
+        Mono<CourseDto> resultCourseDto = courseService.addCourse(courseDto);
+        return resultCourseDto.flatMap(createdPerson -> {
+            URI uri = uriComponentsBuilder.path("/api/v1/location/" + createdPerson.getId()).buildAndExpand(createdPerson).toUri();
+            return Mono.just(ResponseEntity.created(uri).body(createdPerson));
+        }).doOnSuccess(result -> logger.debug("createCourse end with result {}", result));
     }
 
     @Override
-    public CourseDto getCourse(@PathVariable Long id){
+    public Mono<CourseDto> getCourse(@PathVariable Long id){
         logger.debug("getCourse with {} - start ", id);
-        CourseDto courseDto = courseService.getCourseById(id);
-        logger.debug("getCourse end with result {}", courseDto);
-        return courseDto;
+        Mono<CourseDto> courseDto = courseService.getCourseById(id);
+        return courseDto.doOnSuccess(result -> logger.debug("getCourse end with result {}", result));
     }
 
     @Audit(AuditCode.COURSE_DELETE)
     @Override
-    public boolean deleteCourse(@PathVariable Long id){
+    public Mono<Boolean> deleteCourse(@PathVariable Long id){
         logger.debug("deleteCourse with {} - start ", id);
-        boolean isDeleted = courseService.deleteCourseById(id);
-        logger.debug("deleteCourse end with result {}", isDeleted);
-        return isDeleted;
+        Mono<Boolean> isDeleted = courseService.deleteCourseById(id);
+        return isDeleted.doOnSuccess(result -> logger.debug("deleteCourse end with result {}", result));
     }
 
     @Override
-    public PageDto<CourseDto> getCourses(@RequestBody CourseSearchDto courseSearchDto,
-                                         @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
+    public Flux<CourseDto> getCourses(@RequestBody CourseSearchDto courseSearchDto,
+                                      @PageableDefault(value = 5) @SortDefault(value = "id") Pageable pageable){
         logger.debug("getCourses with {}, {} - start ", courseSearchDto, pageable);
-        PageDto<CourseDto> result = courseService.getCourses(courseSearchDto, pageable);
-        logger.debug("getCourses end with result {}", result);
+        Flux<CourseDto> result = courseService.getCourses(courseSearchDto, pageable);
         return result;
     }
 
     @Audit(AuditCode.COURSE_UPDATE)
     @Override
-    public CourseDto enrollCourse(@RequestParam Long courseId, Long personId){
+    public Mono<CourseDto> enrollCourse(@RequestParam Long courseId, Long personId){
         logger.debug("enrollCourse with {}, {} - start ", courseId, personId);
-        CourseDto courseDto = courseService.enroll(courseId, personId);
-        logger.debug("enrollCourse end with result {}", courseDto);
-        return courseDto;
+        Mono<CourseDto> courseDto = courseService.enroll(courseId, personId);
+        return courseDto.doOnSuccess(result -> logger.debug("enrollCourse end with result {}", result));
     }
 
 }
